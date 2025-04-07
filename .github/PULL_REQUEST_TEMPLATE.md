@@ -6,3 +6,7 @@
 
 ## Issue
 - Resolved: #
+
+## Check
+- [ ] npm run build 오류 없나요?
+- [ ] 코드 에러는 없나요?

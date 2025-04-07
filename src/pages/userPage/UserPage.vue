@@ -1,26 +1,34 @@
 <template>
-  <div class="p-6 max-w-md mx-auto">
-    <h1 class="text-xl font-bold mb-4">프로필 수정</h1>
+  <div class="container">
+    <!-- 좌측: 프로필 -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">프로필</h2>
+        <router-link :to="`/user/${userId}/edit`" class="edit-link"> 수정 </router-link>
+      </div>
 
-    <!-- 🟣 유저 이름 표시 -->
-    <p class="mb-4 text-gray-700">
-      이름 : <strong>{{ user?.name }}</strong>
-    </p>
+      <div class="item">
+        <span class="label">이름</span>
+        <span class="value">{{ user?.name }}</span>
+      </div>
+    </section>
 
-    <div class="mb-6">
-      <label class="block mb-1 font-medium">이름</label>
-      <input
-        v-model="editedName"
-        type="text"
-        class="w-full border rounded px-3 py-2"
-        placeholder="이름을 입력하세요"
-      />
-    </div>
+    <!-- 우측: 사용자 설정 -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">사용자 설정</h2>
+        <router-link :to="`/user/${userId}/settings`" class="edit-link"> 수정 </router-link>
+      </div>
 
-    <div class="flex gap-2">
-      <button class="flex-1 bg-gray-300 text-white py-2 rounded" @click="resetName">취소</button>
-      <button class="flex-1 bg-purple-500 text-white py-2 rounded" @click="saveName">완료</button>
-    </div>
+      <div class="item">
+        <span class="label">카테고리 기본값 설정</span>
+        <span class="value">미분류</span>
+      </div>
+      <div class="item">
+        <span class="label">기본 지출</span>
+        <span class="value">스타벅스</span>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -32,24 +40,67 @@ import axios from 'axios'
 const route = useRoute()
 const userId = route.params.id
 const user = ref(null)
-const editedName = ref('')
 
 const fetchUser = async () => {
   const res = await axios.get(`http://localhost:3000/members/${userId}`)
   user.value = res.data
-  editedName.value = res.data.name
-}
-
-const saveName = async () => {
-  await axios.patch(`http://localhost:3000/members/${userId}`, {
-    name: editedName.value,
-  })
-  alert('이름이 수정되었습니다!')
-}
-
-const resetName = () => {
-  editedName.value = user.value.name
 }
 
 onMounted(fetchUser)
 </script>
+
+<style scoped>
+.container {
+  display: flex;
+  justify-content: space-around;
+  padding: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.section {
+  width: 45%;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.label {
+  width: 150px;
+  font-weight: 600;
+}
+
+.value {
+  flex: 1;
+}
+
+.edit-link {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.edit-link:hover {
+  color: #2563eb;
+}
+</style>

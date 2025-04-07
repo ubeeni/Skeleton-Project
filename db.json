@@ -1,0 +1,186 @@
+{
+  "members": [
+    { "id": "12CD", "name": "홍길동", "incomeDefault": "미분류", "expenseDefault": "미분류" },
+    { "id": "AB78", "name": "John", "incomeDefault": "미분류", "expenseDefault": "미분류" }
+  ],
+
+  "categories": [
+    {
+      "id": "0000",
+      "name": "미분류",
+      "type": "Expense",
+      "imgUrl": "@/assets/images/categories/unclassified.png"
+    },
+    {
+      "id": "1111",
+      "name": "미분류",
+      "type": "Income",
+      "imgUrl": "@/assets/images/categories/unclassified.png"
+    },
+    {
+      "id": "2222",
+      "name": "급여",
+      "type": "Income",
+      "imgUrl": "@/assets/images/categories/salary.png"
+    },
+    {
+      "id": "3333",
+      "name": "용돈",
+      "type": "Income",
+      "imgUrl": "@/assets/images/categories/pinmoney.png"
+    },
+    {
+      "id": "4444",
+      "name": "금융수입",
+      "type": "Income",
+      "imgUrl": "@/assets/images/categories/financial.png"
+    },
+    {
+      "id": "5555",
+      "name": "기타수입",
+      "type": "Income",
+      "imgUrl": "@/assets/images/categories/otherIncome.png"
+    },
+    {
+      "id": "6666",
+      "name": "수도&가스비",
+      "type": "Expense",
+      "imgUrl": "@/assets/images/categories/watergas.png"
+    },
+    {
+      "id": "7777",
+      "name": "식비",
+      "type": "Expense",
+      "imgUrl": "@/assets/images/categories/foodExpense.png"
+    },
+    {
+      "id": "8888",
+      "name": "카페",
+      "type": "Expense",
+      "imgUrl": "@/assets/images/categories/cafe.png"
+    },
+    {
+      "id": "9999",
+      "name": "술/유흥",
+      "type": "Expense",
+      "imgUrl": "@/assets/images/categories/pleasure.png"
+    },
+    {
+      "id": "AAAA",
+      "name": "경조/선물",
+      "type": "Expense",
+      "imgUrl": "@/assets/images/categories/congratulations.png"
+    },
+    {
+      "id": "BBBB",
+      "name": "문화/여가",
+      "type": "Expense",
+      "imgUrl": "@/assets/images/categories/leisure.png"
+    },
+    {
+      "id": "CCCC",
+      "name": "여행",
+      "type": "Expense",
+      "imgUrl": "@/assets/images/categories/travel.png"
+    },
+    {
+      "id": "DDDD",
+      "name": "쇼핑",
+      "type": "Expense",
+      "imgUrl": "@/assets/images/categories/shopping.png"
+    },
+    {
+      "id": "EEEE",
+      "name": "생활",
+      "type": "Expense",
+      "imgUrl": "@/assets/images/categories/life.png"
+    },
+    {
+      "id": "FFFF",
+      "name": "교통",
+      "type": "Expense",
+      "imgUrl": "@/assets/images/categories/traffic.png"
+    },
+    {
+      "id": "GGGG",
+      "name": "의료/건강",
+      "type": "Expense",
+      "imgUrl": "@/assets/images/categories/medical.png"
+    },
+    {
+      "id": "HHHH",
+      "name": "주거/통신",
+      "type": "Expense",
+      "imgUrl": "src/assets/images/categories/residentialCommunication.png"
+    },
+    {
+      "id": "IIII",
+      "name": "교육",
+      "type": "Expense",
+      "imgUrl": "@/assets/images/categories/education.png"
+    }
+  ],
+
+  "transactions": [
+    {
+      "id": "1E67",
+      "member_id": "12CD",
+      "category_id": "2222",
+      "amount": 2000000,
+      "date": "2024-03-04",
+      "memo": "용돈 받는날!"
+    },
+    {
+      "id": "WV71",
+      "member_id": "12CD",
+      "category_id": "4444",
+      "amount": 50000,
+      "date": "2024-03-04",
+      "memo": "수도요금..."
+    },
+    {
+      "id": "E9X3",
+      "member_id": "12CD",
+      "category_id": "6666",
+      "amount": 130000,
+      "date": "2024-03-04",
+      "memo": "카페에서 한잔"
+    }
+  ],
+
+  "quickAddOptions": [
+    {
+      "id": "PQRS",
+      "member_id": "12CD",
+      "category_id": "0000",
+      "cycle": "daily",
+      "day": "매일",
+      "week": null,
+      "month": null,
+      "amout": 2000,
+      "memo": "커피값"
+    },
+    {
+      "id": "LKEN",
+      "member_id": "12CD",
+      "category_id": "0000",
+      "cycle": "weekly",
+      "day": null,
+      "week": "monday",
+      "month": null,
+      "amout": 70000,
+      "memo": "저금"
+    },
+    {
+      "id": "SMFM",
+      "member_id": "12CD",
+      "category_id": "0000",
+      "cycle": "monthly",
+      "day": null,
+      "week": null,
+      "month": 15,
+      "amout": 600000,
+      "memo": "월세"
+    }
+  ]
+}

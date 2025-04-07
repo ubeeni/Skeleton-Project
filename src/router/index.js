@@ -40,6 +40,11 @@ const router = createRouter({
       component: () => import('@/pages/notFoundPage/NotFoundPage.vue'),
     },
   ],
+
+  // 페이지 이동시 항상 최상단으로 이동
+  scrollBehavior() {
+    return { top: 0, behavior: 'smooth' }
+  },
 })
 
 export default router

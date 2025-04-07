@@ -1,7 +1,7 @@
 {
   "members": [
-    { "id": "12CD", "name": "홍길동" },
-    { "id": "AB78", "name": "John" }
+    { "id": "12CD", "name": "홍길동", "incomeDefault": "미분류", "expenseDefault": "미분류" },
+    { "id": "AB78", "name": "John", "incomeDefault": "미분류", "expenseDefault": "미분류" }
   ],
 
   "categories": [

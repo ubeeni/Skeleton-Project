@@ -4,9 +4,9 @@
     <nav>
       <ul>
         <li><router-link to="/">Home</router-link></li>
-    <li><router-link to=" /list">List Page</router-link></li>
+        <li><router-link to=" /list">List Page</router-link></li>
         <li><router-link to="/report">Report Page</router-link></li>
-        <li><router-link to="/user">User Page</router-link></li>
+        <li><router-link to="/user/12CD">User Page</router-link></li>
       </ul>
     </nav>
   </header>

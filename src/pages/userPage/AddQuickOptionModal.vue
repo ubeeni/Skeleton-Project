@@ -7,7 +7,7 @@
       <!-- 거래명 -->
       <div class="form-row">
         <label>거래명</label>
-        <input v-model="newItem.memo" placeholder="place holder" />
+        <input v-model="newItem.title" placeholder="place holder" />
       </div>
 
       <!-- 구분 (수입 / 지출 버튼) -->
@@ -105,6 +105,7 @@ const userId = route.params.id
 
 const newItem = ref({
   member_id: userId,
+  title: '',
   type: 'Expense',
   category_id: '',
   cycle: 'daily',

@@ -9,6 +9,10 @@
     :is-income-active="isIncome"
     :is-expense-active="isExpense"
   />
+  <InputLg type="search" placeholder="이메일을 입력하세요" v-model="inputVal" />
+  <InputMed type="text" placeholder="text" v-model="inputVal" />
+  <InputSm type="number" placeholder="number" v-model="inputVal" />
+  {{ inputVal }}
 </template>
 
 <script setup>
@@ -16,10 +20,14 @@ import BtnLg from '@/components/button/BtnLg.vue'
 import BtnMed from '@/components/button/BtnMed.vue'
 import BtnSm from '@/components/button/BtnSm.vue'
 import BtnDual from '@/components/button/BtnDual.vue'
+import InputLg from '@/components/input/InputLg.vue'
 
 import { ref } from 'vue'
+import InputMed from '@/components/input/InputMed.vue'
+import InputSm from '@/components/input/InputSm.vue'
 const isIncome = ref(false)
 const isExpense = ref(false)
+const inputVal = ref('')
 
 function handleClick() {
   alert('Button clicked!')

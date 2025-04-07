@@ -1,27 +1,34 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import axios from 'axios'
 
 const BASEURI = '/api'
 
 const transactionName = ref('')
 const amount = ref(null)
-const selectedType = ref('income')
-
-const allCategories = reactive([])
-const filteredCategories = computed(() => {
-  return allCategories.value.filters((category) => category.type === selectedType.value)
-})
-
-const selectedCategory = ref('')
-// const selectedCategoryId;
-
 const date = ref('')
 const memo = ref('')
+
+const allCategories = reactive([]) // 모든 카테고리 목록 (id, name, type)
+
+const selectedCategoryType = ref('income')
+
+const filteredCategories = computed(() =>
+  allCategories.filter((category) => category.type === selectedCategoryType.value),
+) // type에 따른 카테고리 목록 (id, name, type)
+
+const selectedCategoryName = computed(() => {
+  const match = allCategories.find((category) => category.id === selectedCategoryId.value)
+  return match ? match.name : ''
+}) // 선택된 카테고리 name
+
+const selectedCategoryId = ref('') // 선택된 카테고리 id
 
 onMounted(async () => {
   try {
     const response = await axios.get(BASEURI + '/categories')
+    console.log(response.data)
+
     allCategories.splice(0, allCategories.length, ...response.data)
   } catch (error) {
     console.log('에러 발생 : ' + error)
@@ -29,16 +36,17 @@ onMounted(async () => {
 })
 
 const selectType = (type) => {
-  selectedType.value = type
-  selectable_categories.splice(0, selectable_categories.length)
+  selectedCategoryType.value = type
+  const selectedCategory = filteredCategories.find((category) => category.name === '미분류')
+  selectedCategoryId = selectedCategory.id
 }
 
 const addTransaction = () => {
   console.log(
     transactionName.value,
     amount.value,
-    selectedType.value,
-    category.value,
+    selectedCategoryType.value,
+    selectedCategoryName.value,
     date.value,
     memo.value,
   )
@@ -66,11 +74,11 @@ const cancleTransaction = () => {}
           name="type"
           value="income"
           class="radio-toggle"
-          v-model="selectedType"
+          v-model="selectedCategoryType"
         />
         <span
           class="radio-toggle income"
-          :class="{ active: selectedType === 'income' }"
+          :class="{ active: selectedCategoryType === 'income' }"
           @click="selectType('income')"
           >수입</span
         >
@@ -82,11 +90,11 @@ const cancleTransaction = () => {}
           name="type"
           value="expense"
           class="radio-toggle"
-          v-model="selectedType"
+          v-model="selectedCategoryType"
         />
         <span
           class="radio-toggle expense"
-          :class="{ active: selectedType === 'expense' }"
+          :class="{ active: selectedCategoryType === 'expense' }"
           @click="selectType('expense')"
           >지출</span
         >
@@ -95,7 +103,17 @@ const cancleTransaction = () => {}
 
     <div class="form-group">
       <label>카테고리</label>
-      <input type="text" placeholder="카테고리를 선택하세요" v-model="category" />
+      <input type="text" placeholder="카테고리를 선택하세요" v-model="selectedCategoryName" />
+    </div>
+
+    <div class="form-group">
+      <label for="category">카테고리</label>
+      <select id="category" v-model="selectedCategoryId">
+        <option value="" disabled>카테고리를 선택하세요</option>
+        <option v-for="category in filteredCategories" :key="category.id" :value="category.id">
+          {{ category.name }}
+        </option>
+      </select>
     </div>
 
     <div class="form-group">

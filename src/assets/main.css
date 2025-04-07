@@ -1,35 +1,70 @@
 @import './base.css';
+@import './fonts.css';
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  font-family: 'Pretendard-Regular', sans-serif;
+  font-size: 1rem;
+  color: var(--color-dark);
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+:root {
+  --color-primary: #864af9;
+  --color-secondary: #f8e559;
+  --color-accent: #3b3486;
+  --color-dark: #100d14;
+  --color-semidark: #797979;
+  --color-light: #c8c8c8;
+  --color-white: #ffffff;
+  --color-income: #0c7acd;
+  --color-expense: #cd0c22;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+.titleBold14px {
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-family: 'Pretendard-Bold', sans-serif;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+.titleBold24px {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-family: 'Pretendard-Bold', sans-serif;
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+.titleBold30px {
+  font-size: 1.875rem;
+  font-weight: 700;
+  font-family: 'Pretendard-Bold', sans-serif;
+}
+
+.bodyRegular16px {
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: 'Pretendard-Regular', sans-serif;
+}
+.bodySemibold16px {
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Pretendard-SemiBold', sans-serif;
+}
+.bodyRegular18px {
+  font-size: 1.125rem;
+  font-weight: 400;
+  font-family: 'Pretendard-Regular', sans-serif;
+}
+.bodySemibold18px {
+  font-size: 1.125rem;
+  font-weight: 600;
+  font-family: 'Pretendard-SemiBold', sans-serif;
+}
+
+/* 추후 적응형시 브레이크 포인트 */
+@media screen and (max-width: 767px) {
+  /** Mobile */
+}
+
+@media all and (min-width: 768px) and (max-width: 1023px) {
+  /** Tablet  */
 }

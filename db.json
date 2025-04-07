@@ -1,0 +1,90 @@
+{
+  "members": [
+    { "id": "12CD", "name": "홍길동" },
+    { "id": "AB78", "name": "John" }
+  ],
+
+  "categories": [
+    { "id": "0000", "name": "미분류", "type": "Expense", "imgUrl": "" },
+    { "id": "ZZZZ", "name": "미분류", "type": "Income", "imgUrl": "" },
+    { "id": "1111", "name": "급여", "type": "Income", "imgUrl": "" },
+    { "id": "2222", "name": "용돈", "type": "Income", "imgUrl": "" },
+    { "id": "3333", "name": "금융수입", "type": "Income", "imgUrl": "" },
+    { "id": "4444", "name": "수도&가스비", "type": "Expense", "imgUrl": "" },
+    { "id": "5555", "name": "식비", "type": "Expense", "imgUrl": "" },
+    { "id": "6666", "name": "카페", "type": "Expense", "imgUrl": "" },
+    { "id": "7777", "name": "술/유흥", "type": "Expense", "imgUrl": "" },
+    { "id": "8888", "name": "경조/선물", "type": "Expense", "imgUrl": "" },
+    { "id": "9999", "name": "문화/여가", "type": "Expense", "imgUrl": "" },
+    { "id": "AAAA", "name": "여행", "type": "Expense", "imgUrl": "" },
+    { "id": "BBBB", "name": "쇼핑", "type": "Expense", "imgUrl": "" },
+    { "id": "CCCC", "name": "생활", "type": "Expense", "imgUrl": "" },
+    { "id": "DDDD", "name": "교통", "type": "Expense", "imgUrl": "" },
+    { "id": "EEEE", "name": "의료/건강", "type": "Expense", "imgUrl": "" },
+    { "id": "FFFF", "name": "주거/통신", "type": "Expense", "imgUrl": "" },
+    { "id": "GGGG", "name": "교육", "type": "Expense", "imgUrl": "" }
+  ],
+
+  "transactions": [
+    {
+      "id": "1E67",
+      "member_id": "12CD",
+      "category_id": "2222",
+      "amount": 2000000,
+      "date": "2024-03-04",
+      "memo": "용돈 받는날!"
+    },
+    {
+      "id": "WV71",
+      "member_id": "12CD",
+      "category_id": "4444",
+      "amount": 50000,
+      "date": "2024-03-04",
+      "memo": "수도요금..."
+    },
+    {
+      "id": "E9X3",
+      "member_id": "12CD",
+      "category_id": "6666",
+      "amount": 130000,
+      "date": "2024-03-04",
+      "memo": "카페에서 한잔"
+    }
+  ],
+
+  "quickAddOptions": [
+    {
+      "id": "PQRS",
+      "member_id": "12CD",
+      "category_id": "0000",
+      "cycle": "daily",
+      "day": "매일",
+      "week": null,
+      "month": null,
+      "amout": 2000,
+      "memo": "커피값"
+    },
+    {
+      "id": "LKEN",
+      "member_id": "12CD",
+      "category_id": "0000",
+      "cycle": "weekly",
+      "day": null,
+      "week": "monday",
+      "month": null,
+      "amout": 70000,
+      "memo": "저금"
+    },
+    {
+      "id": "SMFM",
+      "member_id": "12CD",
+      "category_id": "0000",
+      "cycle": "monthly",
+      "day": null,
+      "week": null,
+      "month": 15,
+      "amout": 600000,
+      "memo": "월세"
+    }
+  ]
+}

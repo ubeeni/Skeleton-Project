@@ -2,15 +2,15 @@
   "members": [],
 
   "categories": [
-    { "id": "0000", "name": "미분류", "type": "Expense" },
-    { "id": "FFFF", "name": "미분류", "type": "Income" },
-    { "id": "1111", "name": "월급", "type": "Income" },
-    { "id": "2222", "name": "용돈", "type": "Income" },
-    { "id": "3333", "name": "기타", "type": "Income" },
-    { "id": "4444", "name": "수도&가스비", "type": "Expense" },
-    { "id": "5555", "name": "생활비", "type": "Expense" },
-    { "id": "6666", "name": "보험료", "type": "Expense" },
-    { "id": "7777", "name": "기타", "type": "Expense" }
+    { "id": "0000", "name": "미분류", "type": "Expense", "imgUrl": "" },
+    { "id": "FFFF", "name": "미분류", "type": "Income", "imgUrl": "" },
+    { "id": "1111", "name": "월급", "type": "Income", "imgUrl": "" },
+    { "id": "2222", "name": "용돈", "type": "Income", "imgUrl": "" },
+    { "id": "3333", "name": "기타", "type": "Income", "imgUrl": "" },
+    { "id": "4444", "name": "수도&가스비", "type": "Expense", "imgUrl": "" },
+    { "id": "5555", "name": "생활비", "type": "Expense", "imgUrl": "" },
+    { "id": "6666", "name": "보험료", "type": "Expense", "imgUrl": "" },
+    { "id": "7777", "name": "기타", "type": "Expense", "imgUrl": "" }
   ],
 
   "transactions": [],

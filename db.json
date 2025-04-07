@@ -5,26 +5,6 @@
   ],
 
   "categories": [
-<<<<<<< HEAD
-    { "id": "0000", "name": "미분류", "type": "expense", "imgUrl": "" },
-    { "id": "ZZZZ", "name": "미분류", "type": "income", "imgUrl": "" },
-    { "id": "1111", "name": "급여", "type": "income", "imgUrl": "" },
-    { "id": "2222", "name": "용돈", "type": "income", "imgUrl": "" },
-    { "id": "3333", "name": "금융수입", "type": "income", "imgUrl": "" },
-    { "id": "4444", "name": "수도&가스비", "type": "expense", "imgUrl": "" },
-    { "id": "5555", "name": "식비", "type": "expense", "imgUrl": "" },
-    { "id": "6666", "name": "카페", "type": "expense", "imgUrl": "" },
-    { "id": "7777", "name": "술/유흥", "type": "expense", "imgUrl": "" },
-    { "id": "8888", "name": "경조/선물", "type": "expense", "imgUrl": "" },
-    { "id": "9999", "name": "문화/여가", "type": "expense", "imgUrl": "" },
-    { "id": "AAAA", "name": "여행", "type": "expense", "imgUrl": "" },
-    { "id": "BBBB", "name": "쇼핑", "type": "expense", "imgUrl": "" },
-    { "id": "CCCC", "name": "생활", "type": "expense", "imgUrl": "" },
-    { "id": "DDDD", "name": "교통", "type": "expense", "imgUrl": "" },
-    { "id": "EEEE", "name": "의료/건강", "type": "expense", "imgUrl": "" },
-    { "id": "FFFF", "name": "주거/통신", "type": "expense", "imgUrl": "" },
-    { "id": "GGGG", "name": "교육", "type": "expense", "imgUrl": "" }
-=======
     {
       "id": "0000",
       "name": "미분류",
@@ -139,7 +119,6 @@
       "type": "Expense",
       "imgUrl": "@/assets/images/categories/education.png"
     }
->>>>>>> 9-feat-add-dbjson-file
   ],
 
   "transactions": [
@@ -205,25 +184,3 @@
     }
   ]
 }
-<<<<<<< HEAD
-=======
-{
-  "members": [],
-
-  "categories": [
-    { "id": "0000", "name": "미분류", "type": "Expense", "imgUrl": "" },
-    { "id": "FFFF", "name": "미분류", "type": "Income", "imgUrl": "" },
-    { "id": "1111", "name": "월급", "type": "Income", "imgUrl": "" },
-    { "id": "2222", "name": "용돈", "type": "Income", "imgUrl": "" },
-    { "id": "3333", "name": "기타", "type": "Income", "imgUrl": "" },
-    { "id": "4444", "name": "수도&가스비", "type": "Expense", "imgUrl": "" },
-    { "id": "5555", "name": "생활비", "type": "Expense", "imgUrl": "" },
-    { "id": "6666", "name": "보험료", "type": "Expense", "imgUrl": "" },
-    { "id": "7777", "name": "기타", "type": "Expense", "imgUrl": "" }
-  ],
-
-  "transactions": [],
-
-  "quickAddOptions": []
-}
->>>>>>> 9-feat-add-dbjson-file

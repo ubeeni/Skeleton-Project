@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '@/pages/homePage/HomePage.vue'
+import NotFoundPage from '@/pages/notFoundPage/NotFoundPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,11 +36,16 @@ const router = createRouter({
       component: () => import('@/pages/userPage/UserPage.vue'),
     },
     {
-      path: '/paths(.*)',
+      path: '/:pathMatch(.*)*',
       name: 'notfound',
-      component: () => import('@/pages/notFoundPage/NotFoundPage.vue'),
+      component: NotFoundPage,
     },
   ],
+
+  // 페이지 이동시 항상 최상단으로 이동
+  scrollBehavior() {
+    return { top: 0, behavior: 'smooth' }
+  },
 })
 
 export default router

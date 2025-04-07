@@ -1,4 +1,10 @@
-<template>footer</template>
+<template>
+  <footer>footer</footer>
+</template>
 
 <script setup></script>
-<style scoped></style>
+<style scoped>
+footer {
+  background-color: var(--color-light);
+}
+</style>

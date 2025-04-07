@@ -1,0 +1,122 @@
+{
+  "members": [
+    {
+      "id": "12CD",
+      "name": "test",
+      "pw": "1q2w3e4r!"
+    },
+    {
+      "id": "AB78",
+      "name": "John",
+      "pw": "1q2w3e4r@"
+    }
+  ],
+  "categories": [
+    {
+      "id": "0000",
+      "name": "미분류",
+      "type": "Expense"
+    },
+    {
+      "id": "0001",
+      "name": "미분류",
+      "type": "Income"
+    },
+    {
+      "id": "1111",
+      "name": "월급",
+      "type": "Income"
+    },
+    {
+      "id": "2222",
+      "name": "용돈",
+      "type": "Income"
+    },
+    {
+      "id": "3333",
+      "name": "기타",
+      "type": "Income"
+    },
+    {
+      "id": "4444",
+      "name": "수도&가스비",
+      "type": "Expense"
+    },
+    {
+      "id": "5555",
+      "name": "생활비",
+      "type": "Expense"
+    },
+    {
+      "id": "6666",
+      "name": "보험료",
+      "type": "Expense"
+    },
+    {
+      "id": "7777",
+      "name": "기타",
+      "type": "Expense"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "1E67",
+      "member_id": "12CD",
+      "category_id": "2222",
+      "amount": 2000000,
+      "date": "2024-03-04",
+      "memo": "월급날!"
+    },
+    {
+      "id": "WV71",
+      "member_id": "12CD",
+      "category_id": "4444",
+      "amount": 50000,
+      "date": "2024-03-04",
+      "memo": "수도요금..."
+    },
+    {
+      "id": "E9X3",
+      "member_id": "12CD",
+      "category_id": "6666",
+      "amount": 130000,
+      "date": "2024-03-04",
+      "memo": "보험료..."
+    }
+  ],
+  "quickAddOptions": [
+    {
+      "id": "PQRS",
+      "member_id": "12CD",
+      "category_id": "0000",
+      "cycle": "daily",
+      "day": "매일",
+      "week": null,
+      "month": null,
+      "amout": 2000,
+      "memo": "커피값"
+    },
+    {
+      "id": "LKEN",
+      "member_id": "12CD",
+      "category_id": "0000",
+      "cycle": "weekly",
+      "day": null,
+      "week": "monday",
+      "month": null,
+      "amout": 70000,
+      "memo": "저금"
+    },
+    {
+      "id": "SMFM",
+      "member_id": "12CD",
+      "category_id": "0000",
+      "cycle": "monthly",
+      "day": null,
+      "week": null,
+      "month": 15,
+      "amout": 600000,
+      "memo": "월세"
+    }
+  ]
+}

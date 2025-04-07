@@ -19,6 +19,8 @@ html {
   --color-white: #ffffff;
   --color-income: #0c7acd;
   --color-expense: #cd0c22;
+  --color-hover: linear-gradient(0deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.4) 100%);
+  --transition: all 0.3s ease;
 }
 
 .titleBold14px {

@@ -5,24 +5,37 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
 
-// 도넛 데이터
-const series = ref([44, 55, 41, 17, 15])
+const props = defineProps({
+  labels: {
+    type: Array,
+    required: true,
+  },
+  series: {
+    type: Array,
+    required: true,
+  },
+})
 
 // 옵션 설정
-const options = ref({
+const options = computed(() => ({
   chart: {
-    type: 'doughnut',
+    type: 'donut',
   },
-  labels: ['카페', '교통', '마트', '쇼핑', '기타'],
+  labels: props.labels,
   legend: {
     position: 'bottom',
   },
   dataLabels: {
     enabled: true,
   },
-})
+  tooltip: {
+    y: {
+      formatter: (val) => `${val.toLocaleString()}원`,
+    },
+  },
+}))
 </script>
 
 <style scoped>

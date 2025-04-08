@@ -3,13 +3,24 @@
     <div class="report-wrapper">
       <div class="report-left">
         <div class="report-title titleBold24px">소비 분석 그래프</div>
+        <!-- 기간 선택 버튼 -->
+        <div class="report-selector">
+          <BtnXs
+            v-for="p in PERIOD_OPTIONS"
+            :key="p"
+            :text="p"
+            :is-active="p === periodLine"
+            @click="periodLine = p"
+            color="var(--color-accent)"
+          />
+        </div>
         <div class="report-subtitle">
           {{
             monthlyTotal.diff === 0
-              ? '전월과 동일한 소비입니다.'
+              ? `${periodLine} 기준으로 동일한 소비입니다.`
               : monthlyTotal.diff > 0
-                ? `전월 대비 ${monthlyTotal.diff.toLocaleString()}원 더 소비하였습니다.`
-                : `전월 대비 ${Math.abs(monthlyTotal.diff).toLocaleString()}원 덜 소비하였습니다.`
+                ? `${periodLine} 기준으로 ${monthlyTotal.diff.toLocaleString()}원 더 소비하였습니다.`
+                : `${periodLine} 기준으로 ${Math.abs(monthlyTotal.diff).toLocaleString()}원 덜 소비하였습니다.`
           }}
         </div>
       </div>
@@ -27,6 +38,17 @@
     <div class="report-wrapper">
       <div class="report-left">
         <div class="report-title titleBold24px">카테고리 별 비율</div>
+        <!-- 기간 선택 버튼 -->
+        <div class="report-selector">
+          <BtnXs
+            v-for="p in PERIOD_OPTIONS"
+            :key="p"
+            :text="p"
+            :is-active="p === periodDoughnut"
+            @click="periodDoughnut = p"
+            color="var(--color-accent)"
+          />
+        </div>
         <BtnDual
           @clickIncome="clickIncome"
           @clickExpense="clickExpense"
@@ -34,114 +56,38 @@
           :is-expense-active="isExpense"
         />
         <div class="report-subtitle">
-          1위: 카페<br />2위: 식당<br />3위: xx<br />4위: xx<br />5위: xx
+          <div v-for="(label, index) in top5Labels" :key="index">
+            {{ index + 1 }}위: {{ label }}
+          </div>
         </div>
       </div>
       <div class="report-right">
-        <Doughnut />
+        <Doughnut :labels="doughnutData.labels" :series="doughnutData.series" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import axios from 'axios'
-import { ref, onMounted, computed } from 'vue'
+import { inject } from 'vue'
 import BtnDual from '@/components/button/BtnDual.vue'
 import Doughnut from '@/components/chart/Doughnut.vue'
 import Line from '@/components/chart/Line.vue'
+import BtnXs from '@/components/button/BtnXs.vue'
 
-const isIncome = ref(false)
-const isExpense = ref(true)
-// 토글 버튼 형식 구현
-function clickIncome() {
-  isIncome.value = !isIncome.value
-  isExpense.value = !isIncome.value
-}
-function clickExpense() {
-  isExpense.value = !isExpense.value
-  isIncome.value = !isExpense.value
-}
-
-// db.json에서 데이터 받아오기
-const transactions = ref([])
-
-async function requestAPI() {
-  try {
-    const res = await axios.get('/api/transactions') // 엔드포인트 확인 필요
-    transactions.value = res.data
-  } catch (error) {
-    console.error('🚨 트랜잭션 불러오기 실패:', error)
-  }
-}
-
-// ✅ 날짜별 수입/지출 총합과 건수를 계산
-const grouped = computed(() => {
-  const map = new Map()
-  transactions.value.forEach((tx) => {
-    const date = tx.date
-    const isIncome = tx.category_id.startsWith('2')
-
-    if (!map.has(date)) {
-      map.set(date, {
-        income: 0,
-        incomeCount: 0,
-        expense: 0,
-        expenseCount: 0,
-      })
-    }
-
-    const entry = map.get(date)
-    if (isIncome) {
-      entry.income += tx.amount
-      entry.incomeCount++
-    } else {
-      entry.expense += tx.amount
-      entry.expenseCount++
-    }
-  })
-
-  const sorted = [...map.entries()].sort(([a], [b]) => a.localeCompare(b))
-
-  return {
-    labels: sorted.map(([date]) => date),
-    incomeData: sorted.map(([_, val]) => val.income),
-    incomeCounts: sorted.map(([_, val]) => val.incomeCount),
-    expenseData: sorted.map(([_, val]) => val.expense),
-    expenseCounts: sorted.map(([_, val]) => val.expenseCount),
-  }
-})
-
-// ✅ 전월 대비 소비 총합 비교
-const monthlyTotal = computed(() => {
-  const now = new Date()
-  const thisMonth = now.toISOString().slice(0, 7)
-  const prevMonth = new Date(now.setMonth(now.getMonth() - 1)).toISOString().slice(0, 7)
-
-  let thisTotal = 0
-  let prevTotal = 0
-
-  transactions.value.forEach((tx) => {
-    const isExpense = !tx.category_id.startsWith('2')
-    const month = tx.date.slice(0, 7)
-
-    if (isExpense) {
-      if (month === thisMonth) thisTotal += tx.amount
-      else if (month === prevMonth) prevTotal += tx.amount
-    }
-  })
-
-  return {
-    thisTotal,
-    prevTotal,
-    diff: thisTotal - prevTotal,
-  }
-})
-
-onMounted(() => {
-  requestAPI()
-})
+const periodLine = inject('periodLine')
+const periodDoughnut = inject('periodDoughnut')
+const isIncome = inject('isIncome')
+const isExpense = inject('isExpense')
+const clickIncome = inject('clickIncome')
+const clickExpense = inject('clickExpense')
+const grouped = inject('grouped')
+const monthlyTotal = inject('monthlyTotal')
+const doughnutData = inject('doughnutData')
+const top5Labels = inject('top5Labels')
+const PERIOD_OPTIONS = inject('PERIOD_OPTIONS')
 </script>
+
 <style scoped>
 .report-page {
   display: flex;
@@ -160,6 +106,11 @@ onMounted(() => {
   flex-direction: column;
   align-items: flex-start;
   gap: 0.75rem;
+}
+
+.report-selector {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .report-right {

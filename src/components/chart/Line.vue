@@ -33,14 +33,39 @@ const series = computed(() => [
 // 옵션 설정
 const options = computed(() => ({
   chart: {
+    width: '100%',
+    height: '100%',
     id: 'line-chart',
     type: 'line',
+    // 차트 도구 비활성화
+    toolbar: {
+      show: false,
+    },
+    // 차트 확대/축소 비활성화
+    zoom: {
+      enabled: false,
+    },
+  },
+  // 라인 그래프 스타일 설정
+  stroke: {
+    curve: 'smooth',
+    width: 2,
   },
   xaxis: {
     categories: props.labels,
+    labels: {
+      // 라벨 형식 mm/dd 형식으로 변환
+      formatter: function (value) {
+        const date = new Date(value)
+        const mm = String(date.getMonth() + 1).padStart(2, '0')
+        const dd = String(date.getDate()).padStart(2, '0')
+        return `${mm}/${dd}`
+      },
+    },
   },
   tooltip: {
     shared: true,
+    // 매핑
     custom: ({ dataPointIndex }) => {
       const date = props.labels[dataPointIndex]
       const income = props.incomeData[dataPointIndex] || 0
@@ -49,10 +74,10 @@ const options = computed(() => ({
       const expenseCount = props.expenseCounts[dataPointIndex] || 0
 
       return `
-        <div style="padding: 8px;">
-          <strong>${date}</strong><br/>
-          <span style="color: var(--color-income)">● 수입:</span> ${income.toLocaleString()}원 (${incomeCount}건)<br/>
-          <span style="color: var(--color-expense)">● 지출:</span> ${expense.toLocaleString()}원 (${expenseCount}건)
+        <div style="padding: 1rem;">
+          <div class="bodySemibold16px">${date}</div><br/>
+          <span class="bodyRegular16px" style="color: var(--color-income)">● 수입:</span> ${income.toLocaleString()}원 (${incomeCount}건)<br/>
+          <span class="bodyRegular16px" style="color: var(--color-expense)">● 지출:</span> ${expense.toLocaleString()}원 (${expenseCount}건)
         </div>
       `
     },

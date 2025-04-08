@@ -13,6 +13,9 @@
   <InputMed type="text" placeholder="text" v-model="inputVal" />
   <InputSm type="number" placeholder="number" v-model="inputVal" />
   {{ inputVal }}
+  <SelectLg v-model="selectedValue" :options="categoryOptions" placeholder="수입 카테고리" />
+  <SelectMed v-model="selectedValue" :options="categoryOptions" placeholder="수입 카테고리" />
+  <SelectSm v-model="selectedValue" :options="categoryOptions" placeholder="수입 카테고리" />
 </template>
 
 <script setup>
@@ -25,6 +28,9 @@ import InputLg from '@/components/input/InputLg.vue'
 import { ref } from 'vue'
 import InputMed from '@/components/input/InputMed.vue'
 import InputSm from '@/components/input/InputSm.vue'
+import SelectLg from '@/components/input/SelectLg.vue'
+import SelectMed from '@/components/input/SelectMed.vue'
+import SelectSm from '@/components/input/SelectSm.vue'
 const isIncome = ref(false)
 const isExpense = ref(false)
 const inputVal = ref('')
@@ -41,6 +47,13 @@ function clickExpense() {
   isExpense.value = !isExpense.value
   // alert('Expense button clicked!')
 }
+
+const selectedValue = ref('')
+const categoryOptions = [
+  { value: 'income', label: '수입' },
+  { value: 'expense', label: '지출' },
+  { value: 'other', label: '기타' },
+]
 </script>
 
 <style scoped></style>

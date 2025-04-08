@@ -61,7 +61,7 @@ const route = useRoute()
   width: 8rem;
   text-align: center;
   padding: 0.75rem 0.5rem;
-  transition: all 0.2s ease-in-out;
+  transition: var(--transition);
 }
 
 .active-tab {
@@ -78,6 +78,4 @@ const route = useRoute()
 .username {
   text-decoration: underline;
 }
-
-
 </style>

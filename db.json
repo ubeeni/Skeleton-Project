@@ -9,8 +9,8 @@
     {
       "id": "AB78",
       "name": "ㅁㄴㅇㄹ",
-      "incomeDefault": "기타수입",
-      "expenseDefault": "여행"
+      "incomeDefault": "미분류",
+      "expenseDefault": "미분류"
     }
   ],
   "categories": [
@@ -213,6 +213,19 @@
       "week": null,
       "month": null,
       "amout": 444,
+      "memo": ""
+    },
+    {
+      "id": "1744093977970",
+      "member_id": "AB78",
+      "title": "134253425",
+      "type": "Income",
+      "category_id": "1111",
+      "cycle": "daily",
+      "day": "매일",
+      "week": null,
+      "month": null,
+      "amout": 12341245,
       "memo": ""
     }
   ]

@@ -28,12 +28,7 @@
         <button class="add-yellow" @click="showAddModal = true">추가</button>
       </div>
       <ul>
-        <li
-          v-for="item in limitedQuickOptions"
-          :key="item.id"
-          class="item"
-          @click="openEditModal(item)"
-        >
+        <li v-for="item in quickOptions" :key="item.id" class="item" @click="openEditModal(item)">
           {{ formatOption(item) }}
         </li>
       </ul>
@@ -51,7 +46,7 @@
     v-if="showAddModal"
     :categories="categories"
     @close="showAddModal = false"
-    @refresh="fetchQuickOptions"
+    @add="handleAddOption"
   />
 
   <EditQuickOptionModal
@@ -89,6 +84,7 @@ const categories = ref([])
 const selectedIncome = ref('')
 const selectedExpense = ref('')
 
+const originalQuickOptions = ref([])
 const user = ref(null)
 
 const fetchUser = async () => {
@@ -101,6 +97,12 @@ const fetchUser = async () => {
   selectedExpense.value =
     categories.value.find((c) => c.name === res.data.expenseDefault && c.type === 'Expense')?.id ||
     ''
+}
+
+const handleAddOption = (newOption) => {
+  newOption.id = Date.now().toString() // 임시 ID 부여
+  newOption.member_id = userId
+  quickOptions.value.push(newOption)
 }
 
 const findCategoryNameById = (id) => {
@@ -116,8 +118,15 @@ const saveDefaults = async () => {
   }
 
   await axios.patch(`http://localhost:3000/members/${userId}`, payload)
-  alert('저장되었습니다!')
 
+  const existing = await axios.get(`http://localhost:3000/quickAddOptions?member_id=${userId}`)
+  const toAdd = quickOptions.value.filter(
+    (item) => !existing.data.some((e) => e.title === item.title && e.amout === item.amout),
+  )
+
+  await Promise.all(toAdd.map((item) => axios.post(`http://localhost:3000/quickAddOptions`, item)))
+
+  alert('저장되었습니다!')
   router.push(`/user/${userId}`)
 }
 
@@ -130,7 +139,9 @@ const cancelAndRedirect = () => {
 
 const fetchQuickOptions = async () => {
   const res = await axios.get('http://localhost:3000/quickAddOptions')
-  quickOptions.value = res.data.filter((item) => item.member_id === userId)
+  const userData = res.data.filter((item) => item.member_id === userId)
+  quickOptions.value = [...userData]
+  originalQuickOptions.value = [...userData]
 }
 
 const fetchCategories = async () => {
@@ -155,8 +166,6 @@ const openEditModal = (item) => {
   showEditModal.value = true
 }
 
-const limitedQuickOptions = computed(() => quickOptions.value.slice(0, 5))
-
 onMounted(async () => {
   await fetchCategories()
   await fetchUser()
@@ -165,6 +174,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+/* 동일한 스타일 유지 */
 .wrapper {
   display: flex;
   justify-content: center;

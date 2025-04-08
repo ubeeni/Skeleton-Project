@@ -1,4 +1,3 @@
-<!-- components/AddQuickOptionModal.vue -->
 <template>
   <div class="modal">
     <div class="modal-box">
@@ -100,14 +99,13 @@
 
 <script setup>
 import { ref, computed, watchEffect } from 'vue'
-import axios from 'axios'
 import { useRoute } from 'vue-router'
 
 const props = defineProps({
   categories: Array,
 })
 
-const emit = defineEmits(['close', 'refresh'])
+const emit = defineEmits(['close', 'add'])
 
 const route = useRoute()
 const userId = route.params.id
@@ -131,7 +129,7 @@ const filteredCategories = computed(() =>
 
 const triedSubmit = ref(false)
 
-const submit = async () => {
+const submit = () => {
   triedSubmit.value = true
 
   if (!newItem.value.title || !newItem.value.amout || newItem.value.amout <= 0) {
@@ -139,17 +137,7 @@ const submit = async () => {
     return
   }
 
-  // 5개 제한 검사 (기존대로 유지)
-  const res = await axios.get('http://localhost:3000/quickAddOptions')
-  const userOptions = res.data.filter((item) => item.member_id === userId)
-  if (userOptions.length >= 5) {
-    alert('기본 지출은 최대 5개까지만 추가할 수 있습니다.')
-    return
-  }
-
-  await axios.post('http://localhost:3000/quickAddOptions', newItem.value)
-  alert('기본 지출이 추가되었습니다!')
-  emit('refresh')
+  emit('add', { ...newItem.value })
   emit('close')
 }
 
@@ -245,6 +233,7 @@ input.error {
   background-color: var(--color-expense); /* 빨간색 */
   color: var(--color-white);
 }
+
 .button-group {
   margin-top: 40px;
   display: flex;

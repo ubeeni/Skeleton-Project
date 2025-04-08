@@ -7,7 +7,11 @@
       <!-- 거래명 -->
       <div class="form-row">
         <label>거래명</label>
-        <input v-model="newItem.title" placeholder="거래명을 입력하세요" />
+        <input
+          v-model="newItem.title"
+          :class="{ error: !newItem.title && triedSubmit }"
+          placeholder="거래명을 입력하세요"
+        />
       </div>
 
       <!-- 구분 (수입 / 지출 버튼) -->
@@ -72,7 +76,12 @@
       <!-- 금액 -->
       <div class="form-row">
         <label>금액</label>
-        <input v-model="newItem.amout" type="number" placeholder="금액을 입력하세요" />
+        <input
+          v-model="newItem.amout"
+          type="number"
+          :class="{ error: (!newItem.amout || newItem.amout <= 0) && triedSubmit }"
+          placeholder="금액을 입력하세요"
+        />
       </div>
 
       <!-- 메모 -->
@@ -120,17 +129,24 @@ const filteredCategories = computed(() =>
   props.categories.filter((cat) => cat.type === newItem.value.type),
 )
 
+const triedSubmit = ref(false)
+
 const submit = async () => {
-  // 먼저 현재 유저의 quickAddOptions 개수를 조회
+  triedSubmit.value = true
+
+  if (!newItem.value.title || !newItem.value.amout || newItem.value.amout <= 0) {
+    alert('거래명과 금액은 필수 항목입니다.')
+    return
+  }
+
+  // 5개 제한 검사 (기존대로 유지)
   const res = await axios.get('http://localhost:3000/quickAddOptions')
   const userOptions = res.data.filter((item) => item.member_id === userId)
-
   if (userOptions.length >= 5) {
     alert('기본 지출은 최대 5개까지만 추가할 수 있습니다.')
     return
   }
 
-  // 5개 미만이면 추가
   await axios.post('http://localhost:3000/quickAddOptions', newItem.value)
   alert('기본 지출이 추가되었습니다!')
   emit('refresh')
@@ -192,6 +208,10 @@ select {
   border: 1px solid #ccc;
   border-radius: 12px;
   font-size: 14px;
+}
+
+input.error {
+  border: 1px solid red;
 }
 
 .select-group {

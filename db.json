@@ -240,19 +240,6 @@
       "month": null,
       "amout": 1122,
       "memo": ""
-    },
-    {
-      "id": "1612",
-      "member_id": "AB78",
-      "title": "5번째 ",
-      "type": "Expense",
-      "category_id": "7777",
-      "cycle": "monthly",
-      "day": "매일",
-      "week": null,
-      "month": 12,
-      "amout": 100,
-      "memo": "5번째 옵션"
     }
   ]
 }

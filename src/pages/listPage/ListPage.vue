@@ -1,27 +1,59 @@
 <template>
-    <div class="list-page">
-      <TransactionOneDay
-        :date="today"
-        :transactions="sampleTransactions"
-        :categoryMap="categoryMap"
-      />
-    </div>
-  </template>
+  <div class="list-page">
+    <TransactionList
+      :transactions="transactions"
+      :categoryMap="categoryMap"
+    />
+  </div>
+</template>
   
   <script setup>
-  import TransactionOneDay from './TransactionOneDay.vue'
+  import { ref, onMounted, computed } from 'vue'
+  import axios from 'axios'
+  import TransactionList from './TransactionList.vue'
+
+  const transactions = ref([])
+  const categories = ref([])
   
-  const today = '2024-04-07'
-  
-  const sampleTransactions = [
-    { id: 'tx1', category_id: '2222', amount: 50000, memo: '카테고리' },
-    { id: 'tx2', category_id: '5555', amount: 3000, memo: '메모란' },
-    { id: 'tx3', category_id: '5555', amount: 4000, memo: '메모란' }
-  ]
-  
-  const categoryMap = {
-    '2222': { name: '용돈', type: 'Income' },
-    '5555': { name: '생활비', type: 'Expense' }
+  // const categoryMap = computed(() => {
+  //   const map = {}
+  //   categories.value.forEach((cat) => (map[cat.id] = cat))
+  //   return map
+  // })
+
+  const categoryMap = computed(() => {
+  const map = {}
+  if (Array.isArray(categories.value)) {
+    categories.value.forEach((cat) => {
+      if (cat && cat.id) map[cat.id] = cat
+    })
   }
+  return map
+})
+
+
+  const groupedTransactions = computed(() => {
+  const groups = {}
+  for (const tx of transactions.value) {
+    if (!groups[tx.date]) groups[tx.date] = []
+    groups[tx.date].push(tx)
+  }
+  return groups
+})
+
+  onMounted(async () => {
+    const txRes = await axios.get('/api/transactions')
+    const catRes = await axios.get('/api/categories')
+    transactions.value = txRes.data
+    categories.value = catRes.data
+  })
   </script>
+
+<style scoped>
+.list-page {
+  padding: 24px;
+  background-color: #f8f8f8;
+}
+</style>
+
   

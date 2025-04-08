@@ -1,15 +1,21 @@
 <template>
-    <section class="day-group">
-        <h3>{{ formatDate(date) }}</h3>
-        <p>{{ totalText }}</p>
+    <div class="transaction-day">
+      <div class="header">
+        <div class="date titleBold14px">{{ formattedDate }}</div>
+        <div class="summary bodyRegular16px">
+          {{ formattedTotal }} · {{ items.length }}건
+        </div>
+      </div>
+      <div class="items">
         <ListItem
-            v-for="tx in transactions"
-            :key="tx.id"
-            :item="tx"
-            :categoryMap="categoryMap"
+          v-for="item in items"
+          :key="item.id"
+          :item="item"
+          :categoryMap="categoryMap"
         />
-    </section>
-</template>
+      </div>
+    </div>
+  </template>
 
 <script setup>
     import {computed} from 'vue';
@@ -18,25 +24,45 @@
     
     const props = defineProps({
         date: String,
-        transactions : Array,
+        items : Array,
         categoryMap : Object
     })
     
-    const formatDate = (d) => {
-        const today = dayjs().format('YYYY-MM-DD')
-        return d === today ? '오늘' : dayjs(d).format('M월 D일')
-    }
+    const formattedDate = computed(() =>
+    dayjs(props.date).isValid()
+    ? dayjs(props.date).format('M월 D일')
+    : '날짜 오류'
+    )
 
-    const totalText = computed(() => {
-        const total = props.transactions.reduce((acc,tx) => {
-            const type = props.categoryMap[tx.category_id]?.type
-            return acc + (type === 'Income' ? tx.amount : -tx.amount)
-        },0)
-        return `${total >= 0 ? '+' : ''}${total.toLocaleString()}원 · ${props.transactions.length}건`
-
+    const total = computed(() => {
+        return props.items.reduce((sum, item) => {
+        const type = props.categoryMap[item.category_id]?.type
+        const sign = type === 'Income' ? 1 : -1
+        return sum + item.amount * sign
+    }, 0 )
     })
+
+    const formattedTotal = computed(() => {
+        const sign = total.value >= 0 ? '+' : '-'
+        return `${sign}${Math.abs(total.value).toLocaleString()}원`
+    })
+
 </script>
 
-<style lang="scss" scoped>
 
+<style scoped>
+.transaction-day {
+  margin-bottom: 24px;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 </style>

@@ -329,24 +329,6 @@
       "amount": 100000,
       "date": "2025-04-08",
       "memo": "길에서 주운 돈"
-    },
-    {
-      "title": "전용 더미 데이터 2222",
-      "category_id": "6666",
-      "type": "Expense",
-      "amount": "6677889900",
-      "date": "1000-04-08",
-      "memo": "이건 진짜 테스트용 (나중에 뺌) 22222",
-      "id": "SIVA"
-    },
-    {
-      "id": "9b9b",
-      "title": "김창영 암살",
-      "category_id": "3333",
-      "type": "Income",
-      "amount": "4444444",
-      "date": "2044-04-04",
-      "memo": "죽어라 창영"
     }
   ],
   "quickAddOptions": [

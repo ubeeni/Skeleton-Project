@@ -1,43 +1,60 @@
 <template>
-  <div class="calendar-wrapper">
-    <FullCalendar :options="calendarOptions" />
-
-    <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
-      <div class="modal-content">
-        <button @click="closeModal" class="close-btn">
-          <img :src="closeButton" alt="close" />
+  <div class="container">
+    <div class="sidebar">
+      <div class="month-nav">
+        <button @click="handlePrev" class="back-btn">
+          <img :src="backButton" alt="back" />
         </button>
 
-        <div class="bodySemibold18px">{{ clickedDate }}</div>
-        <br />
+        <span class="titleBold24px"> {{ parseInt(currentDate.split('-')[1]) }}월 </span>
 
-        <div class="bodyRegular16px" v-if="dailyData">
-          <div>
-            <strong>💸 지출</strong>
-            <br />
-            <ul>
-              <li v-for="(item, index) in dailyData.expense" :key="'e' + index">
-                {{ item.category }}
-                <span style="color: var(--color-expense)">
-                  {{ item.amount.toLocaleString() }}원
-                </span>
-              </li>
-            </ul>
+        <button @click="handleNext" class="forward-btn">
+          <img :src="forwardButton" alt="forward" />
+        </button>
+      </div>
+
+      <BtnMed :color="'var(--color-secondary)'" :text="`빠른추가`" @click="moveToAdd"></BtnMed>
+      <BtnMed :color="'var(--color-primary)'" :text="`기본추가`" @click="moveToAdd"></BtnMed>
+    </div>
+
+    <div class="calendar-wrapper">
+      <FullCalendar ref="calendarRef" :options="calendarOptions" />
+
+      <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+        <div class="modal-content">
+          <button @click="closeModal" class="close-btn">
+            <img :src="closeButton" alt="close" />
+          </button>
+
+          <div class="bodySemibold18px">{{ clickedDate }}</div>
+          <br />
+
+          <div class="bodyRegular16px" v-if="dailyData">
+            <div>
+              <strong>💸 지출</strong>
+              <ul>
+                <li v-for="(item, index) in dailyData.expense" :key="'e' + index">
+                  {{ item.category }} -
+                  <span style="color: var(--color-expense)">
+                    {{ item.amount.toLocaleString() }}원
+                  </span>
+                </li>
+              </ul>
+            </div>
+            <div style="margin-top: 1rem">
+              <strong>💰 수입</strong>
+              <ul>
+                <li v-for="(item, index) in dailyData.income" :key="'i' + index">
+                  {{ item.category }} -
+                  <span style="color: var(--color-income)">
+                    {{ item.amount.toLocaleString() }}원
+                  </span>
+                </li>
+              </ul>
+            </div>
           </div>
-          <div style="margin-top: 1rem">
-            <strong>💰 수입</strong>
-            <ul>
-              <li v-for="(item, index) in dailyData.income" :key="'i' + index">
-                {{ item.category }}
-                <span style="color: var(--color-income)">
-                  {{ item.amount.toLocaleString() }}원
-                </span>
-              </li>
-            </ul>
-          </div>
+          <p class="bodyRegular16px" v-else>내역이 없습니다.</p>
         </div>
-
-        <p class="bodyRegular16px" v-else>내역이 없습니다.</p>
       </div>
     </div>
   </div>
@@ -49,6 +66,16 @@ import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import closeButton from '@/assets/icons/IconClose.svg'
+import backButton from '@/assets/icons/IconArrowBack.svg'
+import forwardButton from '@/assets/icons/IconArrowForward.svg'
+import BtnMed from '@/components/button/BtnMed.vue'
+
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+function moveToAdd() {
+  router.push({ name: 'add' })
+}
 
 const showModal = ref(false)
 const clickedDate = ref('')
@@ -65,6 +92,27 @@ const dummyData = {
     ],
     income: [{ category: '알바비', amount: 50000 }],
   },
+}
+
+const calendarRef = ref(null)
+const currentDate = ref(formatDate(new Date()))
+
+function formatDate(date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+}
+
+const handlePrev = () => {
+  const calendarApi = calendarRef.value.getApi()
+  calendarApi.prev()
+  const newDate = calendarApi.getDate()
+  currentDate.value = formatDate(newDate)
+}
+
+const handleNext = () => {
+  const calendarApi = calendarRef.value.getApi()
+  calendarApi.next()
+  const newDate = calendarApi.getDate()
+  currentDate.value = formatDate(newDate)
 }
 
 const closeModal = () => {
@@ -120,7 +168,7 @@ const calendarOptions = {
   },
   headerToolbar: {
     left: 'today',
-    center: 'prev title next',
+    center: '',
     right: '',
   },
   locale: 'ko',
@@ -136,9 +184,22 @@ const calendarOptions = {
 </script>
 
 <style>
+.month-nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.container {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+  margin: 0 auto;
+}
+
 .calendar-wrapper {
-  max-width: 900px;
-  margin: 2rem auto;
   padding: 1.5rem;
   background: var(--color-white);
   border-radius: 16px;
@@ -167,46 +228,11 @@ const calendarOptions = {
   outline: none !important;
 }
 
-.fc .fc-toolbar-chunk:nth-child(2) {
-  display: flex !important;
-  align-items: center;
-  gap: 0.75rem;
-  justify-content: center;
-}
-
-.fc .fc-toolbar-title {
-  /* bodySemibold18px */
-  font-size: 1.125rem;
-  font-weight: 600;
-  font-family: 'Pretendard-SemiBold', sans-serif;
-}
-
 .fc .fc-col-header-cell .fc-col-header-cell-cushion {
   /* bodySemibold18px */
   font-size: 1.125rem;
   font-weight: 600;
   font-family: 'Pretendard-SemiBold', sans-serif;
-}
-
-.fc .fc-prev-button,
-.fc .fc-next-button {
-  background: none !important;
-  border: none !important;
-  color: var(--color-dark) !important;
-  padding: 0.2rem 0.4rem;
-  box-shadow: none !important;
-}
-
-.fc .fc-prev-button:hover,
-.fc .fc-next-button:hover,
-.fc .fc-prev-button:focus,
-.fc .fc-next-button:focus,
-.fc .fc-prev-button:active,
-.fc .fc-next-button:active {
-  background: none !important;
-  color: var(--color-dark) !important;
-  box-shadow: none !important;
-  outline: none !important;
 }
 
 .fc .fc-daygrid-day-number {

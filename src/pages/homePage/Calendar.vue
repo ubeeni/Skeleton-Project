@@ -12,7 +12,7 @@
             <ul>
               <li v-for="(item, index) in dailyData.expense" :key="'e' + index">
                 {{ item.category }}
-                <span style="color: #e74c3c; font-weight: 500">
+                <span style="color: var(--color-expense); font-weight: 500">
                   {{ item.amount.toLocaleString() }}원
                 </span>
               </li>
@@ -23,7 +23,7 @@
             <ul>
               <li v-for="(item, index) in dailyData.income" :key="'i' + index">
                 {{ item.category }}
-                <span style="color: #0c7acd; font-weight: 500">
+                <span style="color: var(--color-income); font-weight: 500">
                   {{ item.amount.toLocaleString() }}원
                 </span>
               </li>
@@ -97,12 +97,12 @@ const renderEventContent = (arg) => {
 
   const expenseEl = document.createElement('div')
   expenseEl.textContent = `${expense.toLocaleString()}원`
-  expenseEl.style.color = '#e74c3c'
+  expenseEl.style.color = 'var(--color-expense)'
   wrapper.appendChild(expenseEl)
 
   const incomeEl = document.createElement('div')
   incomeEl.textContent = `${income.toLocaleString()}원`
-  incomeEl.style.color = '#0C7ACD'
+  incomeEl.style.color = 'var(--color-income)'
   wrapper.appendChild(incomeEl)
 
   return { domNodes: [wrapper] }
@@ -136,14 +136,14 @@ const calendarOptions = {
   max-width: 900px;
   margin: 2rem auto;
   padding: 1.5rem;
-  background: #ffffff;
+  background: var(--color-white);
   border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-light);
 }
 
 .fc .fc-button.fc-today-button {
-  background: white;
-  color: black !important;
+  background: var(--color-white);
+  color: var(--color-dark) !important;
   border-radius: 6px !important;
   font-size: 0.85rem;
   font-weight: 500;
@@ -154,8 +154,8 @@ const calendarOptions = {
 .fc .fc-button.fc-today-button:hover,
 .fc .fc-button.fc-today-button:focus,
 .fc .fc-button.fc-today-button:active {
-  background: white !important;
-  color: black !important;
+  background: var(--color-white) !important;
+  color: var(--color-dark) !important;
   border: none;
   box-shadow: none !important;
   outline: none !important;
@@ -178,7 +178,7 @@ const calendarOptions = {
 .fc .fc-next-button {
   background: none !important;
   border: none !important;
-  color: black !important;
+  color: var(--color-dark) !important;
   font-size: 1.2rem;
   font-weight: bold;
   padding: 0.2rem 0.4rem;
@@ -192,13 +192,13 @@ const calendarOptions = {
 .fc .fc-prev-button:active,
 .fc .fc-next-button:active {
   background: none !important;
-  color: black !important;
+  color: var(--color-dark) !important;
   box-shadow: none !important;
   outline: none !important;
 }
 
 .fc .fc-daygrid-day-number {
-  color: #000000;
+  color: var(--color-dark);
   text-align: center;
   margin-bottom: 0.25rem;
   display: block;
@@ -225,35 +225,20 @@ const calendarOptions = {
 }
 
 .fc .fc-col-header-cell .fc-col-header-cell-cushion {
-  color: #000000 !important;
+  color: var(--color-dark) !important;
   font-weight: 600;
   font-size: 0.85rem;
 }
 
 .fc .fc-day-today {
-  background: rgba(49, 130, 246, 0.08);
+  background: var(--color-secondary2) !important;
   border-radius: 12px;
 }
 
 .fc-daygrid-day.fc-day-today:hover,
 .fc-daygrid-day:hover {
-  background: rgba(0, 0, 0, 0.03);
+  background: var(--color-light2);
   border-radius: 12px;
-}
-
-.fc-button {
-  background: #3182f6;
-  border: none;
-  border-radius: 6px;
-  padding: 0.4rem 0.8rem;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: white;
-  transition: background 0.2s ease;
-}
-
-.fc-button:focus {
-  box-shadow: none;
 }
 
 .modal-overlay {
@@ -262,7 +247,7 @@ const calendarOptions = {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--color-modal);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -275,9 +260,8 @@ const calendarOptions = {
   border-radius: 16px;
   width: 340px;
   max-width: 90%;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
   font-size: 0.9rem;
-  color: #333;
+  color: var(--color-dark);
 }
 
 .modal-content h3 {
@@ -290,7 +274,7 @@ const calendarOptions = {
   margin-top: 1.5rem;
   padding: 0.6rem 1.2rem;
   background: var(--color-primary);
-  color: white;
+  color: var(--color-white);
   border: none;
   border-radius: 8px;
   cursor: pointer;

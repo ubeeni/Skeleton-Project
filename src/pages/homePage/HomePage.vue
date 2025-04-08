@@ -1,5 +1,5 @@
 <template>
-  <!-- 여기부터 승아 -->
+<!-- 여기부터 승아 -->
   <div class="report-divider"></div>
   <div class="report-title titleBold24px">소비리포트</div>
   <div class="report-wrapper bodySemibold18px">
@@ -19,9 +19,13 @@
     </div>
   </div>
   <!-- 여기까지 승아 -->
+  <div>
+    <Calendar />
+  </div>
 </template>
 
 <script setup>
+import Calendar from './Calendar.vue'
 // 여기부터 승아
 import Doughnut from '@/components/chart/Doughnut.vue'
 import Line from '@/components/chart/Line.vue'
@@ -31,6 +35,7 @@ const grouped = inject('grouped')
 const doughnutData = inject('doughnutData')
 // 여기까지 승아
 </script>
+
 <style scoped>
 /* 여기부터 승아 */
 .report-divider {
@@ -55,5 +60,4 @@ const doughnutData = inject('doughnutData')
 .report-right {
   width: 48%;
 }
-/* 여기까지 승아 */
 </style>

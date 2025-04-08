@@ -184,7 +184,7 @@ header {
   margin: auto;
 }
 main {
-  width: 60vw;
+  width: 62vw;
   margin: 8rem auto;
   min-height: 60vh;
 }

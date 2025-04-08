@@ -11,14 +11,18 @@ html {
 :root {
   --color-primary: #864af9;
   --color-secondary: #f8e559;
+  --color-secondary2: rgba(248, 229, 89, 0.4);
   --color-accent: #3b3486;
   --color-dark: #100d14;
   --color-semidark: #797979;
   --color-light: #c8c8c8;
+  --color-light2: rgba(200, 200, 200, 0.3);
+  --color-light3: rgba(200, 200, 200, 0.4);
   --color-white: #ffffff;
   --color-income: #0c7acd;
   --color-expense: #cd0c22;
-  --color-hover: linear-gradient(0deg, #100d1480 0%, #100d1480 100%);
+  --color-modal: rgba(0, 0, 0, 0.3);
+  --color-hover: linear-gradient(0deg, rgba(121, 121, 121, 0.5) 0%, rgba(121, 121, 121, 0.5) 100%);
   --transition: all 0.3s ease;
 }
 

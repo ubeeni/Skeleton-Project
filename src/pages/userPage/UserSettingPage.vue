@@ -1,50 +1,53 @@
 <template>
   <div class="wrapper">
-    <h2 class="title">사용자 설정</h2>
-
-    <div class="section">
-      <label class="label">카테고리 기본값</label>
-      <div class="category-selects">
-        <div>
-          <p class="select-label">수입 카테고리</p>
-          <select v-model="selectedIncome" class="select" @change="updateDefault('income')">
-            <option v-for="cat in incomeCategories" :key="cat.id" :value="cat.id">
-              {{ cat.name }}
-            </option>
-          </select>
-        </div>
-        <div>
-          <p class="select-label">지출 카테고리</p>
-          <select v-model="selectedExpense" class="select" @change="updateDefault('expense')">
-            <option v-for="cat in expenseCategories" :key="cat.id" :value="cat.id">
-              {{ cat.name }}
-            </option>
-          </select>
-        </div>
+    <!-- 왼쪽 패널 -->
+    <div class="left-panel">
+      <h2 class="title">사용자 설정</h2>
+      <div class="select-group">
+        <label class="select-label">수입</label>
+        <select v-model="selectedIncome" class="select">
+          <option v-for="cat in incomeCategories" :key="cat.id" :value="cat.id">
+            {{ cat.name }}
+          </option>
+        </select>
+      </div>
+      <div class="select-group">
+        <label class="select-label">지출</label>
+        <select v-model="selectedExpense" class="select">
+          <option v-for="cat in expenseCategories" :key="cat.id" :value="cat.id">
+            {{ cat.name }}
+          </option>
+        </select>
       </div>
     </div>
 
-    <div class="section">
-      <label class="label">기본 지출 (최대 5개)</label>
+    <!-- 오른쪽 패널 -->
+    <div class="right-panel">
+      <div class="right-header">
+        <label class="title">고정 수입/지출</label>
+        <button class="add-yellow" @click="showModal = true">추가</button>
+      </div>
       <ul>
         <li v-for="item in limitedQuickOptions" :key="item.id" class="item">
           {{ formatOption(item) }}
         </li>
       </ul>
     </div>
-
-    <div class="button-group">
-      <button class="btn add" @click="showModal = true">추가</button>
-      <button class="btn cancel" @click="router.back()">취소</button>
-    </div>
-
-    <AddQuickOptionModal
-      v-if="showModal"
-      :categories="categories"
-      @close="showModal = false"
-      @refresh="fetchQuickOptions"
-    />
   </div>
+
+  <!-- 버튼 -->
+  <div class="button-group">
+    <button class="btn save" @click="saveDefaults">저장</button>
+    <button class="btn cancel" @click="router.back()">취소</button>
+  </div>
+
+  <!-- 모달 -->
+  <AddQuickOptionModal
+    v-if="showModal"
+    :categories="categories"
+    @close="showModal = false"
+    @refresh="fetchQuickOptions"
+  />
 </template>
 
 <script setup>
@@ -83,15 +86,16 @@ const findCategoryNameById = (id) => {
   return categories.value.find((c) => c.id === id)?.name || ''
 }
 
-const updateDefault = async (type) => {
+const saveDefaults = async () => {
   if (!user.value) return
 
-  const payload =
-    type === 'income'
-      ? { incomeDefault: findCategoryNameById(selectedIncome.value) }
-      : { expenseDefault: findCategoryNameById(selectedExpense.value) }
+  const payload = {
+    incomeDefault: findCategoryNameById(selectedIncome.value),
+    expenseDefault: findCategoryNameById(selectedExpense.value),
+  }
 
   await axios.patch(`http://localhost:3000/members/${userId}`, payload)
+  alert('저장되었습니다!')
 }
 
 const fetchQuickOptions = async () => {
@@ -128,51 +132,61 @@ const limitedQuickOptions = computed(() => quickOptions.value.slice(0, 5))
 
 <style scoped>
 .wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
   padding: 40px;
-  max-width: 640px;
+  max-width: 1200px;
   margin: 0 auto;
+}
+
+.left-panel,
+.right-panel {
+  flex: 1;
 }
 
 .title {
   font-size: 24px;
   font-weight: bold;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
-.section {
-  margin-bottom: 36px;
-}
-
-.label {
-  display: block;
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
-.category-selects {
-  display: flex;
-  gap: 24px;
-  align-items: flex-start;
+.select-group {
+  margin-bottom: 24px;
 }
 
 .select-label {
-  font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 8px;
+  display: block;
 }
 
 .select {
-  padding: 10px;
-  width: 220px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  width: 100%;
+  padding: 12px;
   font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+}
+
+.right-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.add-yellow {
+  background-color: #fde047;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .item {
-  margin-bottom: 10px;
-  line-height: 1.6;
+  margin-bottom: 8px;
   font-size: 15px;
 }
 
@@ -180,28 +194,27 @@ const limitedQuickOptions = computed(() => quickOptions.value.slice(0, 5))
   margin-top: 60px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
   align-items: center;
-  justify-content: center;
+  gap: 16px;
 }
 
 .btn {
-  width: 60%;
-  padding: 14px 0;
-  border-radius: 12px;
-  font-weight: bold;
+  width: 300px;
+  padding: 16px 0;
   font-size: 16px;
+  font-weight: bold;
+  border-radius: 16px;
   border: none;
   cursor: pointer;
 }
 
-.cancel {
-  background-color: #ccc;
+.save {
+  background-color: #8b5cf6;
   color: white;
 }
 
-.add {
-  background-color: #8b5cf6;
+.cancel {
+  background-color: #ccc;
   color: white;
 }
 </style>

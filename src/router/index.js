@@ -46,16 +46,6 @@ const router = createRouter({
       component: () => import('@/pages/userPage/UserSettingPage.vue'),
     },
     {
-      path: '/user/:id/edit',
-      name: 'userEdit',
-      component: () => import('@/pages/userPage/UserEditPage.vue'),
-    },
-    {
-      path: '/user/:id/settings',
-      name: 'userSetting',
-      component: () => import('@/pages/userPage/UserSettingPage.vue'),
-    },
-    {
       path: '/:pathMatch(.*)*',
       name: 'notfound',
       component: NotFoundPage,

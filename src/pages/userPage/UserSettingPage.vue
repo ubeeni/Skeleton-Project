@@ -34,8 +34,8 @@
     </div>
 
     <div class="button-group">
-      <button class="btn cancel" @click="router.back()">취소</button>
       <button class="btn add" @click="showModal = true">추가</button>
+      <button class="btn cancel" @click="router.back()">취소</button>
     </div>
 
     <AddQuickOptionModal
@@ -113,7 +113,8 @@ const expenseCategories = computed(() => categories.value.filter((c) => c.type =
 
 const formatOption = (item) => {
   const dayText = item.day || item.week || (item.month ? `매월 ${item.month}일` : '')
-  return `${item.memo} | ${item.cycle} | ${item.amout.toLocaleString()}원 | ${dayText}`
+  const memoText = item.memo ? ` | ${item.memo}` : ''
+  return `${item.title} | ${dayText} | ${item.amout.toLocaleString()}원${memoText}`
 }
 
 onMounted(async () => {
@@ -128,55 +129,79 @@ const limitedQuickOptions = computed(() => quickOptions.value.slice(0, 5))
 <style scoped>
 .wrapper {
   padding: 40px;
-  max-width: 800px;
+  max-width: 640px;
   margin: 0 auto;
 }
+
 .title {
   font-size: 24px;
   font-weight: bold;
-  margin-bottom: 24px;
-}
-.section {
   margin-bottom: 32px;
 }
+
+.section {
+  margin-bottom: 36px;
+}
+
 .label {
   display: block;
+  font-size: 16px;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
+
 .category-selects {
   display: flex;
-  gap: 20px;
+  gap: 24px;
+  align-items: flex-start;
 }
+
 .select-label {
-  margin-bottom: 4px;
-}
-.select {
-  padding: 8px;
-  width: 180px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-.item {
+  font-size: 14px;
+  font-weight: 500;
   margin-bottom: 8px;
 }
-.button-group {
-  display: flex;
-  gap: 12px;
+
+.select {
+  padding: 10px;
+  width: 220px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 14px;
 }
+
+.item {
+  margin-bottom: 10px;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.button-group {
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+}
+
 .btn {
-  padding: 10px 20px;
-  border-radius: 8px;
+  width: 60%;
+  padding: 14px 0;
+  border-radius: 12px;
   font-weight: bold;
+  font-size: 16px;
   border: none;
   cursor: pointer;
 }
+
 .cancel {
   background-color: #ccc;
   color: white;
 }
+
 .add {
-  background-color: #a855f7;
+  background-color: #8b5cf6;
   color: white;
 }
 </style>

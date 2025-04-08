@@ -4,7 +4,7 @@
 
     <div class="form-row">
       <label class="label">이름</label>
-      <input v-model="editedName" type="text" class="input" :placeholder="user.name" />
+      <input v-model="editedName" type="text" class="input" :placeholder="user?.name" />
     </div>
 
     <div class="button-group">

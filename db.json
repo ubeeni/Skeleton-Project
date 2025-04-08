@@ -8,9 +8,9 @@
     },
     {
       "id": "AB78",
-      "name": "테스트",
-      "incomeDefault": "미분류",
-      "expenseDefault": "미분류"
+      "name": "ㅁㄴㅇㄹ",
+      "incomeDefault": "용돈",
+      "expenseDefault": "술/유흥"
     }
   ],
   "categories": [
@@ -201,6 +201,58 @@
       "month": 15,
       "amout": 100000,
       "memo": "용돈을 받았다"
+    },
+    {
+      "id": "53cb",
+      "member_id": "AB78",
+      "title": "교통비",
+      "type": "Expense",
+      "category_id": "FFFF",
+      "cycle": "weekly",
+      "day": "매일",
+      "week": "화요일",
+      "month": null,
+      "amout": 50000,
+      "memo": ""
+    },
+    {
+      "id": "e7b4",
+      "member_id": "AB78",
+      "title": "ㅁㄴㅇㄹ",
+      "type": "Income",
+      "category_id": "2222",
+      "cycle": "daily",
+      "day": "매일",
+      "week": null,
+      "month": null,
+      "amout": 12345,
+      "memo": ""
+    },
+    {
+      "id": "143a",
+      "member_id": "AB78",
+      "title": "sadasdaSd",
+      "type": "Expense",
+      "category_id": "8888",
+      "cycle": "daily",
+      "day": "매일",
+      "week": null,
+      "month": null,
+      "amout": 1122,
+      "memo": ""
+    },
+    {
+      "id": "6036",
+      "member_id": "AB78",
+      "title": "ㅁㅇㄴㄹㅁ",
+      "type": "Expense",
+      "category_id": "6666",
+      "cycle": "daily",
+      "day": "매일",
+      "week": null,
+      "month": null,
+      "amout": 122123,
+      "memo": ""
     }
   ]
 }

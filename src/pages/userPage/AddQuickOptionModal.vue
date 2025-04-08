@@ -7,7 +7,7 @@
       <!-- 거래명 -->
       <div class="form-row">
         <label>거래명</label>
-        <input v-model="newItem.title" placeholder="place holder" />
+        <input v-model="newItem.title" placeholder="거래명을 입력하세요" />
       </div>
 
       <!-- 구분 (수입 / 지출 버튼) -->
@@ -72,18 +72,18 @@
       <!-- 금액 -->
       <div class="form-row">
         <label>금액</label>
-        <input v-model="newItem.amout" type="number" placeholder="place holder" />
+        <input v-model="newItem.amout" type="number" placeholder="금액을 입력하세요" />
       </div>
 
       <!-- 메모 -->
       <div class="form-row">
         <label>메모</label>
-        <input v-model="newItem.memo" placeholder="place holder" />
+        <input v-model="newItem.memo" placeholder="추가 정보를 입력하세요" />
       </div>
 
       <div class="button-group">
-        <button @click="$emit('close')">취소</button>
         <button @click="submit">추가</button>
+        <button @click="$emit('close')">취소</button>
       </div>
     </div>
   </div>
@@ -202,7 +202,7 @@ select {
   border-radius: 10px;
   font-weight: bold;
   background-color: var(--color-light);
-  color: var(--color-dark);
+  color: var(--color-white);
   cursor: pointer;
 }
 
@@ -232,12 +232,12 @@ select {
 }
 
 .button-group button:first-child {
-  background-color: var(--color-light);
+  background-color: var(--color-primary);
   color: var(--color-white);
 }
 
 .button-group button:last-child {
-  background-color: var(--color-primary);
+  background-color: var(--color-light);
   color: var(--color-white);
 }
 </style>

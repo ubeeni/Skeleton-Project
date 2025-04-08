@@ -66,7 +66,6 @@ const categoryMap = computed(() => {
   display: flex;
   padding: 24px;
   gap: 32px;
-  background-color: #f8f8f8;
 }
 
 .left-area {

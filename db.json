@@ -216,16 +216,16 @@
       "memo": ""
     },
     {
-      "id": "1744093977970",
+      "id": "1744098031424",
       "member_id": "AB78",
-      "title": "134253425",
-      "type": "Income",
-      "category_id": "1111",
+      "title": "4",
+      "type": "Expense",
+      "category_id": "0000",
       "cycle": "daily",
       "day": "매일",
       "week": null,
       "month": null,
-      "amout": 12341245,
+      "amout": 2,
       "memo": ""
     }
   ]

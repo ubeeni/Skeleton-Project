@@ -45,6 +45,7 @@
   <AddQuickOptionModal
     v-if="showAddModal"
     :categories="categories"
+    :currentCount="quickOptions.length"
     @close="showAddModal = false"
     @add="handleAddOption"
   />
@@ -53,13 +54,14 @@
     v-if="showEditModal"
     :option="selectedOption"
     :categories="categories"
+    @update="handleUpdateOption"
+    @delete="handleDeleteOption"
     @close="
       () => {
         showEditModal = false
         selectedOption = null
       }
     "
-    @refresh="fetchQuickOptions"
   />
 </template>
 
@@ -70,23 +72,30 @@ import axios from 'axios'
 import AddQuickOptionModal from '@/pages/userPage/AddQuickOptionModal.vue'
 import EditQuickOptionModal from '@/pages/userPage/EditQuickOptionModal.vue'
 
-const showAddModal = ref(false)
-const showEditModal = ref(false)
-const selectedOption = ref(null)
-
+// 라우터 및 경로
 const route = useRoute()
 const router = useRouter()
 const userId = route.params.id
 
-const quickOptions = ref([])
-const categories = ref([])
+// 상태 변수
+const showAddModal = ref(false)
+const showEditModal = ref(false)
+const selectedOption = ref(null)
 
+// 사용자 정보 및 선택된 카테고리
+const user = ref(null)
 const selectedIncome = ref('')
 const selectedExpense = ref('')
 
-const originalQuickOptions = ref([])
-const user = ref(null)
+// 데이터 목록
+const categories = ref([])
+const quickOptions = ref([])
 
+// 카테고리 필터링
+const incomeCategories = computed(() => categories.value.filter((c) => c.type === 'Income'))
+const expenseCategories = computed(() => categories.value.filter((c) => c.type === 'Expense'))
+
+// 유저 데이터 가져오기
 const fetchUser = async () => {
   const res = await axios.get(`http://localhost:3000/members/${userId}`)
   user.value = res.data
@@ -99,12 +108,46 @@ const fetchUser = async () => {
     ''
 }
 
+// 카테고리 가져오기
+const fetchCategories = async () => {
+  const res = await axios.get('http://localhost:3000/categories')
+  categories.value = res.data
+
+  selectedIncome.value = categories.value.find((c) => c.type === 'Income')?.id || ''
+  selectedExpense.value = categories.value.find((c) => c.type === 'Expense')?.id || ''
+}
+
+// 고정지출 옵션 가져오기
+const fetchQuickOptions = async () => {
+  const res = await axios.get('http://localhost:3000/quickAddOptions')
+  const userData = res.data.filter((item) => item.member_id === userId)
+  quickOptions.value = [...userData]
+}
+
+// 항목 포맷
+const formatOption = (item) => {
+  const dayText = item.day || item.week || (item.month ? `매월 ${item.month}일` : '')
+  const memoText = item.memo ? ` | ${item.memo}` : ''
+  return `${item.title} | ${dayText} | ${item.amout.toLocaleString()}원${memoText}`
+}
+
+// 추가/수정/삭제 핸들러
 const handleAddOption = (newOption) => {
-  newOption.id = Date.now().toString() // 임시 ID 부여
+  newOption.id = Date.now().toString()
   newOption.member_id = userId
   quickOptions.value.push(newOption)
 }
 
+const handleUpdateOption = (updatedItem) => {
+  const idx = quickOptions.value.findIndex((opt) => opt.id === updatedItem.id)
+  if (idx !== -1) quickOptions.value[idx] = { ...updatedItem }
+}
+
+const handleDeleteOption = (id) => {
+  quickOptions.value = quickOptions.value.filter((item) => item.id !== id)
+}
+
+// 저장
 const findCategoryNameById = (id) => {
   return categories.value.find((c) => c.id === id)?.name || ''
 }
@@ -116,20 +159,30 @@ const saveDefaults = async () => {
     incomeDefault: findCategoryNameById(selectedIncome.value),
     expenseDefault: findCategoryNameById(selectedExpense.value),
   }
-
   await axios.patch(`http://localhost:3000/members/${userId}`, payload)
 
   const existing = await axios.get(`http://localhost:3000/quickAddOptions?member_id=${userId}`)
-  const toAdd = quickOptions.value.filter(
-    (item) => !existing.data.some((e) => e.title === item.title && e.amout === item.amout),
-  )
 
-  await Promise.all(toAdd.map((item) => axios.post(`http://localhost:3000/quickAddOptions`, item)))
+  const toAdd = quickOptions.value.filter((item) => !existing.data.some((e) => e.id === item.id))
+
+  const toUpdate = quickOptions.value.filter((item) => {
+    const original = existing.data.find((e) => e.id === item.id)
+    return original && JSON.stringify(original) !== JSON.stringify(item)
+  })
+
+  const toDelete = existing.data.filter((item) => !quickOptions.value.some((e) => e.id === item.id))
+
+  await Promise.all([
+    ...toAdd.map((item) => axios.post(`http://localhost:3000/quickAddOptions`, item)),
+    ...toUpdate.map((item) => axios.put(`http://localhost:3000/quickAddOptions/${item.id}`, item)),
+    ...toDelete.map((item) => axios.delete(`http://localhost:3000/quickAddOptions/${item.id}`)),
+  ])
 
   alert('저장되었습니다!')
   router.push(`/user/${userId}`)
 }
 
+// 취소
 const cancelAndRedirect = () => {
   const confirmCancel = confirm('수정 내용이 반영되지 않습니다. 정말 취소하시겠어요?')
   if (confirmCancel) {
@@ -137,30 +190,7 @@ const cancelAndRedirect = () => {
   }
 }
 
-const fetchQuickOptions = async () => {
-  const res = await axios.get('http://localhost:3000/quickAddOptions')
-  const userData = res.data.filter((item) => item.member_id === userId)
-  quickOptions.value = [...userData]
-  originalQuickOptions.value = [...userData]
-}
-
-const fetchCategories = async () => {
-  const res = await axios.get('http://localhost:3000/categories')
-  categories.value = res.data
-
-  selectedIncome.value = categories.value.find((c) => c.type === 'Income')?.id || ''
-  selectedExpense.value = categories.value.find((c) => c.type === 'Expense')?.id || ''
-}
-
-const incomeCategories = computed(() => categories.value.filter((c) => c.type === 'Income'))
-const expenseCategories = computed(() => categories.value.filter((c) => c.type === 'Expense'))
-
-const formatOption = (item) => {
-  const dayText = item.day || item.week || (item.month ? `매월 ${item.month}일` : '')
-  const memoText = item.memo ? ` | ${item.memo}` : ''
-  return `${item.title} | ${dayText} | ${item.amout.toLocaleString()}원${memoText}`
-}
-
+// 수정 모달 열기
 const openEditModal = (item) => {
   selectedOption.value = item
   showEditModal.value = true

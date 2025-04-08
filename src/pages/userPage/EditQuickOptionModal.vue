@@ -108,7 +108,7 @@ const props = defineProps({
   categories: Array,
 })
 
-const emit = defineEmits(['close', 'refresh'])
+const emit = defineEmits(['close', 'update', 'delete'])
 
 const editItem = ref({ ...props.option })
 const triedSubmit = ref(false)
@@ -125,27 +125,22 @@ const filteredCategories = computed(() =>
   props.categories.filter((cat) => cat.type === editItem.value.type),
 )
 
-const update = async () => {
+const update = () => {
   triedSubmit.value = true
-
   if (!editItem.value.title || !editItem.value.amout || editItem.value.amout <= 0) {
     alert('거래명과 금액은 필수 항목입니다.')
     return
   }
 
-  await axios.put(`http://localhost:3000/quickAddOptions/${editItem.value.id}`, editItem.value)
-  alert('수정이 완료되었습니다.')
-  emit('refresh')
+  emit('update', editItem.value) // ⬅️ 상위에 수정 내용 전달
   emit('close')
 }
 
-const remove = async () => {
+const remove = () => {
   const confirmDelete = confirm('정말 삭제하시겠습니까?')
   if (!confirmDelete) return
 
-  await axios.delete(`http://localhost:3000/quickAddOptions/${editItem.value.id}`)
-  alert('삭제가 완료되었습니다.')
-  emit('refresh')
+  emit('delete', editItem.value.id) // ⬅️ 상위에 삭제 요청 전달
   emit('close')
 }
 </script>

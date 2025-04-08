@@ -103,6 +103,7 @@ import { useRoute } from 'vue-router'
 
 const props = defineProps({
   categories: Array,
+  currentCount: Number,
 })
 
 const emit = defineEmits(['close', 'add'])
@@ -134,6 +135,11 @@ const submit = () => {
 
   if (!newItem.value.title || !newItem.value.amout || newItem.value.amout <= 0) {
     alert('거래명과 금액은 필수 항목입니다.')
+    return
+  }
+
+  if (props.currentCount >= 5) {
+    alert('기본 지출은 최대 5개까지만 추가할 수 있습니다.')
     return
   }
 

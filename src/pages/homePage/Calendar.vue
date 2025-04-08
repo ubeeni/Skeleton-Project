@@ -13,8 +13,28 @@
         </button>
       </div>
 
-      <BtnMed :color="'var(--color-secondary)'" :text="`빠른추가`" @click="moveToAdd"></BtnMed>
-      <BtnMed :color="'var(--color-primary)'" :text="`기본추가`" @click="moveToAdd"></BtnMed>
+      <div class="summary">
+        <div class="bodyRegular16px">
+          💰 수입:
+          <span style="color: var(--color-dark)"> {{ monthlyIncome.toLocaleString() }}원 </span>
+        </div>
+        <div class="bodyRegular16px">
+          💸 지출:
+          <span style="color: var(--color-dark)"> {{ monthlyExpense.toLocaleString() }}원 </span>
+        </div>
+        <div class="bodySemibold18px" style="margin-top: 0.5rem">
+          총합:
+          <span :class="totalColorClass">
+            {{ (monthlyIncome - monthlyExpense).toLocaleString() }}
+          </span>
+          원
+        </div>
+      </div>
+
+      <div style="height: 2rem"></div>
+      <BtnMed :color="'var(--color-secondary)'" :text="`빠른추가`" @click="moveToAdd" />
+      <div style="height: 1rem"></div>
+      <BtnMed :color="'var(--color-primary)'" :text="`기본추가`" @click="moveToAdd" />
     </div>
 
     <div class="calendar-wrapper">
@@ -29,26 +49,28 @@
           <div class="bodySemibold18px">{{ clickedDate }}</div>
           <br />
 
-          <div class="bodyRegular16px" v-if="dailyData">
+          <div class="bodyRegular16px" style="color: var(--color-dark)" v-if="dailyData">
             <div>
-              <strong>💸 지출</strong>
+              <strong>💰 수입</strong>
               <ul>
-                <li v-for="(item, index) in dailyData.expense" :key="'e' + index">
-                  {{ item.category }} -
-                  <span style="color: var(--color-expense)">
-                    {{ item.amount.toLocaleString() }}원
+                <li v-for="(item, index) in dailyData.income" :key="'i' + index">
+                  {{ item.title }}
+                  <span style="color: var(--color-income)">
+                    {{ item.amount.toLocaleString() }}
                   </span>
+                  원
                 </li>
               </ul>
             </div>
             <div style="margin-top: 1rem">
-              <strong>💰 수입</strong>
+              <strong>💸 지출</strong>
               <ul>
-                <li v-for="(item, index) in dailyData.income" :key="'i' + index">
-                  {{ item.category }} -
-                  <span style="color: var(--color-income)">
-                    {{ item.amount.toLocaleString() }}원
+                <li v-for="(item, index) in dailyData.expense" :key="'e' + index">
+                  {{ item.title }}
+                  <span style="color: var(--color-expense)">
+                    {{ item.amount.toLocaleString() }}
                   </span>
+                  원
                 </li>
               </ul>
             </div>
@@ -61,7 +83,8 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import axios from 'axios'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
@@ -77,22 +100,46 @@ function moveToAdd() {
   router.push({ name: 'add' })
 }
 
+const transactions = ref([])
+
+onMounted(async () => {
+  const res = await fetch('/db.json')
+  const json = await res.json()
+  transactions.value = json.transactions
+})
+
+const groupedByDate = computed(() => {
+  const result = {}
+
+  transactions.value.forEach((item) => {
+    const date = item.date
+    const type = item.type
+    const amount = item.amount
+    const title = item.title
+
+    if (!result[date]) {
+      result[date] = { income: [], expense: [] }
+    }
+
+    if (type === 'Income') {
+      result[date].income.push({ title, amount })
+    } else if (type === 'Expense') {
+      result[date].expense.push({ title, amount })
+    }
+  })
+
+  return result
+})
+
+const totalColorClass = computed(() => {
+  const net = monthlyIncome.value - monthlyExpense.value
+  if (net > 0) return 'color-positive'
+  else if (net < 0) return 'color-negative'
+  else return ''
+})
+
 const showModal = ref(false)
 const clickedDate = ref('')
-
-const dummyData = {
-  '2025-04-01': {
-    expense: [{ category: '카페', amount: 4500 }],
-    income: [],
-  },
-  '2025-04-07': {
-    expense: [
-      { category: '식비', amount: 12000 },
-      { category: '교통', amount: 3500 },
-    ],
-    income: [{ category: '알바비', amount: 50000 }],
-  },
-}
 
 const calendarRef = ref(null)
 const currentDate = ref(formatDate(new Date()))
@@ -115,27 +162,44 @@ const handleNext = () => {
   currentDate.value = formatDate(newDate)
 }
 
+const monthlyIncome = computed(() => {
+  const selectedMonth = currentDate.value
+  return transactions.value
+    .filter((t) => t.date.startsWith(selectedMonth) && t.type === 'Income')
+    .reduce((acc, cur) => acc + cur.amount, 0)
+})
+
+const monthlyExpense = computed(() => {
+  const selectedMonth = currentDate.value
+  return transactions.value
+    .filter((t) => t.date.startsWith(selectedMonth) && t.type === 'Expense')
+    .reduce((acc, cur) => acc + cur.amount, 0)
+})
+
 const closeModal = () => {
   showModal.value = false
 }
 
-const dailyData = computed(() => dummyData[clickedDate.value] ?? null)
+const dailyData = computed(() => groupedByDate.value[clickedDate.value] ?? null)
 
 const handleDateClick = (info) => {
   clickedDate.value = info.dateStr
   showModal.value = true
 }
 
-const events = Object.entries(dummyData).map(([date, data]) => {
-  const expenseTotal = data.expense.reduce((acc, cur) => acc + cur.amount, 0)
-  const incomeTotal = data.income.reduce((acc, cur) => acc + cur.amount, 0)
-  return {
-    title: `지출: ${expenseTotal.toLocaleString()}원\n수입: ${incomeTotal.toLocaleString()}원`,
-    start: date,
-    allDay: true,
-    extendedProps: { expenseTotal, incomeTotal },
-  }
-})
+const events = computed(() =>
+  Object.entries(groupedByDate.value).map(([date, data]) => {
+    const expenseTotal = data.expense.reduce((acc, cur) => acc + cur.amount, 0)
+    const incomeTotal = data.income.reduce((acc, cur) => acc + cur.amount, 0)
+
+    return {
+      title: `수입: ${incomeTotal.toLocaleString()}원\n지출: ${expenseTotal.toLocaleString()}원`,
+      start: date,
+      allDay: true,
+      extendedProps: { expenseTotal, incomeTotal },
+    }
+  }),
+)
 
 const renderEventContent = (arg) => {
   const expense = arg.event.extendedProps.expenseTotal
@@ -147,43 +211,43 @@ const renderEventContent = (arg) => {
   wrapper.style.textAlign = 'center'
   wrapper.style.pointerEvents = 'none'
 
-  const expenseEl = document.createElement('div')
-  expenseEl.textContent = `${expense.toLocaleString()}원`
-  expenseEl.style.color = 'var(--color-expense)'
-  wrapper.appendChild(expenseEl)
-
   const incomeEl = document.createElement('div')
-  incomeEl.textContent = `${income.toLocaleString()}원`
+  incomeEl.textContent = `${income.toLocaleString()}`
   incomeEl.style.color = 'var(--color-income)'
   wrapper.appendChild(incomeEl)
+
+  const expenseEl = document.createElement('div')
+  expenseEl.textContent = `-${expense.toLocaleString()}`
+  expenseEl.style.color = 'var(--color-expense)'
+  wrapper.appendChild(expenseEl)
 
   return { domNodes: [wrapper] }
 }
 
-const calendarOptions = {
+const calendarOptions = computed(() => ({
   plugins: [dayGridPlugin, interactionPlugin],
   initialView: 'dayGridMonth',
-  dayCellContent: function (arg) {
-    return String(arg.date.getDate())
-  },
+  dayCellContent: (arg) => String(arg.date.getDate()),
   headerToolbar: {
-    left: 'today',
+    left: '',
     center: '',
     right: '',
   },
   locale: 'ko',
-  buttonText: {
-    today: '오늘',
-    month: '',
-  },
   height: 'auto',
   dateClick: handleDateClick,
-  events,
+  events: events.value,
   eventContent: renderEventContent,
-}
+}))
 </script>
 
 <style>
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
 .month-nav {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -194,16 +258,13 @@ const calendarOptions = {
 
 .container {
   display: flex;
-  gap: 2rem;
-  padding: 2rem;
-  margin: 0 auto;
 }
 
 .calendar-wrapper {
-  padding: 1.5rem;
+  border: 1px solid var(--color-light);
   background: var(--color-white);
   border-radius: 16px;
-  border: 1px solid var(--color-light);
+  margin-left: 20px;
 }
 
 .fc .fc-button.fc-today-button {
@@ -233,12 +294,14 @@ const calendarOptions = {
   font-size: 1.125rem;
   font-weight: 600;
   font-family: 'Pretendard-SemiBold', sans-serif;
+  padding-bottom: 0.5rem;
 }
 
 .fc .fc-daygrid-day-number {
   color: var(--color-dark);
   text-align: center;
-  margin-bottom: 0.25rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
   display: block;
   width: 100%;
 }
@@ -256,10 +319,6 @@ const calendarOptions = {
   background: none;
   border: none;
   padding: 0;
-}
-
-.fc-theme-standard td {
-  padding: 1.2rem 0.5rem;
 }
 
 .fc .fc-day-today {
@@ -311,5 +370,13 @@ const calendarOptions = {
 .close-btn img {
   width: 100%;
   height: 100%;
+}
+
+.color-positive {
+  color: var(--color-income);
+}
+
+.color-negative {
+  color: var(--color-expense);
 }
 </style>

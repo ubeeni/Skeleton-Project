@@ -9,103 +9,103 @@
       "id": "0000",
       "name": "미분류",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/unclassified.png"
+      "imgUrl": "/images/categories/unclassified.png"
     },
     {
       "id": "1111",
       "name": "미분류",
       "type": "Income",
-      "imgUrl": "@/assets/images/categories/unclassified.png"
+      "imgUrl": "/images/categories/unclassified.png"
     },
     {
       "id": "2222",
       "name": "급여",
       "type": "Income",
-      "imgUrl": "@/assets/images/categories/salary.png"
+      "imgUrl": "/images/categories/salary.png"
     },
     {
       "id": "3333",
       "name": "용돈",
       "type": "Income",
-      "imgUrl": "@/assets/images/categories/pinmoney.png"
+      "imgUrl": "/images/categories/pinmoney.png"
     },
     {
       "id": "4444",
       "name": "금융수입",
       "type": "Income",
-      "imgUrl": "@/assets/images/categories/financial.png"
+      "imgUrl": "/images/categories/financial.png"
     },
     {
       "id": "5555",
       "name": "기타수입",
       "type": "Income",
-      "imgUrl": "@/assets/images/categories/otherIncome.png"
+      "imgUrl": "/images/categories/otherIncome.png"
     },
     {
       "id": "6666",
       "name": "수도&가스비",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/watergas.png"
+      "imgUrl": "/images/categories/watergas.png"
     },
     {
       "id": "7777",
       "name": "식비",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/foodExpense.png"
+      "imgUrl": "/images/categories/foodExpense.png"
     },
     {
       "id": "8888",
       "name": "카페",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/cafe.png"
+      "imgUrl": "/images/categories/cafe.png"
     },
     {
       "id": "9999",
       "name": "술/유흥",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/pleasure.png"
+      "imgUrl": "/images/categories/pleasure.png"
     },
     {
       "id": "AAAA",
       "name": "경조/선물",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/congratulations.png"
+      "imgUrl": "/images/categories/congratulations.png"
     },
     {
       "id": "BBBB",
       "name": "문화/여가",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/leisure.png"
+      "imgUrl": "/images/categories/leisure.png"
     },
     {
       "id": "CCCC",
       "name": "여행",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/travel.png"
+      "imgUrl": "/images/categories/travel.png"
     },
     {
       "id": "DDDD",
       "name": "쇼핑",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/shopping.png"
+      "imgUrl": "/images/categories/shopping.png"
     },
     {
       "id": "EEEE",
       "name": "생활",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/life.png"
+      "imgUrl": "/images/categories/life.png"
     },
     {
       "id": "FFFF",
       "name": "교통",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/traffic.png"
+      "imgUrl": "/images/categories/traffic.png"
     },
     {
       "id": "GGGG",
       "name": "의료/건강",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/medical.png"
+      "imgUrl": "/images/categories/medical.png"
     },
     {
       "id": "HHHH",
@@ -117,7 +117,7 @@
       "id": "IIII",
       "name": "교육",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/education.png"
+      "imgUrl": "/images/categories/education.png"
     }
   ],
 

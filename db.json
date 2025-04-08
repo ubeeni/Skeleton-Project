@@ -9,8 +9,8 @@
     {
       "id": "AB78",
       "name": "ㅁㄴㅇㄹ",
-      "incomeDefault": "용돈",
-      "expenseDefault": "주거/통신"
+      "incomeDefault": "기타수입",
+      "expenseDefault": "여행"
     }
   ],
   "categories": [
@@ -203,29 +203,16 @@
       "memo": "용돈을 받았다"
     },
     {
-      "id": "e7b4",
+      "id": "4343",
       "member_id": "AB78",
-      "title": "ㅁㄴㅇㄹ",
-      "type": "Income",
-      "category_id": "2222",
-      "cycle": "daily",
-      "day": "매일",
-      "week": null,
-      "month": null,
-      "amout": 12345,
-      "memo": ""
-    },
-    {
-      "id": "143a",
-      "member_id": "AB78",
-      "title": "sadasdaSd",
+      "title": "saedw",
       "type": "Expense",
       "category_id": "8888",
       "cycle": "daily",
       "day": "매일",
       "week": null,
       "month": null,
-      "amout": 1122,
+      "amout": 444,
       "memo": ""
     }
   ]

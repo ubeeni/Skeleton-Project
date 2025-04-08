@@ -43,7 +43,7 @@
   <!-- 버튼 -->
   <div class="button-group">
     <button class="btn save" @click="saveDefaults">저장</button>
-    <button class="btn cancel" @click="router.back()">취소</button>
+    <button class="btn cancel" @click="cancelAndRedirect">취소</button>
   </div>
 
   <!-- 모달 -->
@@ -117,6 +117,15 @@ const saveDefaults = async () => {
 
   await axios.patch(`http://localhost:3000/members/${userId}`, payload)
   alert('저장되었습니다!')
+
+  router.push(`/user/${userId}`)
+}
+
+const cancelAndRedirect = () => {
+  const confirmCancel = confirm('수정 내용이 반영되지 않습니다. 정말 취소하시겠어요?')
+  if (confirmCancel) {
+    router.push(`/user/${userId}`)
+  }
 }
 
 const fetchQuickOptions = async () => {
@@ -146,13 +155,13 @@ const openEditModal = (item) => {
   showEditModal.value = true
 }
 
+const limitedQuickOptions = computed(() => quickOptions.value.slice(0, 5))
+
 onMounted(async () => {
   await fetchCategories()
   await fetchUser()
   fetchQuickOptions()
 })
-
-const limitedQuickOptions = computed(() => quickOptions.value.slice(0, 5))
 </script>
 
 <style scoped>

@@ -121,6 +121,16 @@ const filteredCategories = computed(() =>
 )
 
 const submit = async () => {
+  // 먼저 현재 유저의 quickAddOptions 개수를 조회
+  const res = await axios.get('http://localhost:3000/quickAddOptions')
+  const userOptions = res.data.filter((item) => item.member_id === userId)
+
+  if (userOptions.length >= 5) {
+    alert('기본 지출은 최대 5개까지만 추가할 수 있습니다.')
+    return
+  }
+
+  // 5개 미만이면 추가
   await axios.post('http://localhost:3000/quickAddOptions', newItem.value)
   alert('기본 지출이 추가되었습니다!')
   emit('refresh')

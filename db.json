@@ -111,7 +111,7 @@
       "id": "HHHH",
       "name": "주거/통신",
       "type": "Expense",
-      "imgUrl": "src/assets/images/categories/residentialCommunication.png"
+      "imgUrl": "/images/categories/residentialCommunication.png"
     },
     {
       "id": "IIII",

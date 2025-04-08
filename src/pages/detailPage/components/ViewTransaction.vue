@@ -31,7 +31,8 @@
     </div>
 
     <div class="actions">
-      <BtnLg text="수정" @click="EditTransaction" color="var(--color-primary)" />
+      <BtnLg text="수정" @click="gotoUpdate" color="var(--color-primary)" />
+      <BtnLg text="취소" @click="cancle" color="var(--color-primary)" />
     </div>
   </div>
 </template>
@@ -52,7 +53,7 @@ import axios from 'axios'
 
 const BASEURI = '/api'
 
-const transactionId = ref('1E67') // 상세 보기할 트랜잭션 ID
+const transactionId = ref('JTF7') // 상세 보기할 트랜잭션 ID
 
 const transactionTitle = ref('') // 거래명
 const amount = ref(null) // 금액
@@ -118,8 +119,13 @@ onMounted(async () => {
   }
 })
 
-const EditTransaction = () => {
+const gotoUpdate = () => {
   console.log('수정 버튼')
+  router.push('/detail/update')
+}
+
+const cancle = () => {
+  console.log('취소 버튼')
 }
 </script>
 

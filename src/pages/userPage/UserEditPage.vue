@@ -1,25 +1,15 @@
 <template>
-  <div class="p-6 max-w-md mx-auto">
-    <h1 class="text-xl font-bold mb-4">프로필 수정</h1>
+  <div class="wrapper">
+    <h1 class="title">프로필 수정</h1>
 
-    <!-- 🟣 유저 이름 표시 -->
-    <p class="mb-4 text-gray-700">
-      이름 : <strong>{{ user?.name }}</strong>
-    </p>
-
-    <div class="mb-6">
-      <label class="block mb-1 font-medium">이름</label>
-      <input
-        v-model="editedName"
-        type="text"
-        class="w-full border rounded px-3 py-2"
-        placeholder="이름을 입력하세요"
-      />
+    <div class="form-row">
+      <label class="label">이름</label>
+      <input v-model="editedName" type="text" class="input" :placeholder="user.name" />
     </div>
 
-    <div class="flex gap-2">
-      <button class="flex-1 bg-gray-300 text-white py-2 rounded" @click="resetName">취소</button>
-      <button class="flex-1 bg-purple-500 text-white py-2 rounded" @click="saveName">완료</button>
+    <div class="button-group">
+      <button class="btn complete" @click="saveName">완료</button>
+      <button class="btn cancel" @click="resetName">취소</button>
     </div>
   </div>
 </template>
@@ -37,13 +27,13 @@ const user = ref(null)
 const editedName = ref('')
 
 const fetchUser = async () => {
-  const res = await axios.get(`http://localhost:3000/users/${userId}`)
+  const res = await axios.get(`http://localhost:3000/members/${userId}`)
   user.value = res.data
   editedName.value = res.data.name
 }
 
 const saveName = async () => {
-  await axios.patch(`http://localhost:3000/users/${userId}`, {
+  await axios.patch(`http://localhost:3000/members/${userId}`, {
     name: editedName.value,
   })
   user.value.name = editedName.value
@@ -52,8 +42,66 @@ const saveName = async () => {
 }
 
 const resetName = () => {
-  router.back() // ✅ 이전 페이지로 이동
+  router.back()
 }
 
 onMounted(fetchUser)
 </script>
+
+<style scoped>
+.wrapper {
+  max-width: 600px;
+  margin: 60px auto;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 40px;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 60px;
+}
+
+.label {
+  width: 60px;
+  font-weight: 500;
+}
+
+.input {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.btn {
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.complete {
+  background-color: #8b5cf6;
+  color: white;
+}
+
+.cancel {
+  background-color: #ccc;
+  color: white;
+}
+</style>

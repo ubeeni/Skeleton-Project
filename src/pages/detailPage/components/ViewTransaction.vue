@@ -37,7 +37,7 @@
   </div>
 </template>
 
-<!-- ------------------------------------------------------------------------ -->
+<!-- ----------------------------------- script  ----------------------------------- -->
 
 <script setup>
 import BtnLg from '@/components/button/BtnLg.vue'
@@ -49,14 +49,18 @@ import InputMed from '@/components/input/InputMed.vue'
 import InputSm from '@/components/input/InputSm.vue'
 
 import { ref, reactive, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
+
+const currentRoute = useRoute()
+const router = useRouter()
 
 const BASEURI = '/api'
 
-const transactionId = ref('JTF7') // 상세 보기할 트랜잭션 ID
+const transactionId = ref('SIVA') // 상세 보기할 트랜잭션 ID
 
 const transactionTitle = ref('') // 거래명
-const amount = ref(null) // 금액
+const amount = ref(0) // 금액
 const date = ref('') // 날짜
 const memo = ref('') // 메모
 
@@ -83,22 +87,22 @@ onMounted(async () => {
     console.log(allTransactions)
     console.log(allCategories)
 
-    const selectedTransaction = allTransactions.find(
+    const transaction = allTransactions.find(
       (transaction) => transaction.id === transactionId.value,
     )
 
-    console.log(selectedTransaction)
+    console.log(transaction)
 
-    transactionTitle.value = selectedTransaction.title
-    amount.value = selectedTransaction.amount
-    date.value = selectedTransaction.date
-    memo.value = selectedTransaction.memo
+    transactionTitle.value = transaction.title
+    amount.value = transaction.amount
+    date.value = transaction.date
+    memo.value = transaction.memo
 
-    categoryId.value = selectedTransaction.category_id
-    const selectedCategory = allCategories.find((category) => category.id === categoryId.value)
+    categoryId.value = transaction.category_id
+    const category = allCategories.find((category) => category.id === categoryId.value)
 
-    categoryType.value = selectedCategory.type
-    categoryName.value = selectedCategory.name
+    categoryType.value = category.type
+    categoryName.value = category.name
 
     console.log(
       '거래명: ' +
@@ -129,7 +133,7 @@ const cancle = () => {
 }
 </script>
 
-<!-- ------------------------------------------------------------------------ -->
+<!-- ----------------------------------- style  ----------------------------------- -->
 
 <style scoped>
 * {

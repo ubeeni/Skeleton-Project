@@ -20,13 +20,8 @@
 
     <div class="form-group">
       <label>카테고리</label>
-      <InputLg
-        type="text"
-        placeholder="카테고리를 선택하세요"
-        v-model="selectedCategoryName"
-        readonly
-      />
-      <select id="category" v-model="selectedCategoryId">
+      <InputLg type="text" placeholder="카테고리를 선택하세요" v-model="categoryName" readonly />
+      <select id="category" v-model="categoryId">
         <option value="" disabled>카테고리를 선택하세요</option>
         <option v-for="category in filteredCategories" :key="category.id" :value="category.id">
           {{ category.name }}
@@ -51,7 +46,7 @@
   </div>
 </template>
 
-<!-- ------------------------------------------------------------------------ -->
+<!-- ----------------------------------- script  ----------------------------------- -->
 
 <script setup>
 import BtnLg from '@/components/button/BtnLg.vue'
@@ -76,27 +71,25 @@ const memo = ref('') // 메모
 const allCategories = reactive([])
 
 // 선택된 카테고리 타입 (수입 or 지출)
-const selectedCategoryType = ref('Income')
+const categoryType = ref('Income')
 
 // type에 따른 카테고리 목록 (수입 -> [미분류, 월급, 용돈, 기타수입])
 const filteredCategories = computed(() => {
-  return allCategories.filter((category) => category.type === selectedCategoryType.value)
+  return allCategories.filter((category) => category.type === categoryType.value)
 })
 
 // 선택된 카테고리 이름
-const selectedCategoryName = computed(() => {
-  const selectedCategory = allCategories.find(
-    (category) => category.id === selectedCategoryId.value,
-  )
+const categoryName = computed(() => {
+  const category = allCategories.find((category) => category.id === categoryId.value)
 
-  return selectedCategory ? selectedCategory.name : ''
+  return category ? category.name : ''
 })
 
 // 선택된 카테고리 ID
-const selectedCategoryId = ref('0000')
+const categoryId = ref('0000')
 
-const isIncome = computed(() => selectedCategoryType.value === 'Income')
-const isExpense = computed(() => selectedCategoryType.value === 'Expense')
+const isIncome = computed(() => categoryType.value === 'Income')
+const isExpense = computed(() => categoryType.value === 'Expense')
 
 function clickIncome() {
   selectType('Income')
@@ -115,41 +108,61 @@ onMounted(async () => {
 })
 
 const selectType = (type) => {
-  selectedCategoryType.value = type
-  const selectedCategory = allCategories.find(
+  categoryType.value = type
+  const category = allCategories.find(
     (category) => category.name === '미분류' && category.type === type,
   )
-  console.log('selectedCategory : ', selectedCategory)
-  selectedCategoryId.value = selectedCategory.id
+  console.log('category : ', category)
+  categoryId.value = category.id
 }
 
-const addTransaction = () => {
+const addTransaction = async () => {
   console.log(
     '거래명: ' +
       transactionTitle.value +
       '\n금액: ' +
       amount.value +
       '\n카테고리 타입: ' +
-      selectedCategoryType.value +
+      categoryType.value +
       '\n카테고리명: ' +
-      selectedCategoryName.value +
+      categoryName.value +
       '\n날짜: ' +
       date.value +
       '\n메모: ' +
       memo.value,
   )
+
+  try {
+    const response = await axios.post(`${BASEURI}/transactions/`, {
+      title: transactionTitle.value,
+      category_id: categoryId.value,
+      type: categoryType.value,
+      amount: amount.value,
+      date: date.value,
+      memo: memo.value,
+    })
+
+    if (response.status === 201) {
+      console.log('추가 성공')
+    } else {
+      console.log('추가 실패')
+    }
+  } catch (error) {
+    console.log('에러 발생 : ' + error)
+    console.log(error.stack)
+  }
 }
 
 const cancleTransaction = () => {
-  transactionName.value = ''
+  transactionTitle.value = ''
   amount.value = 0
-  selectedCategoryId.value = '0000'
+  categoryId.value = '0000'
   date.value = ''
   memo.value = ''
 }
 </script>
 
-<!-- ------------------------------------------------------------------------ -->
+<!-- ----------------------------------- style  ----------------------------------- -->
 
 <style scoped>
 * {

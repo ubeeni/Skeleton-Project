@@ -20,7 +20,6 @@ import axios from 'axios'
 import AddTransaction from './components/AddTransaction.vue'
 import UpdateTransaction from './components/UpdateTransaction.vue'
 import ViewTransaction from './components/ViewTransaction.vue'
-import TransactionInputs from './components/TransactionInputs.vue'
 
 const currentRoute = useRoute()
 const router = useRouter()

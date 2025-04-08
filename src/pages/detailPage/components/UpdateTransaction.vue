@@ -1,9 +1,9 @@
 <template>
   <div class="body">
-    <h3>거래내역 수정</h3>
+    <h3>거래 수정</h3>
     <div class="form-group">
       <label>거래명</label>
-      <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionName" />
+      <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionTitle" />
     </div>
 
     <div class="form-group">
@@ -20,13 +20,8 @@
 
     <div class="form-group">
       <label>카테고리</label>
-      <InputLg
-        type="text"
-        placeholder="카테고리를 선택하세요"
-        v-model="selectedCategoryName"
-        readonly
-      />
-      <select id="category" v-model="selectedCategoryId">
+      <InputLg type="text" placeholder="카테고리를 선택하세요" v-model="categoryName" readonly />
+      <select id="category" v-model="categoryId">
         <option value="" disabled>카테고리를 선택하세요</option>
         <option v-for="category in filteredCategories" :key="category.id" :value="category.id">
           {{ category.name }}
@@ -45,13 +40,13 @@
     </div>
 
     <div class="actions">
-      <BtnLg text="추가" @click="addTransaction" color="var(--color-primary)" />
+      <BtnLg text="수정" @click="updateTransaction" color="var(--color-primary)" />
       <BtnLg text="취소" @click="cancleTransaction" color="var(--color-semidark)" />
     </div>
   </div>
 </template>
 
-<!-- ------------------------------------------------------------------------ -->
+<!-- ----------------------------------- script  ----------------------------------- -->
 
 <script setup>
 import BtnLg from '@/components/button/BtnLg.vue'
@@ -62,81 +57,154 @@ import InputLg from '@/components/input/InputLg.vue'
 import InputMed from '@/components/input/InputMed.vue'
 import InputSm from '@/components/input/InputSm.vue'
 
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, watch, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
+
+const currentRoute = useRoute()
+const router = useRouter()
 
 const BASEURI = '/api'
 
-const transactionName = ref('') // 거래명
+const transactionId = ref('SIVA') // 상세 보기할 트랜잭션 ID
+
+const transactionTitle = ref('') // 거래명
 const amount = ref(null) // 금액
 const date = ref('') // 날짜
 const memo = ref('') // 메모
 
-// 모든 카테고리 목록 (id, name, type)
+// 선택된 카테고리 ID
+const categoryId = ref('')
+
 const allCategories = reactive([])
 
+watch(categoryId, () => {
+  if (categoryId) {
+    const category = allCategories.find((category) => category.id === categoryId.value)
+
+    console.log('watch : ')
+    console.log(category)
+    categoryType.value = category.type
+    categoryName.value = category.name
+  }
+})
+
 // 선택된 카테고리 타입 (수입 or 지출)
-const selectedCategoryType = ref('Income')
+const categoryType = ref('')
 
 // type에 따른 카테고리 목록 (수입 -> [미분류, 월급, 용돈, 기타수입])
 const filteredCategories = computed(() => {
-  return allCategories.filter((category) => category.type === selectedCategoryType.value)
+  return allCategories.filter((category) => category.type === categoryType.value)
 })
 
 // 선택된 카테고리 이름
-const selectedCategoryName = computed(() => {
-  const selectedCategory = allCategories.find(
-    (category) => category.id === selectedCategoryId.value,
-  )
+const categoryName = ref('')
 
-  return selectedCategory ? selectedCategory.name : ''
-})
-
-// 선택된 카테고리 ID
-const selectedCategoryId = ref('0000')
-
-const isIncome = computed(() => selectedCategoryType.value === 'Income')
-const isExpense = computed(() => selectedCategoryType.value === 'Expense')
+const isIncome = computed(() => categoryType.value === 'Income')
+const isExpense = computed(() => categoryType.value === 'Expense')
 
 onMounted(async () => {
+  console.log('Update onMounted')
+
   try {
-    const response = await axios.get(BASEURI + '/categories')
-    allCategories.splice(0, allCategories.length, ...response.data)
+    const transResponse = await axios.get(BASEURI + '/transactions')
+    const catResponse = await axios.get(BASEURI + '/categories')
+
+    const allTransactions = transResponse.data
+    allCategories.splice(0, allCategories.length, ...catResponse.data)
+
+    console.log(allTransactions)
+    console.log(allCategories)
+
+    const transaction = allTransactions.find(
+      (transaction) => transaction.id === transactionId.value,
+    )
+
+    console.log(transaction)
+
+    transactionTitle.value = transaction.title
+    amount.value = transaction.amount
+    date.value = transaction.date
+    memo.value = transaction.memo
+
+    categoryId.value = transaction.category_id
+    const category = allCategories.find((category) => category.id === categoryId.value)
+
+    categoryType.value = category.type
+    categoryName.value = category.name
+
+    console.log(
+      '거래명: ' +
+        transactionTitle.value +
+        '\n금액: ' +
+        amount.value +
+        '\n카테고리 ID : ' +
+        categoryId.value +
+        '\n카테고리 타입: ' +
+        categoryType.value +
+        '\n카테고리명: ' +
+        categoryName.value +
+        '\n날짜: ' +
+        date.value +
+        '\n메모: ' +
+        memo.value,
+    )
   } catch (error) {
     console.log('에러 발생 : ' + error)
+    console.log(error.stack)
   }
 })
 
 const selectType = (type) => {
-  selectedCategoryType.value = type
-  const selectedCategory = allCategories.find(
+  categoryType.value = type
+  const category = allCategories.find(
     (category) => category.name === '미분류' && category.type === type,
   )
-  console.log('selectedCategory : ', selectedCategory)
-  selectedCategoryId.value = selectedCategory.id
+  console.log('selectedCategory : ', category)
+  categoryId.value = category.id
 }
 
-const addTransaction = () => {
+const updateTransaction = async () => {
   console.log(
     '거래명: ' +
-      transactionName.value +
+      transactionTitle.value +
       '\n금액: ' +
       amount.value +
       '\n카테고리 타입: ' +
-      selectedCategoryType.value +
+      categoryType.value +
       '\n카테고리명: ' +
-      selectedCategoryName.value +
+      categoryName.value +
       '\n날짜: ' +
       date.value +
       '\n메모: ' +
       memo.value,
   )
+
+  try {
+    const response = await axios.put(`${BASEURI}/transactions/${transactionId.value}`, {
+      title: transactionTitle.value,
+      category_id: categoryId.value,
+      type: categoryType.value,
+      amount: amount.value,
+      date: date.value,
+      memo: memo.value,
+    })
+
+    if (response.status === 200) {
+      console.log('수정 성공')
+    } else {
+      console.log('수정 실패')
+    }
+  } catch (error) {
+    console.log('에러 발생 : ' + error)
+    console.log(error.stack)
+  }
 }
 
 const cancleTransaction = () => {}
 </script>
 
-<!-- ------------------------------------------------------------------------ -->
+<!-- ----------------------------------- style  ----------------------------------- -->
 
 <style scoped>
 * {

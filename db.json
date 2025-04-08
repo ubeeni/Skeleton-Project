@@ -18,103 +18,103 @@
       "id": "0000",
       "name": "미분류",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/unclassified.png"
+      "imgUrl": "/images/categories/unclassified.png"
     },
     {
       "id": "1111",
       "name": "미분류",
       "type": "Income",
-      "imgUrl": "@/assets/images/categories/unclassified.png"
+      "imgUrl": "/images/categories/unclassified.png"
     },
     {
       "id": "2222",
       "name": "급여",
       "type": "Income",
-      "imgUrl": "@/assets/images/categories/salary.png"
+      "imgUrl": "/images/categories/salary.png"
     },
     {
       "id": "3333",
       "name": "용돈",
       "type": "Income",
-      "imgUrl": "@/assets/images/categories/pinmoney.png"
+      "imgUrl": "/images/categories/pinmoney.png"
     },
     {
       "id": "4444",
       "name": "금융수입",
       "type": "Income",
-      "imgUrl": "@/assets/images/categories/financial.png"
+      "imgUrl": "/images/categories/financial.png"
     },
     {
       "id": "5555",
       "name": "기타수입",
       "type": "Income",
-      "imgUrl": "@/assets/images/categories/otherIncome.png"
+      "imgUrl": "/images/categories/otherIncome.png"
     },
     {
       "id": "6666",
       "name": "수도&가스비",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/watergas.png"
+      "imgUrl": "/images/categories/watergas.png"
     },
     {
       "id": "7777",
       "name": "식비",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/foodExpense.png"
+      "imgUrl": "/images/categories/foodExpense.png"
     },
     {
       "id": "8888",
       "name": "카페",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/cafe.png"
+      "imgUrl": "/images/categories/cafe.png"
     },
     {
       "id": "9999",
       "name": "술/유흥",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/pleasure.png"
+      "imgUrl": "/images/categories/pleasure.png"
     },
     {
       "id": "AAAA",
       "name": "경조/선물",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/congratulations.png"
+      "imgUrl": "/images/categories/congratulations.png"
     },
     {
       "id": "BBBB",
       "name": "문화/여가",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/leisure.png"
+      "imgUrl": "/images/categories/leisure.png"
     },
     {
       "id": "CCCC",
       "name": "여행",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/travel.png"
+      "imgUrl": "/images/categories/travel.png"
     },
     {
       "id": "DDDD",
       "name": "쇼핑",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/shopping.png"
+      "imgUrl": "/images/categories/shopping.png"
     },
     {
       "id": "EEEE",
       "name": "생활",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/life.png"
+      "imgUrl": "/images/categories/life.png"
     },
     {
       "id": "FFFF",
       "name": "교통",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/traffic.png"
+      "imgUrl": "/images/categories/traffic.png"
     },
     {
       "id": "GGGG",
       "name": "의료/건강",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/medical.png"
+      "imgUrl": "/images/categories/medical.png"
     },
     {
       "id": "HHHH",
@@ -126,7 +126,7 @@
       "id": "IIII",
       "name": "교육",
       "type": "Expense",
-      "imgUrl": "@/assets/images/categories/education.png"
+      "imgUrl": "/images/categories/education.png"
     }
   ],
   "transactions": [
@@ -250,6 +250,104 @@
       "date": "2025-04-01",
       "memo": "^ㅗ^"
     },
+    {
+      "id": "4T3J",
+      "title": "월세",
+      "member_id": "12CD",
+      "category_id": "HHHH",
+      "type": "Expense",
+      "amount": 500000,
+      "date": "2025-04-01",
+      "memo": "ㅠㅠㅠ"
+    },
+    {
+      "id": "AKE6",
+      "title": "커피 한 잔",
+      "member_id": "12CD",
+      "category_id": "8888",
+      "type": "Expense",
+      "amount": 5500,
+      "date": "2025-04-03",
+      "memo": "긴급 수혈"
+    },
+    {
+      "id": "3HNR",
+      "title": "결혼식 축의금",
+      "member_id": "12CD",
+      "category_id": "AAAA",
+      "type": "Income",
+      "amount": 150000,
+      "date": "2025-04-04",
+      "memo": "친구야 축하해"
+    },
+    {
+      "id": "LJHG",
+      "title": "여행 숙박비",
+      "member_id": "12CD",
+      "category_id": "CCCC",
+      "type": "Expense",
+      "amount": 200000,
+      "date": "2025-04-06",
+      "memo": "여행이 좋다"
+    },
+    {
+      "id": "RNYC",
+      "title": "맛집 탐방",
+      "member_id": "12CD",
+      "category_id": "7777",
+      "type": "Expense",
+    },
+    {
+      "id": "40GN",
+      "title": "외식",
+      "member_id": "12CD",
+      "category_id": "7777",
+      "type": "Expense",
+      "amount": 34000,
+      "date": "2025-03-23",
+      "memo": "사치 부리는 날"
+    },
+    {
+      "id": "QLMB",
+      "title": "기름값",
+      "member_id": "12CD",
+      "category_id": "FFFF",
+      "type": "Expense",
+      "amount": 60000,
+      "date": "2025-03-23",
+      "memo": "5L 같은 6L 주세요"
+    },
+    {
+      "id": "02M4",
+      "title": "병원비",
+      "member_id": "12CD",
+      "category_id": "GGGG",
+      "type": "Expense",
+      "amount": 0,
+      "date": "2025-03-30",
+      "memo": "아프지 말자"
+    },
+    {
+      "id": "ZZ3G",
+      "title": "지하철 요금",
+      "member_id": "12CD",
+      "category_id": "FFFF",
+      "type": "Expense",
+      "amount": 0,
+      "date": "2025-03-30",
+      "memo": "..."
+    },
+    {
+      "id": "4GNS",
+      "title": "월급날",
+      "member_id": "12CD",
+      "category_id": "2222",
+      "type": "Income",
+      "amount": 3500000,
+      "date": "2025-04-01",
+      "memo": "^ㅗ^"
+    },
+
     {
       "id": "4T3J",
       "title": "월세",

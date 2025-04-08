@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <h3>거래내역 추가</h3>
+    <h3>거래내역 수정</h3>
     <div class="form-group">
       <label>거래명</label>
       <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionName" />
@@ -12,8 +12,8 @@
     </div>
 
     <BtnDual
-      @clickIncome="clickIncome"
-      @clickExpense="clickExpense"
+      @clickIncome="selectType('Income')"
+      @clickExpense="selectType('Expense')"
       :is-income-active="isIncome"
       :is-expense-active="isExpense"
     />
@@ -98,13 +98,6 @@ const selectedCategoryId = ref('0000')
 const isIncome = computed(() => selectedCategoryType.value === 'Income')
 const isExpense = computed(() => selectedCategoryType.value === 'Expense')
 
-function clickIncome() {
-  selectType('Income')
-}
-function clickExpense() {
-  selectType('Expense')
-}
-
 onMounted(async () => {
   try {
     const response = await axios.get(BASEURI + '/categories')
@@ -140,13 +133,7 @@ const addTransaction = () => {
   )
 }
 
-const cancleTransaction = () => {
-  transactionName.value = ''
-  amount.value = 0
-  selectedCategoryId.value = '0000'
-  date.value = ''
-  memo.value = ''
-}
+const cancleTransaction = () => {}
 </script>
 
 <!-- ------------------------------------------------------------------------ -->

@@ -124,33 +124,55 @@
   "transactions": [
     {
       "id": "1E67",
+      "name": "용돈",
       "member_id": "12CD",
       "category_id": "2222",
       "amount": 2000000,
-      "date": "2024-03-04",
+      "date": "2025-04-05",
       "memo": "용돈 받는날!"
     },
     {
       "id": "WV71",
+      "name": "물...",
       "member_id": "12CD",
       "category_id": "4444",
       "amount": 50000,
-      "date": "2024-03-04",
+      "date": "2025-04-08",
       "memo": "수도요금..."
     },
     {
       "id": "E9X3",
+      "name": "카페는 자릿세",
       "member_id": "12CD",
       "category_id": "6666",
-      "amount": 130000,
-      "date": "2024-03-04",
+      "amount": 4500,
+      "date": "2024-04-09",
       "memo": "카페에서 한잔"
+    },
+    {
+      "id": "18XW",
+      "name": "친구 축의금",
+      "member_id": "12CD",
+      "category_id": "AAAA",
+      "amount": 150000,
+      "date": "2024-04-09",
+      "memo": "결혼 축하한다"
+    },
+    {
+      "id": "OR37",
+      "name": "신작 영화",
+      "member_id": "12CD",
+      "category_id": "BBBB",
+      "amount": 13000,
+      "date": "2024-04-08",
+      "memo": "너무 비싸"
     }
   ],
 
   "quickAddOptions": [
     {
       "id": "PQRS",
+      "name": "나는야 커피 자판기",
       "member_id": "12CD",
       "category_id": "0000",
       "cycle": "daily",
@@ -162,6 +184,7 @@
     },
     {
       "id": "LKEN",
+      "name": "돼지저금통",
       "member_id": "12CD",
       "category_id": "0000",
       "cycle": "weekly",
@@ -173,6 +196,7 @@
     },
     {
       "id": "SMFM",
+      "name": "돈 나가는 날",
       "member_id": "12CD",
       "category_id": "0000",
       "cycle": "monthly",

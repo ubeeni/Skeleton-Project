@@ -1,22 +1,19 @@
 <template>
   <div class="body">
-    <h3>거래내역 추가</h3>
-    <div class="form-group">
-      <label>거래명</label>
-      <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionName" />
-    </div>
+    <h3>상세보기</h3>
+    <br />
 
     <div class="form-group">
       <label>금액</label>
       <InputLg type="text" placeholder="금액을 입력하세요" v-model="amount" />
     </div>
 
-    <BtnDual
-      @clickIncome="clickIncome"
-      @clickExpense="clickExpense"
-      :is-income-active="isIncome"
-      :is-expense-active="isExpense"
-    />
+    <BtnDual :is-income-active="isIncome" :is-expense-active="isExpense" />
+
+    <div class="form-group">
+      <label>거래명</label>
+      <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionName" />
+    </div>
 
     <div class="form-group">
       <label>카테고리</label>
@@ -26,12 +23,6 @@
         v-model="selectedCategoryName"
         readonly
       />
-      <select id="category" v-model="selectedCategoryId">
-        <option value="" disabled>카테고리를 선택하세요</option>
-        <option v-for="category in filteredCategories" :key="category.id" :value="category.id">
-          {{ category.name }}
-        </option>
-      </select>
     </div>
 
     <div class="form-group">
@@ -45,8 +36,7 @@
     </div>
 
     <div class="actions">
-      <BtnLg text="추가" @click="addTransaction" color="var(--color-primary)" />
-      <BtnLg text="취소" @click="cancleTransaction" color="var(--color-semidark)" />
+      <BtnLg text="수정" @click="EditTransaction" color="var(--color-primary)" />
     </div>
   </div>
 </template>
@@ -67,20 +57,22 @@ import axios from 'axios'
 
 const BASEURI = '/api'
 
+const transactionId = ref('')
+
 const transactionName = ref('') // 거래명
 const amount = ref(null) // 금액
 const date = ref('') // 날짜
 const memo = ref('') // 메모
 
-// 모든 카테고리 목록 (id, name, type)
-const allCategories = reactive([])
+// 선택된 카테고리 ID
+const selectedCategoryId = computed(() => {})
 
 // 선택된 카테고리 타입 (수입 or 지출)
-const selectedCategoryType = ref('Income')
-
-// type에 따른 카테고리 목록 (수입 -> [미분류, 월급, 용돈, 기타수입])
-const filteredCategories = computed(() => {
-  return allCategories.filter((category) => category.type === selectedCategoryType.value)
+const selectedCategoryType = computed(() => {
+  const selectedCategory = allCategories.find(
+    (category) => category.id === selectedCategoryId.value,
+  )
+  return selectedCategory ? selectedCategory.type : ''
 })
 
 // 선택된 카테고리 이름
@@ -88,64 +80,22 @@ const selectedCategoryName = computed(() => {
   const selectedCategory = allCategories.find(
     (category) => category.id === selectedCategoryId.value,
   )
-
   return selectedCategory ? selectedCategory.name : ''
 })
-
-// 선택된 카테고리 ID
-const selectedCategoryId = ref('0000')
 
 const isIncome = computed(() => selectedCategoryType.value === 'Income')
 const isExpense = computed(() => selectedCategoryType.value === 'Expense')
 
-function clickIncome() {
-  selectType('Income')
-}
-function clickExpense() {
-  selectType('Expense')
-}
-
 onMounted(async () => {
   try {
-    const response = await axios.get(BASEURI + '/categories')
-    allCategories.splice(0, allCategories.length, ...response.data)
+    const response = await axios.get(BASEURI + '/transactions')
   } catch (error) {
     console.log('에러 발생 : ' + error)
   }
 })
 
-const selectType = (type) => {
-  selectedCategoryType.value = type
-  const selectedCategory = allCategories.find(
-    (category) => category.name === '미분류' && category.type === type,
-  )
-  console.log('selectedCategory : ', selectedCategory)
-  selectedCategoryId.value = selectedCategory.id
-}
-
-const addTransaction = () => {
-  console.log(
-    '거래명: ' +
-      transactionName.value +
-      '\n금액: ' +
-      amount.value +
-      '\n카테고리 타입: ' +
-      selectedCategoryType.value +
-      '\n카테고리명: ' +
-      selectedCategoryName.value +
-      '\n날짜: ' +
-      date.value +
-      '\n메모: ' +
-      memo.value,
-  )
-}
-
-const cancleTransaction = () => {
-  transactionName.value = ''
-  amount.value = 0
-  selectedCategoryId.value = '0000'
-  date.value = ''
-  memo.value = ''
+const EditTransaction = () => {
+  console.log('수정 버튼')
 }
 </script>
 

@@ -57,7 +57,7 @@
           <input
             v-if="newItem.cycle === 'weekly'"
             v-model="newItem.week"
-            placeholder="예: monday"
+            placeholder="예: 월요일"
           />
           <input
             v-if="newItem.cycle === 'monthly'"
@@ -150,7 +150,7 @@ watchEffect(() => {
 }
 
 .modal-box {
-  background: #fff;
+  background: var(--color-white);
   padding: 40px;
   border-radius: 20px;
   width: 500px;

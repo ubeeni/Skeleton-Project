@@ -7,7 +7,7 @@
       <div class="category-selects">
         <div>
           <p class="select-label">수입 카테고리</p>
-          <select v-model="selectedIncome" class="select">
+          <select v-model="selectedIncome" class="select" @change="updateDefault('income')">
             <option v-for="cat in incomeCategories" :key="cat.id" :value="cat.id">
               {{ cat.name }}
             </option>
@@ -15,7 +15,7 @@
         </div>
         <div>
           <p class="select-label">지출 카테고리</p>
-          <select v-model="selectedExpense" class="select">
+          <select v-model="selectedExpense" class="select" @change="updateDefault('expense')">
             <option v-for="cat in expenseCategories" :key="cat.id" :value="cat.id">
               {{ cat.name }}
             </option>
@@ -64,6 +64,36 @@ const categories = ref([])
 const selectedIncome = ref('')
 const selectedExpense = ref('')
 
+const user = ref(null)
+
+const fetchUser = async () => {
+  const res = await axios.get(`http://localhost:3000/members/${userId}`)
+  user.value = res.data
+
+  // name 값을 id로 매핑해서 select 초기화
+  selectedIncome.value =
+    categories.value.find((c) => c.name === res.data.incomeDefault && c.type === 'Income')?.id || ''
+
+  selectedExpense.value =
+    categories.value.find((c) => c.name === res.data.expenseDefault && c.type === 'Expense')?.id ||
+    ''
+}
+
+const findCategoryNameById = (id) => {
+  return categories.value.find((c) => c.id === id)?.name || ''
+}
+
+const updateDefault = async (type) => {
+  if (!user.value) return
+
+  const payload =
+    type === 'income'
+      ? { incomeDefault: findCategoryNameById(selectedIncome.value) }
+      : { expenseDefault: findCategoryNameById(selectedExpense.value) }
+
+  await axios.patch(`http://localhost:3000/members/${userId}`, payload)
+}
+
 const fetchQuickOptions = async () => {
   const res = await axios.get('http://localhost:3000/quickAddOptions')
   quickOptions.value = res.data.filter((item) => item.member_id === userId)
@@ -86,9 +116,10 @@ const formatOption = (item) => {
   return `${item.memo} | ${item.cycle} | ${item.amout.toLocaleString()}원 | ${dayText}`
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await fetchCategories() // ❗ 먼저 카테고리 정보를 받아야 name → id 매핑이 가능
+  await fetchUser()
   fetchQuickOptions()
-  fetchCategories()
 })
 
 const limitedQuickOptions = computed(() => quickOptions.value.slice(0, 5))

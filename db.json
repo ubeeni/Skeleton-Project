@@ -3,8 +3,8 @@
     {
       "id": "12CD",
       "name": "홍길동",
-      "incomeDefault": "미분류",
-      "expenseDefault": "미분류"
+      "incomeDefault": "용돈",
+      "expenseDefault": "카페"
     },
     {
       "id": "AB78",

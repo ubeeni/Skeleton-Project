@@ -149,8 +149,12 @@ const calendarOptions = {
   background: var(--color-white);
   color: var(--color-dark) !important;
   border-radius: 6px !important;
-  padding: 0.3rem 0.8rem;
   border: none;
+  padding: 0.3rem 0.8rem;
+  /* bodyRegular16px */
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: 'Pretendard-Regular', sans-serif;
 }
 
 .fc .fc-button.fc-today-button:hover,
@@ -171,9 +175,17 @@ const calendarOptions = {
 }
 
 .fc .fc-toolbar-title {
-  font-size: 1rem;
+  /* bodySemibold18px */
+  font-size: 1.125rem;
   font-weight: 600;
-  white-space: nowrap;
+  font-family: 'Pretendard-SemiBold', sans-serif;
+}
+
+.fc .fc-col-header-cell .fc-col-header-cell-cushion {
+  /* bodySemibold18px */
+  font-size: 1.125rem;
+  font-weight: 600;
+  font-family: 'Pretendard-SemiBold', sans-serif;
 }
 
 .fc .fc-prev-button,
@@ -181,8 +193,6 @@ const calendarOptions = {
   background: none !important;
   border: none !important;
   color: var(--color-dark) !important;
-  font-size: 1.2rem;
-  font-weight: bold;
   padding: 0.2rem 0.4rem;
   box-shadow: none !important;
 }
@@ -226,12 +236,6 @@ const calendarOptions = {
   padding: 1.2rem 0.5rem;
 }
 
-.fc .fc-col-header-cell .fc-col-header-cell-cushion {
-  color: var(--color-dark) !important;
-  font-weight: 600;
-  font-size: 0.85rem;
-}
-
 .fc .fc-day-today {
   background: var(--color-secondary2) !important;
   border-radius: 12px;
@@ -263,14 +267,7 @@ const calendarOptions = {
   border-radius: 16px;
   width: 340px;
   max-width: 90%;
-  font-size: 0.9rem;
   color: var(--color-dark);
-}
-
-.modal-content h3 {
-  margin-bottom: 1.2rem;
-  font-size: 1.1rem;
-  font-weight: 600;
 }
 
 .close-btn {

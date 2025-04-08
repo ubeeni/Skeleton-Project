@@ -37,7 +37,7 @@ import Doughnut from '@/components/chart/Doughnut.vue'
 import Line from '@/components/chart/Line.vue'
 
 const isIncome = ref(false)
-const isExpense = ref(false)
+const isExpense = ref(true)
 
 // 토글 버튼 형식 구현
 function clickIncome() {

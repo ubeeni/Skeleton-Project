@@ -5,32 +5,59 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
+
+// props 전달
+const props = defineProps({
+  labels: Array,
+  incomeData: Array,
+  expenseData: Array,
+  incomeCounts: Array,
+  expenseCounts: Array,
+})
+
+// 각 라인 데이터 설정
+const series = computed(() => [
+  {
+    name: '수입',
+    data: props.incomeData,
+    color: 'var(--color-income)',
+  },
+  {
+    name: '지출',
+    data: props.expenseData,
+    color: 'var(--color-expense)',
+  },
+])
 
 // 옵션 설정
-const options = ref({
+const options = computed(() => ({
   chart: {
     id: 'line-chart',
     type: 'line',
   },
   xaxis: {
-    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
+    categories: props.labels,
   },
-})
+  tooltip: {
+    shared: true,
+    custom: ({ dataPointIndex }) => {
+      const date = props.labels[dataPointIndex]
+      const income = props.incomeData[dataPointIndex] || 0
+      const incomeCount = props.incomeCounts[dataPointIndex] || 0
+      const expense = props.expenseData[dataPointIndex] || 0
+      const expenseCount = props.expenseCounts[dataPointIndex] || 0
 
-// 데이터 시리즈
-const series = ref([
-  {
-    name: 'income',
-    data: [30, 40, 45, 50, 49, 60, 70, 70],
-    color: 'var(--color-income)',
+      return `
+        <div style="padding: 8px;">
+          <strong>${date}</strong><br/>
+          <span style="color: var(--color-income)">● 수입:</span> ${income.toLocaleString()}원 (${incomeCount}건)<br/>
+          <span style="color: var(--color-expense)">● 지출:</span> ${expense.toLocaleString()}원 (${expenseCount}건)
+        </div>
+      `
+    },
   },
-  {
-    name: 'expense',
-    data: [20, 30, 35, 40, 39, 50, 60, 81],
-    color: 'var(--color-expense)',
-  },
-])
+}))
 </script>
 
 <style scoped>

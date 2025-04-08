@@ -19,7 +19,7 @@ html {
   --color-white: #ffffff;
   --color-income: #0c7acd;
   --color-expense: #cd0c22;
-  --color-hover: linear-gradient(0deg, #100d1480 0%, #100d1480 100%);
+  --color-hover: linear-gradient(0deg, rgba(121, 121, 121, 0.5) 0%, rgba(121, 121, 121, 0.5) 100%);
   --transition: all 0.3s ease;
 }
 

@@ -19,7 +19,7 @@ header {
 }
 main {
   width: 60vw;
-  margin: 2.5rem auto;
+  margin: 8rem auto;
   min-height: 60vh;
 }
 /* footer {

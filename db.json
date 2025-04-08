@@ -173,7 +173,7 @@
       "member_id": "12CD",
       "category_id": "AAAA",
       "amount": 150000,
-      "date": "2024-04-09",
+      "date": "2025-04-09",
       "memo": "결혼 축하한다"
     },
     {
@@ -182,7 +182,7 @@
       "member_id": "12CD",
       "category_id": "CCCC",
       "amount": 300000,
-      "date": "2024-04-11",
+      "date": "2025-04-11",
       "memo": "해외 여행"
     },
     {
@@ -191,7 +191,7 @@
       "member_id": "12CD",
       "category_id": "BBBB",
       "amount": 13000,
-      "date": "2024-04-09",
+      "date": "2025-04-08",
       "memo": "너무 비싸"
     }
   ],

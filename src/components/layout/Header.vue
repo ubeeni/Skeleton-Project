@@ -42,6 +42,11 @@ const route = useRoute()
   padding: 1rem 5rem;
   background-color: var(--color-white);
   border-bottom: 1px solid var(--color-light);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
 }
 
 /* 왼쪽 nav 구성 */

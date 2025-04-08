@@ -4,15 +4,21 @@
 
     <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
       <div class="modal-content">
-        <h3>{{ clickedDate }}</h3>
+        <button @click="closeModal" class="close-btn">
+          <img :src="closeButton" alt="close" />
+        </button>
 
-        <div v-if="dailyData">
+        <div class="bodySemibold18px">{{ clickedDate }}</div>
+        <br />
+
+        <div class="bodyRegular16px" v-if="dailyData">
           <div>
             <strong>💸 지출</strong>
+            <br />
             <ul>
               <li v-for="(item, index) in dailyData.expense" :key="'e' + index">
                 {{ item.category }}
-                <span style="color: var(--color-expense); font-weight: 500">
+                <span style="color: var(--color-expense)">
                   {{ item.amount.toLocaleString() }}원
                 </span>
               </li>
@@ -23,7 +29,7 @@
             <ul>
               <li v-for="(item, index) in dailyData.income" :key="'i' + index">
                 {{ item.category }}
-                <span style="color: var(--color-income); font-weight: 500">
+                <span style="color: var(--color-income)">
                   {{ item.amount.toLocaleString() }}원
                 </span>
               </li>
@@ -31,9 +37,7 @@
           </div>
         </div>
 
-        <p v-else>내역이 없습니다.</p>
-
-        <button @click="closeModal">닫기</button>
+        <p class="bodyRegular16px" v-else>내역이 없습니다.</p>
       </div>
     </div>
   </div>
@@ -44,6 +48,7 @@ import { ref, computed } from 'vue'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import closeButton from '@/assets/icons/IconClose.svg'
 
 const showModal = ref(false)
 const clickedDate = ref('')
@@ -73,7 +78,6 @@ const handleDateClick = (info) => {
   showModal.value = true
 }
 
-// 더미 데이터 → FullCalendar 이벤트로 변환
 const events = Object.entries(dummyData).map(([date, data]) => {
   const expenseTotal = data.expense.reduce((acc, cur) => acc + cur.amount, 0)
   const incomeTotal = data.income.reduce((acc, cur) => acc + cur.amount, 0)
@@ -145,8 +149,6 @@ const calendarOptions = {
   background: var(--color-white);
   color: var(--color-dark) !important;
   border-radius: 6px !important;
-  font-size: 0.85rem;
-  font-weight: 500;
   padding: 0.3rem 0.8rem;
   border: none;
 }
@@ -255,6 +257,7 @@ const calendarOptions = {
 }
 
 .modal-content {
+  position: relative;
   background: var(--color-white);
   padding: 2rem;
   border-radius: 16px;
@@ -270,14 +273,20 @@ const calendarOptions = {
   font-weight: 600;
 }
 
-.modal-content button {
-  margin-top: 1.5rem;
-  padding: 0.6rem 1.2rem;
-  background: var(--color-primary);
-  color: var(--color-white);
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
   border: none;
-  border-radius: 8px;
+  padding: 0;
   cursor: pointer;
-  font-weight: 500;
+  width: 24px;
+  height: 24px;
+}
+
+.close-btn img {
+  width: 100%;
+  height: 100%;
 }
 </style>

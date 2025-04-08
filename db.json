@@ -123,56 +123,212 @@
 
   "transactions": [
     {
-      "id": "1E67",
-      "name": "용돈",
+      "id": "1Q2W",
+      "title": "월급날",
       "member_id": "12CD",
       "category_id": "2222",
-      "amount": 2000000,
-      "date": "2025-04-05",
-      "memo": "용돈 받는날!"
+      "type": "Income",
+      "amount": 3500000,
+      "date": "2025-03-01",
+      "memo": ""
     },
     {
-      "id": "WV71",
-      "name": "물...",
+      "id": "DEV3",
+      "title": "월세",
       "member_id": "12CD",
-      "category_id": "4444",
-      "amount": 50000,
-      "date": "2025-04-08",
-      "memo": "수도요금..."
+      "category_id": "HHHH",
+      "type": "Expense",
+      "amount": 500000,
+      "date": "2025-03-01",
+      "memo": ""
     },
     {
-      "id": "E9X3",
-      "name": "카페는 자릿세",
+      "id": "5HFB",
+      "title": "마트 장보는 날",
       "member_id": "12CD",
-      "category_id": "6666",
-      "amount": 4500,
-      "date": "2024-04-09",
-      "memo": "카페에서 한잔"
+      "category_id": "7777",
+      "type": "Expense",
+      "amount": 60000,
+      "date": "2025-03-02",
+      "memo": ""
     },
     {
-      "id": "18XW",
-      "name": "친구 축의금",
-      "member_id": "12CD",
-      "category_id": "AAAA",
-      "amount": 150000,
-      "date": "2024-04-09",
-      "memo": "결혼 축하한다"
-    },
-    {
-      "id": "OR37",
-      "name": "신작 영화",
+      "id": "JTF7",
+      "title": "영화",
       "member_id": "12CD",
       "category_id": "BBBB",
+      "type": "Expense",
       "amount": 13000,
-      "date": "2024-04-08",
-      "memo": "너무 비싸"
+      "date": "2025-03-09",
+      "memo": "영화 너무 비싸"
+    },
+    {
+      "id": "H5ZB",
+      "title": "버스 요금",
+      "member_id": "12CD",
+      "category_id": "FFFF",
+      "type": "Expense",
+      "amount": 1450,
+      "date": "2025-03-09",
+      "memo": "..."
+    },
+    {
+      "id": "4T4H",
+      "title": "술 한잔",
+      "member_id": "12CD",
+      "category_id": "9999",
+      "type": "Expense",
+      "amount": 60000,
+      "date": "2025-03-16",
+      "memo": "크으으"
+    },
+    {
+      "id": "KSM7",
+      "title": "지하철 요금",
+      "member_id": "12CD",
+      "category_id": "FFFF",
+      "type": "Expense",
+      "amount": 1450,
+      "date": "2025-03-16",
+      "memo": "..."
+    },
+    {
+      "id": "40GN",
+      "title": "외식",
+      "member_id": "12CD",
+      "category_id": "7777",
+      "type": "Expense",
+      "amount": 34000,
+      "date": "2025-03-23",
+      "memo": "사치 부리는 날"
+    },
+    {
+      "id": "QLMB",
+      "title": "기름값",
+      "member_id": "12CD",
+      "category_id": "FFFF",
+      "type": "Expense",
+      "amount": 60000,
+      "date": "2025-03-23",
+      "memo": "5L 같은 6L 주세요"
+    },
+    {
+      "id": "02M4",
+      "title": "병원비",
+      "member_id": "12CD",
+      "category_id": "GGGG",
+      "type": "Expense",
+      "amount": 0,
+      "date": "2025-03-30",
+      "memo": "아프지 말자"
+    },
+    {
+      "id": "ZZ3G",
+      "title": "지하철 요금",
+      "member_id": "12CD",
+      "category_id": "FFFF",
+      "type": "Expense",
+      "amount": 0,
+      "date": "2025-03-30",
+      "memo": "..."
+    },
+    {
+      "id": "4GNS",
+      "title": "월급날",
+      "member_id": "12CD",
+      "category_id": "2222",
+      "type": "Income",
+      "amount": 3500000,
+      "date": "2025-04-01",
+      "memo": "^ㅗ^"
+    },
+
+    {
+      "id": "4T3J",
+      "title": "월세",
+      "member_id": "12CD",
+      "category_id": "HHHH",
+      "type": "Expense",
+      "amount": 500000,
+      "date": "2025-04-01",
+      "memo": "ㅠㅠㅠ"
+    },
+    {
+      "id": "AKE6",
+      "title": "커피 한 잔",
+      "member_id": "12CD",
+      "category_id": "8888",
+      "type": "Expense",
+      "amount": 5500,
+      "date": "2025-04-03",
+      "memo": "긴급 수혈"
+    },
+    {
+      "id": "3HNR",
+      "title": "결혼식 축의금",
+      "member_id": "12CD",
+      "category_id": "AAAA",
+      "type": "Income",
+      "amount": 150000,
+      "date": "2025-04-04",
+      "memo": "친구야 축하해"
+    },
+    {
+      "id": "LJHG",
+      "title": "여행 숙박비",
+      "member_id": "12CD",
+      "category_id": "CCCC",
+      "type": "Expense",
+      "amount": 200000,
+      "date": "2025-04-06",
+      "memo": "여행이 좋다"
+    },
+    {
+      "id": "RNYC",
+      "title": "맛집 탐방",
+      "member_id": "12CD",
+      "category_id": "7777",
+      "type": "Expense",
+      "amount": 50000,
+      "date": "2025-04-07",
+      "memo": "일식 라멘"
+    },
+    {
+      "id": "468X",
+      "title": "공연 관람",
+      "member_id": "",
+      "category_id": "BBBB",
+      "type": "Expense",
+      "amount": 60000,
+      "date": "2025-04-08",
+      "memo": "뮤지컬 좋아"
+    },
+    {
+      "id": "30BM",
+      "title": "교통비",
+      "member_id": "12CD",
+      "category_id": "FFFF",
+      "type": "Expense",
+      "amount": 120000,
+      "date": "2025-04-08",
+      "memo": "비행기가 싸다!"
+    },
+    {
+      "id": "4KLW",
+      "title": "용돈",
+      "member_id": "12CD",
+      "category_id": "3333",
+      "type": "Income",
+      "amount": 100000,
+      "date": "2025-04-08",
+      "memo": "길에서 주운 돈"
     }
   ],
 
   "quickAddOptions": [
     {
       "id": "PQRS",
-      "name": "나는야 커피 자판기",
+      "title": "커피 수혈",
       "member_id": "12CD",
       "category_id": "0000",
       "cycle": "daily",
@@ -180,11 +336,11 @@
       "week": null,
       "month": null,
       "amout": 2000,
-      "memo": "커피값"
+      "memo": "나는야 커피 자판기"
     },
     {
-      "id": "LKEN",
-      "name": "돼지저금통",
+      "id": "PIG7",
+      "title": "주간 저금",
       "member_id": "12CD",
       "category_id": "0000",
       "cycle": "weekly",
@@ -192,11 +348,11 @@
       "week": "monday",
       "month": null,
       "amout": 70000,
-      "memo": "저금"
+      "memo": "매주 모아서..."
     },
     {
       "id": "SMFM",
-      "name": "돈 나가는 날",
+      "title": "월세",
       "member_id": "12CD",
       "category_id": "0000",
       "cycle": "monthly",
@@ -204,7 +360,7 @@
       "week": null,
       "month": 15,
       "amout": 600000,
-      "memo": "월세"
+      "memo": "돈 나가는 날..."
     }
   ]
 }

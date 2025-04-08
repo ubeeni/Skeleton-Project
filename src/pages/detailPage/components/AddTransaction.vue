@@ -3,7 +3,7 @@
     <h3>거래내역 추가</h3>
     <div class="form-group">
       <label>거래명</label>
-      <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionName" />
+      <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionTitle" />
     </div>
 
     <div class="form-group">
@@ -67,7 +67,7 @@ import axios from 'axios'
 
 const BASEURI = '/api'
 
-const transactionName = ref('') // 거래명
+const transactionTitle = ref('') // 거래 타이틀
 const amount = ref(null) // 금액
 const date = ref('') // 날짜
 const memo = ref('') // 메모
@@ -126,7 +126,7 @@ const selectType = (type) => {
 const addTransaction = () => {
   console.log(
     '거래명: ' +
-      transactionName.value +
+      transactionTitle.value +
       '\n금액: ' +
       amount.value +
       '\n카테고리 타입: ' +

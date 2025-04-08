@@ -1,7 +1,10 @@
 <template>
   <h2>Detail Page</h2>
   <div>
-    <RouterLink v-for="item in componentsArray" :key="item.key" :to="{ path: item.key }"
+    <RouterLink
+      v-for="item in componentsArray"
+      :key="item.key"
+      :to="{ path: '/detail/' + item.key }"
       >{{ item.key }} |
     </RouterLink>
     <component :is="currentComponent" />

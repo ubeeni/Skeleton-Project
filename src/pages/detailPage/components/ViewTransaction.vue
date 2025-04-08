@@ -5,34 +5,29 @@
 
     <div class="form-group">
       <label>금액</label>
-      <InputLg type="text" placeholder="금액을 입력하세요" v-model="amount" />
+      <InputLg type="text" placeholder="금액을 입력하세요" v-model="amount" readonly />
     </div>
 
     <BtnDual :is-income-active="isIncome" :is-expense-active="isExpense" />
 
     <div class="form-group">
       <label>거래명</label>
-      <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionName" />
+      <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionTitle" readonly />
     </div>
 
     <div class="form-group">
       <label>카테고리</label>
-      <InputLg
-        type="text"
-        placeholder="카테고리를 선택하세요"
-        v-model="selectedCategoryName"
-        readonly
-      />
+      <InputLg type="text" placeholder="카테고리를 선택하세요" v-model="categoryName" readonly />
     </div>
 
     <div class="form-group">
       <label>날짜</label>
-      <InputLg type="text" placeholder="날짜를 선택하세요" v-model="date" />
+      <InputLg type="text" placeholder="날짜를 선택하세요" v-model="date" readonly />
     </div>
 
     <div class="form-group">
       <label>메모</label>
-      <InputLg type="text" placeholder="메모는 선택사항입니다" v-model="memo" />
+      <InputLg type="text" placeholder="메모는 선택사항입니다" v-model="memo" readonly />
     </div>
 
     <div class="actions">
@@ -57,38 +52,67 @@ import axios from 'axios'
 
 const BASEURI = '/api'
 
-const transactionId = ref('')
+const transactionId = ref('1E67') // 상세 보기할 트랜잭션 ID
 
-const transactionName = ref('') // 거래명
+const transactionTitle = ref('') // 거래명
 const amount = ref(null) // 금액
 const date = ref('') // 날짜
 const memo = ref('') // 메모
 
 // 선택된 카테고리 ID
-const selectedCategoryId = computed(() => {})
+const categoryId = ref('')
 
 // 선택된 카테고리 타입 (수입 or 지출)
-const selectedCategoryType = computed(() => {
-  const selectedCategory = allCategories.find(
-    (category) => category.id === selectedCategoryId.value,
-  )
-  return selectedCategory ? selectedCategory.type : ''
-})
+const categoryType = ref('')
 
 // 선택된 카테고리 이름
-const selectedCategoryName = computed(() => {
-  const selectedCategory = allCategories.find(
-    (category) => category.id === selectedCategoryId.value,
-  )
-  return selectedCategory ? selectedCategory.name : ''
-})
+const categoryName = ref('')
 
-const isIncome = computed(() => selectedCategoryType.value === 'Income')
-const isExpense = computed(() => selectedCategoryType.value === 'Expense')
+const isIncome = computed(() => categoryType.value === 'Income')
+const isExpense = computed(() => categoryType.value === 'Expense')
 
 onMounted(async () => {
   try {
-    const response = await axios.get(BASEURI + '/transactions')
+    const transResponse = await axios.get(BASEURI + '/transactions')
+    const catResponse = await axios.get(BASEURI + '/categories')
+
+    const allTransactions = transResponse.data
+    const allCategories = catResponse.data
+
+    console.log(allTransactions)
+    console.log(allCategories)
+
+    const selectedTransaction = allTransactions.find(
+      (transaction) => transaction.id === transactionId.value,
+    )
+
+    console.log(selectedTransaction)
+
+    transactionTitle.value = selectedTransaction.title
+    amount.value = selectedTransaction.amount
+    date.value = selectedTransaction.date
+    memo.value = selectedTransaction.memo
+
+    categoryId.value = selectedTransaction.category_id
+    const selectedCategory = allCategories.find((category) => category.id === categoryId.value)
+
+    categoryType.value = selectedCategory.type
+    categoryName.value = selectedCategory.name
+
+    console.log(
+      '거래명: ' +
+        transactionTitle.value +
+        '\n금액: ' +
+        amount.value +
+        '\n카테고리 타입: ' +
+        categoryType.value +
+        '\n카테고리명: ' +
+        categoryName.value +
+        '\n날짜: ' +
+        date.value +
+        '\n메모: ' +
+        memo.value,
+    )
   } catch (error) {
     console.log('에러 발생 : ' + error)
   }

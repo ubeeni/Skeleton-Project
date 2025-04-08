@@ -1,9 +1,12 @@
 {
   "members": [
-    { "id": "12CD", "name": "홍길동", "incomeDefault": "미분류", "expenseDefault": "미분류" },
-    { "id": "AB78", "name": "John", "incomeDefault": "미분류", "expenseDefault": "미분류" }
+    {
+      "id": "12CD",
+      "name": "홍길동",
+      "incomeDefault": "미분류",
+      "expenseDefault": "미분류"
+    }
   ],
-
   "categories": [
     {
       "id": "0000",
@@ -120,7 +123,6 @@
       "imgUrl": "/images/categories/education.png"
     }
   ],
-
   "transactions": [
     {
       "id": "1Q2W",
@@ -242,7 +244,6 @@
       "date": "2025-04-01",
       "memo": "^ㅗ^"
     },
-
     {
       "id": "4T3J",
       "title": "월세",
@@ -296,7 +297,7 @@
     {
       "id": "468X",
       "title": "공연 관람",
-      "member_id": "",
+      "member_id": "12CD",
       "category_id": "BBBB",
       "type": "Expense",
       "amount": 60000,
@@ -324,7 +325,6 @@
       "memo": "길에서 주운 돈"
     }
   ],
-
   "quickAddOptions": [
     {
       "id": "PQRS",
@@ -335,7 +335,7 @@
       "day": "매일",
       "week": null,
       "month": null,
-      "amout": 2000,
+      "amount": 2000,
       "memo": "나는야 커피 자판기"
     },
     {
@@ -347,7 +347,7 @@
       "day": null,
       "week": "monday",
       "month": null,
-      "amout": 70000,
+      "amount": 70000,
       "memo": "매주 모아서..."
     },
     {
@@ -358,8 +358,8 @@
       "cycle": "monthly",
       "day": null,
       "week": null,
-      "month": 15,
-      "amout": 600000,
+      "month": null,
+      "amount": 600000,
       "memo": "돈 나가는 날..."
     }
   ]

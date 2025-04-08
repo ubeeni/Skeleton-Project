@@ -9,7 +9,7 @@
     {
       "id": "AB78",
       "name": "ㅁㄴㅇㄹ",
-      "incomeDefault": "급여",
+      "incomeDefault": "금융수입",
       "expenseDefault": "수도&가스비"
     }
   ],
@@ -250,7 +250,6 @@
       "date": "2025-04-01",
       "memo": "^ㅗ^"
     },
-
     {
       "id": "4T3J",
       "title": "월세",
@@ -368,6 +367,45 @@
       "month": 15,
       "amout": 600000,
       "memo": "돈 나가는 날..."
+    },
+    {
+      "id": "1744100531963",
+      "member_id": "AB78",
+      "title": "매일",
+      "type": "Expense",
+      "category_id": "0000",
+      "cycle": "daily",
+      "day": "매일",
+      "week": null,
+      "month": null,
+      "amout": 10,
+      "memo": ""
+    },
+    {
+      "id": "1744100540213",
+      "member_id": "AB78",
+      "title": "매주",
+      "type": "Expense",
+      "category_id": "0000",
+      "cycle": "weekly",
+      "day": null,
+      "week": "월요일",
+      "month": null,
+      "amout": 10,
+      "memo": ""
+    },
+    {
+      "id": "1744100571474",
+      "member_id": "AB78",
+      "title": "매달",
+      "type": "Expense",
+      "category_id": "0000",
+      "cycle": "monthly",
+      "day": null,
+      "week": null,
+      "month": 1,
+      "amout": 1,
+      "memo": ""
     }
   ]
 }

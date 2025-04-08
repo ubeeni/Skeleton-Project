@@ -126,7 +126,8 @@ const fetchQuickOptions = async () => {
 
 // 항목 포맷
 const formatOption = (item) => {
-  const dayText = item.day || item.week || (item.month ? `매월 ${item.month}일` : '')
+  const dayText =
+    item.day || (item.week ? `매주 ${item.week}` : '') || (item.month ? `매월 ${item.month}일` : '')
   const memoText = item.memo ? ` | ${item.memo}` : ''
   return `${item.title} | ${dayText} | ${item.amout.toLocaleString()}원${memoText}`
 }

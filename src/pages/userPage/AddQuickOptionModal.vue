@@ -143,6 +143,18 @@ const submit = () => {
     return
   }
 
+  if (newItem.value.cycle === 'daily') {
+    newItem.value.day = '매일'
+    newItem.value.week = null
+    newItem.value.month = null
+  } else if (newItem.value.cycle === 'weekly') {
+    newItem.value.day = null
+    newItem.value.month = null
+  } else if (newItem.value.cycle === 'monthly') {
+    newItem.value.day = null
+    newItem.value.week = null
+  }
+
   emit('add', { ...newItem.value })
   emit('close')
 }

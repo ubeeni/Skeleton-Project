@@ -9,8 +9,8 @@
     {
       "id": "AB78",
       "name": "ㅁㄴㅇㄹ",
-      "incomeDefault": "미분류",
-      "expenseDefault": "미분류"
+      "incomeDefault": "급여",
+      "expenseDefault": "수도&가스비"
     }
   ],
   "categories": [
@@ -203,20 +203,20 @@
       "memo": "용돈을 받았다"
     },
     {
-      "id": "4343",
+      "id": "1744098761201",
       "member_id": "AB78",
-      "title": "saedw",
+      "title": "3",
       "type": "Expense",
-      "category_id": "8888",
+      "category_id": "0000",
       "cycle": "daily",
       "day": "매일",
       "week": null,
       "month": null,
-      "amout": 444,
+      "amout": 3,
       "memo": ""
     },
     {
-      "id": "1744098031424",
+      "id": "1744098792971",
       "member_id": "AB78",
       "title": "4",
       "type": "Expense",
@@ -225,7 +225,7 @@
       "day": "매일",
       "week": null,
       "month": null,
-      "amout": 2,
+      "amout": 4,
       "memo": ""
     }
   ]

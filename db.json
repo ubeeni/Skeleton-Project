@@ -124,33 +124,55 @@
   "transactions": [
     {
       "id": "1E67",
+      "name": "용돈",
       "member_id": "12CD",
       "category_id": "2222",
       "amount": 2000000,
-      "date": "2024-03-04",
+      "date": "2025-04-05",
       "memo": "용돈 받는날!"
     },
     {
       "id": "WV71",
+      "name": "물...",
       "member_id": "12CD",
       "category_id": "4444",
       "amount": 50000,
-      "date": "2024-03-04",
+      "date": "2025-04-08",
       "memo": "수도요금..."
     },
     {
       "id": "E9X3",
+      "name": "카페는 자릿세",
       "member_id": "12CD",
       "category_id": "6666",
-      "amount": 130000,
-      "date": "2024-03-04",
+      "amount": 4500,
+      "date": "2024-04-09",
       "memo": "카페에서 한잔"
+    },
+    {
+      "id": "18XW",
+      "name": "친구 축의금",
+      "member_id": "12CD",
+      "category_id": "AAAA",
+      "amount": 150000,
+      "date": "2024-04-09",
+      "memo": "결혼 축하한다"
+    },
+    {
+      "id": "OR37",
+      "name": "신작 영화",
+      "member_id": "12CD",
+      "category_id": "BBBB",
+      "amount": 13000,
+      "date": "2024-04-08",
+      "memo": "너무 비싸"
     }
   ],
 
   "quickAddOptions": [
     {
       "id": "PQRS",
+      "name": "나는야 커피 자판기",
       "member_id": "12CD",
       "category_id": "0000",
       "cycle": "daily",
@@ -162,6 +184,7 @@
     },
     {
       "id": "LKEN",
+      "name": "돼지저금통",
       "member_id": "12CD",
       "category_id": "0000",
       "cycle": "weekly",
@@ -173,6 +196,7 @@
     },
     {
       "id": "SMFM",
+      "name": "돈 나가는 날",
       "member_id": "12CD",
       "category_id": "0000",
       "cycle": "monthly",
@@ -183,23 +207,4 @@
       "memo": "월세"
     }
   ]
-}
-{
-  "members": [],
-
-  "categories": [
-    { "id": "0000", "name": "미분류", "type": "Expense", "imgUrl": "" },
-    { "id": "FFFF", "name": "미분류", "type": "Income", "imgUrl": "" },
-    { "id": "1111", "name": "월급", "type": "Income", "imgUrl": "" },
-    { "id": "2222", "name": "용돈", "type": "Income", "imgUrl": "" },
-    { "id": "3333", "name": "기타", "type": "Income", "imgUrl": "" },
-    { "id": "4444", "name": "수도&가스비", "type": "Expense", "imgUrl": "" },
-    { "id": "5555", "name": "생활비", "type": "Expense", "imgUrl": "" },
-    { "id": "6666", "name": "보험료", "type": "Expense", "imgUrl": "" },
-    { "id": "7777", "name": "기타", "type": "Expense", "imgUrl": "" }
-  ],
-
-  "transactions": [],
-
-  "quickAddOptions": []
 }

@@ -203,19 +203,6 @@
       "memo": "용돈을 받았다"
     },
     {
-      "id": "53cb",
-      "member_id": "AB78",
-      "title": "교통비",
-      "type": "Expense",
-      "category_id": "FFFF",
-      "cycle": "weekly",
-      "day": "매일",
-      "week": "화요일",
-      "month": null,
-      "amout": 50000,
-      "memo": ""
-    },
-    {
       "id": "e7b4",
       "member_id": "AB78",
       "title": "ㅁㄴㅇㄹ",

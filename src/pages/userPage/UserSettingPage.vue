@@ -25,10 +25,15 @@
     <div class="right-panel">
       <div class="right-header">
         <label class="title">고정 수입/지출</label>
-        <button class="add-yellow" @click="showModal = true">추가</button>
+        <button class="add-yellow" @click="showAddModal = true">추가</button>
       </div>
       <ul>
-        <li v-for="item in limitedQuickOptions" :key="item.id" class="item">
+        <li
+          v-for="item in limitedQuickOptions"
+          :key="item.id"
+          class="item"
+          @click="openEditModal(item)"
+        >
           {{ formatOption(item) }}
         </li>
       </ul>
@@ -43,9 +48,22 @@
 
   <!-- 모달 -->
   <AddQuickOptionModal
-    v-if="showModal"
+    v-if="showAddModal"
     :categories="categories"
-    @close="showModal = false"
+    @close="showAddModal = false"
+    @refresh="fetchQuickOptions"
+  />
+
+  <EditQuickOptionModal
+    v-if="showEditModal"
+    :option="selectedOption"
+    :categories="categories"
+    @close="
+      () => {
+        showEditModal = false
+        selectedOption = null
+      }
+    "
     @refresh="fetchQuickOptions"
   />
 </template>
@@ -55,7 +73,11 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import AddQuickOptionModal from '@/pages/userPage/AddQuickOptionModal.vue'
-const showModal = ref(false)
+import EditQuickOptionModal from '@/pages/userPage/EditQuickOptionModal.vue'
+
+const showAddModal = ref(false)
+const showEditModal = ref(false)
+const selectedOption = ref(null)
 
 const route = useRoute()
 const router = useRouter()
@@ -73,7 +95,6 @@ const fetchUser = async () => {
   const res = await axios.get(`http://localhost:3000/members/${userId}`)
   user.value = res.data
 
-  // name 값을 id로 매핑해서 select 초기화
   selectedIncome.value =
     categories.value.find((c) => c.name === res.data.incomeDefault && c.type === 'Income')?.id || ''
 
@@ -107,7 +128,6 @@ const fetchCategories = async () => {
   const res = await axios.get('http://localhost:3000/categories')
   categories.value = res.data
 
-  // 기본값 설정
   selectedIncome.value = categories.value.find((c) => c.type === 'Income')?.id || ''
   selectedExpense.value = categories.value.find((c) => c.type === 'Expense')?.id || ''
 }
@@ -121,8 +141,13 @@ const formatOption = (item) => {
   return `${item.title} | ${dayText} | ${item.amout.toLocaleString()}원${memoText}`
 }
 
+const openEditModal = (item) => {
+  selectedOption.value = item
+  showEditModal.value = true
+}
+
 onMounted(async () => {
-  await fetchCategories() // ❗ 먼저 카테고리 정보를 받아야 name → id 매핑이 가능
+  await fetchCategories()
   await fetchUser()
   fetchQuickOptions()
 })
@@ -188,6 +213,7 @@ const limitedQuickOptions = computed(() => quickOptions.value.slice(0, 5))
 .item {
   margin-bottom: 8px;
   font-size: 15px;
+  cursor: pointer;
 }
 
 .button-group {

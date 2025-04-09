@@ -119,19 +119,16 @@ const groupedByDate = computed(() => {
   const result = {}
 
   transactions.value.forEach((item) => {
-    const date = item.date
-    const type = item.type
-    const amount = item.amount
-    const title = item.title
+    const { id, title, type, amount, date } = item
 
     if (!result[date]) {
       result[date] = { income: [], expense: [] }
     }
 
     if (type === 'Income') {
-      result[date].income.push({ title, amount })
+      result[date].income.push({ id, title, amount })
     } else if (type === 'Expense') {
-      result[date].expense.push({ title, amount })
+      result[date].expense.push({ id, title, amount })
     }
   })
 
@@ -185,14 +182,18 @@ const handleNext = () => {
 const monthlyIncome = computed(() => {
   const selectedMonth = currentDate.value
   return transactions.value
-    .filter((t) => t.date.startsWith(selectedMonth) && t.type === 'Income')
+    .filter(
+      (t) => typeof t.date === 'string' && t.date.startsWith(selectedMonth) && t.type === 'Income',
+    )
     .reduce((acc, cur) => acc + cur.amount, 0)
 })
 
 const monthlyExpense = computed(() => {
   const selectedMonth = currentDate.value
   return transactions.value
-    .filter((t) => t.date.startsWith(selectedMonth) && t.type === 'Expense')
+    .filter(
+      (t) => typeof t.date === 'string' && t.date.startsWith(selectedMonth) && t.type === 'Expense',
+    )
     .reduce((acc, cur) => acc + cur.amount, 0)
 })
 

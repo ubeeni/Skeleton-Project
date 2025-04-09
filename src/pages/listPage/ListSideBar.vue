@@ -113,8 +113,8 @@ const currentDate = ref(dayjs())
 const selectedRange = ref('1개월')
 
 // ✅ 초기값: 수입/지출 모두 true → 전체 보기
-const isIncome = ref(true)
-const isExpense = ref(true)
+const isIncome = ref(false)
+const isExpense = ref(false)
 
 const selectedIncome = ref([])
 const selectedExpense = ref([])
@@ -139,23 +139,39 @@ const selectRange = (val) => {
 
 const clickIncome = () => {
   isIncome.value = !isIncome.value
+  if (!isIncome.value) {
+    selectedIncome.value = [] // 💥 수입 카테고리도 초기화
+  }
   emitFilters()
 }
+
 const clickExpense = () => {
   isExpense.value = !isExpense.value
+  if (!isExpense.value) {
+    selectedExpense.value = [] // 💥 지출 카테고리도 초기화
+  }
   emitFilters()
 }
 
 const selectIncome = (id) => {
-  selectedIncome.value.includes(id)
-    ? selectedIncome.value = selectedIncome.value.filter(i => i !== id)
-    : selectedIncome.value.push(id)
+  if (selectedIncome.value.includes(id)) {
+    selectedIncome.value = selectedIncome.value.filter(i => i !== id)
+    // 선택된 게 아예 없으면 자동 비활성화
+    if (selectedIncome.value.length === 0) isIncome.value = false
+  } else {
+    selectedIncome.value.push(id)
+    isIncome.value = true // 수동으로 on
+  }
   emitFilters()
 }
 const selectExpense = (id) => {
-  selectedExpense.value.includes(id)
-    ? selectedExpense.value = selectedExpense.value.filter(i => i !== id)
-    : selectedExpense.value.push(id)
+  if (selectedExpense.value.includes(id)) {
+    selectedExpense.value = selectedExpense.value.filter(i => i !== id)
+    if (selectedExpense.value.length === 0) isExpense.value = false
+  } else {
+    selectedExpense.value.push(id)
+    isExpense.value = true
+  }
   emitFilters()
 }
 
@@ -179,7 +195,7 @@ const totalColorClass = computed(() => {
   return net > 0 ? 'color-positive' : net < 0 ? 'color-negative' : ''
 })
 
-// 🔄 필터 상태 상위 컴포넌트로 전달
+// 필터 상태 상위 컴포넌트로 전달
 const emitFilters = () => {
   emit('filter-change', {
     date: currentDate.value,

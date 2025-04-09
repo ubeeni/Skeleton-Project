@@ -54,24 +54,30 @@ function handleFilterChange(newOptions) {
 }
 
 const filteredTransactions = computed(() => {
-  const { date, range, showIncome, showExpense, incomeCategoryIds, expenseCategoryIds } =
-    filterOptions.value
+  const { date, range, showIncome, showExpense, incomeCategoryIds, expenseCategoryIds } = filterOptions.value
 
   const to = dayjs(date)
-  const from = to.subtract(range === '1주' ? 7 : range === '3개월' ? 90 : 30, 'day')
+  let from
+
+  if (range === '1주') {
+    const day = to.day() // 일요일(0) ~ 토요일(6)
+    from = to.subtract((day === 0 ? 6 : day - 1), 'day') // 월요일까지 이동
+  } else if (range === '1개월') {
+    from = to.startOf('month')
+  } else if (range === '3개월') {
+    from = to.subtract(2, 'month').startOf('month')
+  }
 
   return transactions.value.filter((tx) => {
-    const txDate = dayjs(tx.date)
-    const inRange = txDate.isBetween(from, to, null, '[]')
+    const txDate = dayjs(tx.date).startOf('day')
+    const inRange = txDate.isSame(from, 'day') || txDate.isSame(to, 'day') || txDate.isBetween(from, to)
 
-    // ❗수입/지출 전부 꺼져 있으면 안 보여주기
-    if (!showIncome && !showExpense) return false
+    // 수입/지출 모두 꺼져 있을 때 → 전체 출력
+    if (!showIncome && !showExpense) return inRange
 
-    // ✅ type 필터
     if (tx.type === 'Income' && !showIncome) return false
     if (tx.type === 'Expense' && !showExpense) return false
 
-    // ✅ category 필터 (선택된 게 있을 경우만 필터링)
     if (tx.type === 'Income' && incomeCategoryIds.length > 0) {
       return inRange && incomeCategoryIds.includes(tx.category_id)
     }
@@ -80,7 +86,6 @@ const filteredTransactions = computed(() => {
       return inRange && expenseCategoryIds.includes(tx.category_id)
     }
 
-    // ❗선택된 카테고리가 없으면 해당 타입은 전체 허용
     return inRange
   })
 })

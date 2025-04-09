@@ -198,7 +198,19 @@ const selectType = (type) => {
   categoryId.value = category.id
 }
 
+const checkTransaction = () => {
+  if (transactionTitle.value === '' || Number(amount.value) < 0) {
+    return false
+  }
+  return true
+}
+
 const updateTransaction = async () => {
+  if (!checkTransaction()) {
+    alert('데이터 입력이 잘못되었습니다.')
+    return
+  }
+
   try {
     const response = await axios.put(`${BASEURI}/transactions/${transactionId.value}`, {
       title: transactionTitle.value,
@@ -220,6 +232,12 @@ const updateTransaction = async () => {
 }
 
 const deleteTransaction = async () => {
+  const isAllowed = confirm('정말로 삭제하시겠습니까?')
+
+  if (!isAllowed) {
+    return
+  }
+
   try {
     const response = await axios.delete(`${BASEURI}/transactions/${transactionId.value}`)
 

@@ -185,7 +185,19 @@ const initInputData = () => {
   memo.value = ''
 }
 
+const checkTransaction = () => {
+  if (transactionTitle.value === '' || Number(amount.value) < 0) {
+    return false
+  }
+  return true
+}
+
 const addTransaction = async () => {
+  if (!checkTransaction()) {
+    alert('데이터 입력이 잘못되었습니다.')
+    return
+  }
+
   console.log(
     '거래명: ' +
       transactionTitle.value +

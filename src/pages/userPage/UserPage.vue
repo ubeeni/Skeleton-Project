@@ -31,7 +31,7 @@
       </div>
 
       <div class="item">
-        <span class="bodySemibold18px">기본 지출</span>
+        <span class="bodySemibold18px">고정 수입/지출</span>
         <ul>
           <li v-for="item in quickOptions" :key="item.id" class="bodyRegular18px">
             {{ formatOption(item) }}

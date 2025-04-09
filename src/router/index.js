@@ -16,7 +16,7 @@ const router = createRouter({
       component: () => import('@/pages/detailPage/DetailPage.vue'),
     },
     {
-      path: '/detail/:id',
+      path: '/detail/:action',
       name: 'detail',
       component: () => import('@/pages/detailPage/DetailPage.vue'),
     },

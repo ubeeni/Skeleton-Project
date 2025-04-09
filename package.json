@@ -11,11 +11,12 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "apexcharts": "^4.5.0",
     "@fullcalendar/core": "^6.1.17",
     "@fullcalendar/daygrid": "^6.1.17",
     "@fullcalendar/interaction": "^6.1.17",
     "@fullcalendar/vue3": "^6.1.17",
+    "@vuepic/vue-datepicker": "^11.0.2",
+    "apexcharts": "^4.5.0",
     "axios": "^1.8.4",
     "dayjs": "^1.11.13",
     "pinia": "^3.0.1",

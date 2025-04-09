@@ -5,7 +5,7 @@
 
     <div class="form-group">
       <label>금액</label>
-      <InputLg type="text" placeholder="금액을 입력하세요" v-model="amount" readonly />
+      <InputLg type="number" placeholder="금액을 입력하세요" v-model.number="amount" readonly />
     </div>
 
     <BtnDual :is-income-active="isIncome" :is-expense-active="isExpense" />
@@ -52,17 +52,14 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 
-const historyState = window.history.state
-
-const prevPage = historyState?.from
+const prevPage = ref(null)
 
 const currentRoute = useRoute()
 const router = useRouter()
 
 const BASEURI = '/api'
 
-// const transactionId = ref('SIVA') // 상세 보기할 트랜잭션 ID
-const transactionId = ref(historyState.transaction_id)
+const transactionId = ref(null) // 상세 보기할 트랜잭션 ID - 추후 pinia로 다른 페이지에서 받아올 것
 
 const transactionTitle = ref('') // 거래명
 const amount = ref(0) // 금액
@@ -82,6 +79,10 @@ const isIncome = computed(() => categoryType.value === 'Income')
 const isExpense = computed(() => categoryType.value === 'Expense')
 
 onMounted(async () => {
+  const historyState = window.history.state
+  prevPage.value = historyState.from
+  transactionId.value = historyState.transaction_id || 'e5f7'
+
   try {
     console.log(transactionId)
 
@@ -91,14 +92,9 @@ onMounted(async () => {
     const allTransactions = transResponse.data
     const allCategories = catResponse.data
 
-    console.log(allTransactions)
-    console.log(allCategories)
-
     const transaction = allTransactions.find(
       (transaction) => transaction.id === transactionId.value,
     )
-
-    console.log(transaction)
 
     transactionTitle.value = transaction.title
     amount.value = transaction.amount
@@ -132,11 +128,18 @@ onMounted(async () => {
 
 const gotoUpdate = () => {
   console.log('수정 버튼')
-  router.push('/detail/update')
+  router.push({
+    name: 'detail',
+    params: { action: 'update' },
+    state: { from: prevPage.value, transaction_id: transactionId.value },
+  })
 }
 
 const cancle = () => {
   console.log('취소 버튼')
+  router.push({
+    name: prevPage.value,
+  })
 }
 </script>
 

@@ -15,6 +15,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+
 import axios from 'axios'
 
 import AddTransaction from './components/AddTransaction.vue'
@@ -35,6 +36,6 @@ const componentsArray = computed(() =>
 )
 
 const currentComponent = computed(() => {
-  return componentsMap[currentRoute.params.action] || ViewTransaction
+  return componentsMap[currentRoute.params.action]
 })
 </script>

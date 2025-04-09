@@ -177,6 +177,14 @@ const selectType = (type) => {
   categoryId.value = category.id
 }
 
+const initInputData = () => {
+  transactionTitle.value = ''
+  amount.value = 0
+  categoryId.value = '0000'
+  date.value = ''
+  memo.value = ''
+}
+
 const addTransaction = async () => {
   console.log(
     '거래명: ' +
@@ -198,18 +206,14 @@ const addTransaction = async () => {
       title: transactionTitle.value,
       category_id: categoryId.value,
       type: categoryType.value,
-      amount: amount.value,
+      amount: Number(amount.value),
       date: isoDate.value,
       memo: memo.value,
     })
 
     if (response.status === 201) {
       console.log('추가 성공')
-      transactionTitle.value = ''
-      amount.value = 0
-      categoryId.value = '0000'
-      date.value = ''
-      memo.value = ''
+      initInputData()
     } else {
       console.log('추가 실패')
     }

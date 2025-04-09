@@ -81,7 +81,7 @@ const isExpense = computed(() => categoryType.value === 'Expense')
 onMounted(async () => {
   const historyState = window.history.state
   prevPage.value = historyState.from
-  transactionId.value = historyState.transaction_id
+  transactionId.value = historyState.transaction_id || 'e5f7'
 
   try {
     const transResponse = await axios.get(BASEURI + '/transactions')
@@ -90,14 +90,9 @@ onMounted(async () => {
     const allTransactions = transResponse.data
     const allCategories = catResponse.data
 
-    console.log(allTransactions)
-    console.log(allCategories)
-
     const transaction = allTransactions.find(
       (transaction) => transaction.id === transactionId.value,
     )
-
-    console.log(transaction)
 
     transactionTitle.value = transaction.title
     amount.value = transaction.amount

@@ -363,15 +363,6 @@
       "amount": 200000,
       "date": "2025-04-09",
       "memo": "엄마 용돈"
-    },
-    {
-      "title": "거래내역",
-      "category_id": "0000",
-      "type": "Expense",
-      "amount": 12345,
-      "date": "2025-04-15T19:37:00",
-      "memo": "ㅇㅇ",
-      "id": "52e3"
     }
   ],
   "quickAddOptions": [

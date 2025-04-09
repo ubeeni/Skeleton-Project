@@ -204,7 +204,7 @@ const updateTransaction = async () => {
       title: transactionTitle.value,
       category_id: categoryId.value,
       type: categoryType.value,
-      amount: amount.value,
+      amount: Number(amount.value),
       date: isoDate.value,
       memo: memo.value,
     })

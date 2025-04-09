@@ -25,7 +25,7 @@
     <div class="right-panel">
       <div class="right-header">
         <span class="bodySemibold18px">고정 수입/지출</span>
-        <BtnSm :color="'var(--color-secondary)'" :text="`저장`" @click="showAddModal = true" />
+        <BtnSm :color="'var(--color-secondary)'" :text="`추가`" @click="showAddModal = true" />
       </div>
       <ul>
         <li

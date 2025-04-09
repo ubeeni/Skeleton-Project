@@ -42,8 +42,8 @@
 
   <!-- 버튼 -->
   <div class="button-group">
-    <BtnLg :color="'var(--color-primary)'" :text="`저장`" @click="saveName" />
-    <BtnLg :color="'var(--color-light)'" :text="`취소`" @click="resetName" />
+    <BtnLg :color="'var(--color-primary)'" :text="`저장`" @click="saveDefaults" />
+    <BtnLg :color="'var(--color-light)'" :text="`취소`" @click="cancelAndRedirect" />
   </div>
 
   <!-- 모달 -->
@@ -137,7 +137,7 @@ const formatOption = (item) => {
   const dayText =
     item.day || (item.week ? `매주 ${item.week}` : '') || (item.month ? `매월 ${item.month}일` : '')
   const memoText = item.memo ? ` | ${item.memo}` : ''
-  return `${item.title} | ${dayText} | ${item.amout.toLocaleString()}원${memoText}`
+  return `${item.title} | ${dayText} | ${item.amount.toLocaleString()}원${memoText}`
 }
 
 // 추가/수정/삭제 핸들러

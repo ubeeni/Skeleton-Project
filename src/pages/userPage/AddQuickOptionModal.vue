@@ -71,9 +71,9 @@
       <div class="form-row">
         <span class="bodySemibold18px">금액</span>
         <InputLg
-          v-model="newItem.amout"
+          v-model="newItem.amount"
           type="number"
-          :class="{ error: (!newItem.amout || newItem.amout <= 0) && triedSubmit }"
+          :class="{ error: (!newItem.amount || newItem.amount <= 0) && triedSubmit }"
           placeholder="금액을 입력하세요"
         />
       </div>
@@ -120,8 +120,7 @@ const newItem = ref({
   day: '매일',
   week: null,
   month: null,
-  amout: 0,
-  memo: '',
+  amoun: '',
 })
 
 const filteredCategories = computed(() =>
@@ -139,7 +138,7 @@ const triedSubmit = ref(false)
 const submit = () => {
   triedSubmit.value = true
 
-  if (!newItem.value.title || !newItem.value.amout || newItem.value.amout <= 0) {
+  if (!newItem.value.title || !newItem.value.amount || newItem.value.amount <= 0) {
     alert('거래명과 금액은 필수 항목입니다.')
     return
   }

@@ -269,7 +269,7 @@
       "title": "결혼식 축의금",
       "member_id": "12CD",
       "category_id": "AAAA",
-      "type": "Income",
+      "type": "Expense",
       "amount": 150000,
       "date": "2025-04-04",
       "memo": "친구야 축하해"

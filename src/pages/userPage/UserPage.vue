@@ -1,25 +1,26 @@
 <template>
-  <div class="container">
-    <!-- 좌측: 프로필 -->
+  <div class="content-columns">
+    <!-- 프로필 -->
     <section class="section">
       <div class="section-header">
         <h2 class="section-title">프로필</h2>
-        <router-link :to="`/user/${userId}/edit`" class="edit-link"> 수정 </router-link>
+        <router-link :to="`/user/${userId}/edit`" class="edit-link">수정</router-link>
       </div>
-
       <div class="item">
         <span class="label">이름</span>
         <span class="value">{{ user?.name }}</span>
       </div>
     </section>
 
-    <!-- 우측: 사용자 설정 -->
+    <!-- 세로 구분선 -->
+    <div class="divider"></div>
+
+    <!-- 사용자 설정 -->
     <section class="section">
       <div class="section-header">
         <h2 class="section-title">사용자 설정</h2>
-        <router-link :to="`/user/${userId}/settings`" class="edit-link"> 수정 </router-link>
+        <router-link :to="`/user/${userId}/settings`" class="edit-link">수정</router-link>
       </div>
-
       <div class="item">
         <span class="label">카테고리 기본값 설정</span>
         <span class="value">미분류</span>
@@ -50,19 +51,27 @@ onMounted(fetchUser)
 </script>
 
 <style scoped>
-.container {
+.content-columns {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  align-items: flex-start;
   padding: 40px;
-  max-width: 1000px;
-  margin: 0 auto;
-  box-sizing: border-box;
 }
 
+/* 각 섹션 */
 .section {
-  width: 45%;
+  width: 300px;
 }
 
+/* 세로줄 */
+.divider {
+  width: 1px;
+  background-color: black;
+  margin: 0 40px;
+  align-self: stretch;
+}
+
+/* 제목 + 수정 */
 .section-header {
   display: flex;
   justify-content: space-between;
@@ -71,36 +80,30 @@ onMounted(fetchUser)
 }
 
 .section-title {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
 }
 
+.edit-link {
+  font-size: 14px;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* 항목 */
 .item {
   display: flex;
-  align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .label {
-  width: 150px;
-  font-weight: 600;
+  width: 120px;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 .value {
-  flex: 1;
-}
-
-.edit-link {
-  background: none;
-  border: none;
-  color: #3b82f6;
   font-size: 14px;
-  cursor: pointer;
-  text-decoration: underline;
-  padding: 0;
-}
-
-.edit-link:hover {
-  color: #2563eb;
 }
 </style>

@@ -1,5 +1,8 @@
 <template>
-<!-- 여기부터 승아 -->
+  <div>
+    <Calendar />
+  </div>
+  <!-- 여기부터 승아 -->
   <div class="report-divider"></div>
   <div class="report-title titleBold24px">소비리포트</div>
   <div class="report-wrapper bodySemibold18px">
@@ -19,9 +22,6 @@
     </div>
   </div>
   <!-- 여기까지 승아 -->
-  <div>
-    <Calendar />
-  </div>
 </template>
 
 <script setup>

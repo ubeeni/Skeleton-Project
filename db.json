@@ -5,12 +5,6 @@
       "name": "홍길동",
       "incomeDefault": "미분류",
       "expenseDefault": "미분류"
-    },
-    {
-      "id": "AB78",
-      "name": "John",
-      "incomeDefault": "미분류",
-      "expenseDefault": "미분류"
     }
   ],
   "categories": [
@@ -295,104 +289,6 @@
       "title": "맛집 탐방",
       "member_id": "12CD",
       "category_id": "7777",
-      "type": "Expense"
-    },
-    {
-      "id": "40GN",
-      "title": "외식",
-      "member_id": "12CD",
-      "category_id": "7777",
-      "type": "Expense",
-      "amount": 34000,
-      "date": "2025-03-23",
-      "memo": "사치 부리는 날"
-    },
-    {
-      "id": "QLMB",
-      "title": "기름값",
-      "member_id": "12CD",
-      "category_id": "FFFF",
-      "type": "Expense",
-      "amount": 60000,
-      "date": "2025-03-23",
-      "memo": "5L 같은 6L 주세요"
-    },
-    {
-      "id": "02M4",
-      "title": "병원비",
-      "member_id": "12CD",
-      "category_id": "GGGG",
-      "type": "Expense",
-      "amount": 0,
-      "date": "2025-03-30",
-      "memo": "아프지 말자"
-    },
-    {
-      "id": "ZZ3G",
-      "title": "지하철 요금",
-      "member_id": "12CD",
-      "category_id": "FFFF",
-      "type": "Expense",
-      "amount": 0,
-      "date": "2025-03-30",
-      "memo": "..."
-    },
-    {
-      "id": "4GNS",
-      "title": "월급날",
-      "member_id": "12CD",
-      "category_id": "2222",
-      "type": "Income",
-      "amount": 3500000,
-      "date": "2025-04-01",
-      "memo": "^ㅗ^"
-    },
-
-    {
-      "id": "4T3J",
-      "title": "월세",
-      "member_id": "12CD",
-      "category_id": "HHHH",
-      "type": "Expense",
-      "amount": 500000,
-      "date": "2025-04-01",
-      "memo": "ㅠㅠㅠ"
-    },
-    {
-      "id": "AKE6",
-      "title": "커피 한 잔",
-      "member_id": "12CD",
-      "category_id": "8888",
-      "type": "Expense",
-      "amount": 5500,
-      "date": "2025-04-03",
-      "memo": "긴급 수혈"
-    },
-    {
-      "id": "3HNR",
-      "title": "결혼식 축의금",
-      "member_id": "12CD",
-      "category_id": "AAAA",
-      "type": "Income",
-      "amount": 150000,
-      "date": "2025-04-04",
-      "memo": "친구야 축하해"
-    },
-    {
-      "id": "LJHG",
-      "title": "여행 숙박비",
-      "member_id": "12CD",
-      "category_id": "CCCC",
-      "type": "Expense",
-      "amount": 200000,
-      "date": "2025-04-06",
-      "memo": "여행이 좋다"
-    },
-    {
-      "id": "RNYC",
-      "title": "맛집 탐방",
-      "member_id": "12CD",
-      "category_id": "7777",
       "type": "Expense",
       "amount": 50000,
       "date": "2025-04-07",
@@ -401,7 +297,7 @@
     {
       "id": "468X",
       "title": "공연 관람",
-      "member_id": "",
+      "member_id": "12CD",
       "category_id": "BBBB",
       "type": "Expense",
       "amount": 60000,
@@ -462,7 +358,7 @@
       "cycle": "monthly",
       "day": null,
       "week": null,
-      "month": 15,
+      "month": null,
       "amount": 600000,
       "memo": "돈 나가는 날..."
     }

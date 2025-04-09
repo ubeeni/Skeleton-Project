@@ -42,7 +42,6 @@ const formattedTotal = computed(() => {
 <style scoped>
 .transaction-day {
   margin-bottom: 24px;
-  background-color: #f8f8f8;
   padding: 12px 16px;
   border-radius: 8px;
 }

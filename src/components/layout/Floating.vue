@@ -15,7 +15,7 @@ const router = useRouter()
 
 // 추가 버튼
 function moveToAdd() {
-  router.push({ name: 'add' })
+  router.push({ name: 'detail', params: { action: 'add' } })
 }
 
 // 상단이동 버튼

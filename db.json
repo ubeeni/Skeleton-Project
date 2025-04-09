@@ -333,6 +333,36 @@
       "amount": 200000,
       "date": "2025-04-08",
       "memo": "엄마 용돈"
+    },
+    {
+      "id": "d9c6",
+      "title": "커피 수혈",
+      "member_id": "12CD",
+      "category_id": "0000",
+      "type": "Expense",
+      "amount": 2000,
+      "date": "2025-04-09",
+      "memo": "나는야 커피 자판기"
+    },
+    {
+      "id": "0f16",
+      "title": "주간 저금",
+      "member_id": "12CD",
+      "category_id": "0000",
+      "type": "Expense",
+      "amount": 70000,
+      "date": "2025-04-09",
+      "memo": "매주 모아서..."
+    },
+    {
+      "id": "a710",
+      "title": "부모님 용돈",
+      "member_id": "12CD",
+      "category_id": "3333",
+      "type": "Income",
+      "amount": 200000,
+      "date": "2025-04-09",
+      "memo": "엄마 용돈"
     }
   ],
   "quickAddOptions": [

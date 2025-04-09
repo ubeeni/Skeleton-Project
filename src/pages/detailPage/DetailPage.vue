@@ -35,6 +35,6 @@ const componentsArray = computed(() =>
 )
 
 const currentComponent = computed(() => {
-  return componentsMap[currentRoute.params.action] || ViewTransaction
+  return componentsMap[currentRoute.params.action]
 })
 </script>

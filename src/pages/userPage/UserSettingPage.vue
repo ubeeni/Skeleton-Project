@@ -251,12 +251,19 @@ onMounted(async () => {
   align-items: center;
 }
 
-.right-header,
+.right-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
 .left-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  height: 35.5px;
 }
 
 .item {

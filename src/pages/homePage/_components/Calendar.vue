@@ -2,15 +2,9 @@
   <div class="container">
     <div class="sidebar">
       <div class="month-nav">
-        <button @click="handlePrev" class="back-btn">
-          <img :src="backButton" alt="back" />
-        </button>
-
+        <img :src="backButton" alt="back" @click="handlePrev" />
         <span class="titleBold24px"> {{ parseInt(currentDate.split('-')[1]) }}월 </span>
-
-        <button @click="handleNext" class="forward-btn">
-          <img :src="forwardButton" alt="forward" />
-        </button>
+        <img :src="forwardButton" alt="forward" @click="handleNext" />
       </div>
 
       <div class="summary">
@@ -300,22 +294,31 @@ const calendarOptions = computed(() => ({
 }
 
 .month-nav {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
   align-items: center;
-  text-align: center;
+  justify-content: center;
   margin-bottom: 1rem;
+  gap: 1rem;
+}
+.month-nav img {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
 }
 
 .container {
   display: flex;
 }
 
+.sidebar {
+  width: 17.5rem;
+}
+
 .calendar-wrapper {
   box-shadow: var(--boxshadow-light);
   background: var(--color-white);
-  border-radius: 16px;
-  margin-left: 20px;
+  border-radius: 1rem;
+  margin-left: 2rem;
 }
 
 .fc .fc-button.fc-today-button {

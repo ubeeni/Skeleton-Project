@@ -104,7 +104,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watchEffect } from 'vue'
+import { ref, computed, watchEffect, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import InputLg from '@/components/input/InputLg.vue'
 import InputMed from '@/components/input/InputMed.vue'
@@ -132,7 +132,7 @@ const newItem = ref({
   day: '매일',
   week: null,
   month: null,
-  amoun: '',
+  amount: 0,
 })
 
 const filteredCategories = computed(() =>
@@ -156,6 +156,16 @@ const weeklyOptions = [
 ]
 
 const triedSubmit = ref(false)
+
+watch(
+  () => newItem.value.amount,
+  (val) => {
+    if (typeof val === 'string') {
+      const parsed = Number(val)
+      newItem.value.amount = isNaN(parsed) ? 0 : parsed
+    }
+  },
+)
 
 const submit = () => {
   triedSubmit.value = true

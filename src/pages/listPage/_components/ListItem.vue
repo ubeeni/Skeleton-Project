@@ -42,28 +42,32 @@ const amountOnly = computed(() => {
 .list-item {
   display: flex;
   width: 100%;
-  height: 120px;
-  padding: 20px;
+  height: 7.5rem;
+  padding: 1.25rem;
   justify-content: space-between;
   align-items: center;
   flex-shrink: 0;
 
-  border-radius: 20px;
-  border: 1px solid var(--Light, #C8C8C8);
-  background: var(--White, #FFF);
+  border-radius: 1.25rem;
+  border: 1px solid var(--color-light);
+  background: var(--color-white);
 }
 .item-left {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 24px;
+  gap: 1.5rem;
+}
+
+.category {
+  color: var(--color-semidark);
 }
 
 .category-img {
-  width: 80px;
-  height: 80px;
+  width: 5rem;
+  height: 5rem;
   object-fit: cover;
-  border-radius: 50%;
+  border-radius: 100%;
   background-color: var(--color-light); /* fallback bg */
 }
 .text {
@@ -71,7 +75,7 @@ const amountOnly = computed(() => {
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  gap: 12px;
+  gap: 0.75rem;
 }
 
 .item-right {
@@ -88,6 +92,5 @@ const amountOnly = computed(() => {
 .won {
   color: var(--color-dark); /* '원'은 항상 검정색 */
   text-align: right;
-
 }
 </style>

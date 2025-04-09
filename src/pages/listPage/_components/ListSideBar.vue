@@ -2,30 +2,20 @@
   <div class="sidebar-wrapper">
     <!-- 월 이동 -->
     <div class="month-nav">
-      <button @click="handlePrev" class="back-btn">
-        <img :src="backButton" alt="back" />
-      </button>
-
+      <img :src="backButton" alt="back" @click="handlePrev" />
       <span class="titleBold24px"> {{ monthText }} </span>
-
-      <button @click="handleNext" class="forward-btn">
-        <img :src="forwardButton" alt="forward" />
-      </button>
+      <img :src="forwardButton" alt="forward" @click="handleNext" />
     </div>
 
     <!-- 수입/지출/총합 요약 -->
     <div class="summary">
       <div class="bodyRegular16px">
         💰 수입:
-        <span style="color: var(--color-dark)">
-          {{ monthlyIncome.toLocaleString() }}원
-        </span>
+        <span style="color: var(--color-dark)"> {{ monthlyIncome.toLocaleString() }}원 </span>
       </div>
       <div class="bodyRegular16px">
         💸 지출:
-        <span style="color: var(--color-dark)">
-          {{ monthlyExpense.toLocaleString() }}원
-        </span>
+        <span style="color: var(--color-dark)"> {{ monthlyExpense.toLocaleString() }}원 </span>
       </div>
       <div class="bodySemibold18px" style="margin-top: 0.5rem">
         총합:
@@ -63,12 +53,12 @@
 
       <!-- 수입 카테고리 -->
       <div class="category-group">
-        <div class="title bodySemibold16px">카테고리(수입)</div>
+        <div class="category-title bodySemibold16px">카테고리(수입)</div>
         <div class="category-list">
           <span
             v-for="cat in incomeCategories"
             :key="cat.id"
-            class="category-item bodyRegular16px"
+            class="category-item"
             :class="{ selected: selectedIncome.includes(cat.id) }"
             @click="selectIncome(cat.id)"
           >
@@ -79,12 +69,12 @@
 
       <!-- 지출 카테고리 -->
       <div class="category-group">
-        <div class="title bodySemibold16px">카테고리(지출)</div>
+        <div class="category-title bodySemibold16px">카테고리(지출)</div>
         <div class="category-list">
           <span
             v-for="cat in expenseCategories"
             :key="cat.id"
-            class="category-item bodyRegular16px"
+            class="category-item"
             :class="{ selected: selectedExpense.includes(cat.id) }"
             @click="selectExpense(cat.id)"
           >
@@ -155,7 +145,7 @@ const clickExpense = () => {
 
 const selectIncome = (id) => {
   if (selectedIncome.value.includes(id)) {
-    selectedIncome.value = selectedIncome.value.filter(i => i !== id)
+    selectedIncome.value = selectedIncome.value.filter((i) => i !== id)
     // 선택된 게 아예 없으면 자동 비활성화
     if (selectedIncome.value.length === 0) isIncome.value = false
   } else {
@@ -166,7 +156,7 @@ const selectIncome = (id) => {
 }
 const selectExpense = (id) => {
   if (selectedExpense.value.includes(id)) {
-    selectedExpense.value = selectedExpense.value.filter(i => i !== id)
+    selectedExpense.value = selectedExpense.value.filter((i) => i !== id)
     if (selectedExpense.value.length === 0) isExpense.value = false
   } else {
     selectedExpense.value.push(id)
@@ -175,19 +165,19 @@ const selectExpense = (id) => {
   emitFilters()
 }
 
-const incomeCategories = computed(() => props.categories.filter(c => c.type === 'Income'))
-const expenseCategories = computed(() => props.categories.filter(c => c.type === 'Expense'))
+const incomeCategories = computed(() => props.categories.filter((c) => c.type === 'Income'))
+const expenseCategories = computed(() => props.categories.filter((c) => c.type === 'Expense'))
 
 const monthlyIncome = computed(() => {
   const ym = currentDate.value.format('YYYY-MM')
   return props.transactions
-    .filter(t => t.type === 'Income' && t.date.startsWith(ym))
+    .filter((t) => t.type === 'Income' && t.date.startsWith(ym))
     .reduce((sum, t) => sum + t.amount, 0)
 })
 const monthlyExpense = computed(() => {
   const ym = currentDate.value.format('YYYY-MM')
   return props.transactions
-    .filter(t => t.type === 'Expense' && t.date.startsWith(ym))
+    .filter((t) => t.type === 'Expense' && t.date.startsWith(ym))
     .reduce((sum, t) => sum + t.amount, 0)
 })
 const totalColorClass = computed(() => {
@@ -211,17 +201,27 @@ const emitFilters = () => {
 <style scoped>
 .sidebar-wrapper {
   width: 100%;
-  padding: 0 16px;
 }
+.month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+.month-nav img {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+}
+
 .summary {
-  margin-top: 8px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  position: relative;
+  gap: 0.5rem;
 }
 .summary .total-line {
-  margin: 32px 0;
+  margin: 2rem 0;
   border-top: 1px solid var(--color-light);
 }
 .sideBar-bottom {
@@ -233,46 +233,42 @@ const emitFilters = () => {
 .range {
   display: flex;
   align-items: center;
-  gap: 12px;
-}
-.range-name {
-  font-weight: 600;
-  color: var(--color-dark);
+  gap: 1rem;
 }
 .range-list {
   display: flex;
-  gap: 12px;
+  gap: 0.5rem;
 }
 .range-option {
   cursor: pointer;
-  color: var(--color-light);
+  color: var(--color-semidark);
 }
 .range-option.active {
-  color: var(--color-dark);
   text-decoration: underline;
-  text-underline-offset: 4px;
+  text-underline-offset: 0.25rem;
   font-weight: 600;
 }
-.category-group {
-  width: 100%;
+
+.category-title {
+  margin-bottom: 0.5rem;
 }
+
 .category-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 0.5rem;
 }
+
 .category-item {
   cursor: pointer;
   color: var(--color-semidark);
-  transition: 0.2s;
+  transition: var(--transition);
   text-align: center;
-  text-decoration: none;
 }
 .category-item.selected {
-  color: var(--color-dark);
+  color: var(--color-semidark);
   font-weight: 600;
   text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25rem;
 }
 </style>

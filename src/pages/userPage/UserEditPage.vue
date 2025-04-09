@@ -4,7 +4,15 @@
 
     <div class="form-row">
       <span class="bodySemibold18px">이름</span>
-      <InputLg v-model="editedName" type="text" :placeholder="user?.name" />
+      <div class="input-wrapper">
+        <InputLg
+          v-model="editedName"
+          type="text"
+          :placeholder="user?.name"
+          :class="{ error: isInvalid }"
+        />
+        <p class="error-msg" :class="{ show: isInvalid }">이름은 공백일 수 없습니다.</p>
+      </div>
     </div>
 
     <div class="button-group">
@@ -15,7 +23,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import InputLg from '@/components/input/InputLg.vue'
@@ -34,7 +42,17 @@ const fetchUser = async () => {
   editedName.value = res.data.name
 }
 
+const isInvalid = ref(false)
+
 const saveName = async () => {
+  if (!editedName.value.trim()) {
+    isInvalid.value = true
+    alert('이름은 공백일 수 없습니다.')
+    return
+  }
+
+  isInvalid.value = false
+
   await axios.patch(`http://localhost:3000/members/${userId}`, {
     name: editedName.value,
   })
@@ -51,6 +69,10 @@ const cancelAndRedirect = () => {
   }
 }
 
+watchEffect(() => {
+  isInvalid.value = !editedName.value.trim()
+})
+
 onMounted(fetchUser)
 </script>
 
@@ -63,10 +85,14 @@ onMounted(fetchUser)
 
 .form-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   margin-top: 1.25rem;
   margin-bottom: 10rem;
+}
+
+.form-row > span {
+  margin-top: 19.25px;
 }
 
 .button-group {
@@ -74,5 +100,28 @@ onMounted(fetchUser)
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.error-msg {
+  height: 20px;
+  margin-top: 5px;
+  color: red;
+  text-align: end;
+  font-size: 16px;
+  visibility: hidden;
+}
+
+.error-msg.show {
+  visibility: visible;
+}
+
+input.error {
+  border: 1px solid red;
 }
 </style>

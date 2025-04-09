@@ -1,5 +1,5 @@
 <template>
-  <div class="list-item" v-if="item && item.amount !== undefined">
+  <div class="list-item" v-if="item && item.amount !== undefined" @click="goToDetail">
     <div class="item-left">
       <img :src="categoryInfo.imgUrl" alt="category" class="category-img" />
       <div class="text">
@@ -16,7 +16,7 @@
 
 <script setup>
 import { computed } from 'vue'
-// import categoryImgs from '@/assets/images/categories/'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
   item: {
@@ -29,6 +29,7 @@ const props = defineProps({
   },
 })
 
+const router = useRouter()
 const categoryInfo = computed(() => props.categoryMap[props.item.category_id] || {})
 const isIncome = computed(() => categoryInfo.value.type === 'Income')
 
@@ -36,6 +37,17 @@ const amountOnly = computed(() => {
   const sign = isIncome.value ? ' ' : '-'
   return `${sign} ${props.item.amount.toLocaleString()}`
 })
+
+const goToDetail = () => {
+  router.push({
+    name:'detail',
+    params: {action : 'view'},
+    state: {
+      from : 'list',
+      transaction_id : props.item.id,
+    },
+  })
+}
 </script>
 
 <style scoped>
@@ -47,7 +59,7 @@ const amountOnly = computed(() => {
   justify-content: space-between;
   align-items: center;
   flex-shrink: 0;
-
+  cursor: pointer;
   border-radius: 1.25rem;
   border: 1px solid var(--color-light);
   background: var(--color-white);

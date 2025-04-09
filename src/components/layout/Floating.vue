@@ -6,16 +6,22 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import BtnCircle from '../button/BtnCircle.vue'
 import IconAdd from '@/assets/icons/IconAdd.svg'
 import IconTop from '@/assets/icons/IconTop.svg'
 
+const currentRoute = useRoute()
 const router = useRouter()
 
 // 추가 버튼
 function moveToAdd() {
   router.push({ name: 'detail', params: { action: 'add' } })
+  router.push({
+    name: 'detail',
+    params: { action: 'add' },
+    state: { from: currentRoute.name },
+  })
 }
 
 // 상단이동 버튼

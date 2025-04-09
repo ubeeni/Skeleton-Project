@@ -375,7 +375,6 @@ const calendarOptions = computed(() => ({
   border-radius: 8px;
   padding: 0.6rem;
   text-align: left;
-  cursor: pointer;
   transition: background 0.2s;
 }
 

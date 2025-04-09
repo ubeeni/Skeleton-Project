@@ -18,6 +18,7 @@
                 {{ item.amount.toLocaleString() }}
               </span>
               원
+              <button @click="goToEditPage(item.id)" class="edit-btn">✏️</button>
             </li>
           </ul>
         </div>
@@ -30,6 +31,7 @@
                 {{ item.amount.toLocaleString() }}
               </span>
               원
+              <button @click="goToEditPage(item.id)" class="edit-btn">✏️</button>
             </li>
           </ul>
         </div>
@@ -41,6 +43,17 @@
 
 <script setup>
 import closeButton from '@/assets/icons/IconClose.svg'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goToEditPage = (id) => {
+  router.push({
+    name: 'detail',
+    params: { action: 'update' },
+    state: { from: 'home', transaction_id: id },
+  })
+}
 
 defineProps({
   date: String,
@@ -74,6 +87,18 @@ defineEmits(['close'])
   color: var(--color-dark);
 }
 
+li {
+  margin-top: 0.5rem;
+}
+
+li + li {
+  margin-top: 0.5rem;
+}
+
+.edit-btn {
+  transform: scaleX(-1);
+}
+
 .close-btn {
   position: absolute;
   top: 1rem;
@@ -81,7 +106,6 @@ defineEmits(['close'])
   background: none;
   border: none;
   padding: 0;
-  cursor: pointer;
   width: 24px;
   height: 24px;
 }

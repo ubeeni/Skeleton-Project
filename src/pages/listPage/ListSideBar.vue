@@ -1,44 +1,67 @@
 <template>
-    <div class="sidebar-wrapper">
-      <div class="header">
-        <div class="month-nav">
-      <span class="arrow"><</span>
-      <span class="month titleBold24px">{{ currentMonth }}월</span>
-      <span class="arrow">></span>
+  <div class="sidebar-wrapper">
+    <!-- 월 이동 -->
+    <div class="month-nav">
+      <button @click="handlePrev" class="back-btn">
+        <img :src="backButton" alt="back" />
+      </button>
+
+      <span class="titleBold24px"> {{ monthText }} </span>
+
+      <button @click="handleNext" class="forward-btn">
+        <img :src="forwardButton" alt="forward" />
+      </button>
     </div>
-  
-        <div class="summary bodyRegular16px">
-          <div>수입: {{ formattedIncomeTotal }}원</div>
-          <div>지출: {{ formattedExpenseTotal }}원</div>
-          <div class="total">
-            총합: <span :class="{ minus: total < 0, plus: total >= 0 }">
-              {{ formattedTotal }} 원
-            </span>
+
+    <!-- 수입/지출/총합 요약 -->
+    <div class="summary">
+      <div class="bodyRegular16px">
+        💰 수입:
+        <span style="color: var(--color-dark)">
+          {{ monthlyIncome.toLocaleString() }}원
+        </span>
+      </div>
+      <div class="bodyRegular16px">
+        💸 지출:
+        <span style="color: var(--color-dark)">
+          {{ monthlyExpense.toLocaleString() }}원
+        </span>
+      </div>
+      <div class="bodySemibold18px" style="margin-top: 0.5rem">
+        총합:
+        <span :class="totalColorClass">
+          {{ (monthlyIncome - monthlyExpense).toLocaleString() }}
+        </span>
+        원
+      </div>
+      <div class="total-line"></div>
+    </div>
+
+    <div class="sideBar-bottom">
+      <!-- 날짜 범위 -->
+      <div class="range">
+        <div class="range-name">범위</div>
+        <div class="range-list">
+          <div
+            v-for="option in options"
+            :key="option"
+            :class="['range-option', { active: selectedRange === option }]"
+            @click="selectRange(option)"
+          >
+            {{ option }}
           </div>
         </div>
       </div>
 
-      <div class="range">
-        <div class="range-name">범위</div>
-        <div class="range-list">
-            <span
-                v-for="option in options"
-                :key="option"
-                :class="['range-option', { active: selected === option }]"
-                @click="selectRange(option)">
-                {{ option }}
-            </span>
-        </div>
-      </div>
-
+      <!-- 수입/지출 필터 버튼 -->
       <BtnDual
         @clickIncome="clickIncome"
         @clickExpense="clickExpense"
         :is-income-active="isIncome"
         :is-expense-active="isExpense"
-        />
-  
-      <!-- 카테고리(수입) -->
+      />
+
+      <!-- 수입 카테고리 -->
       <div class="category-group">
         <div class="title bodySemibold16px">카테고리(수입)</div>
         <div class="category-list">
@@ -46,15 +69,15 @@
             v-for="cat in incomeCategories"
             :key="cat.id"
             class="category-item bodyRegular16px"
-            :class="{ selected: selectedIncome === cat.id }"
+            :class="{ selected: selectedIncome.includes(cat.id) }"
             @click="selectIncome(cat.id)"
           >
             {{ cat.name }}
           </span>
         </div>
       </div>
-  
-      <!-- 카테고리(지출) -->
+
+      <!-- 지출 카테고리 -->
       <div class="category-group">
         <div class="title bodySemibold16px">카테고리(지출)</div>
         <div class="category-list">
@@ -62,7 +85,7 @@
             v-for="cat in expenseCategories"
             :key="cat.id"
             class="category-item bodyRegular16px"
-            :class="{ selected: selectedExpense === cat.id }"
+            :class="{ selected: selectedExpense.includes(cat.id) }"
             @click="selectExpense(cat.id)"
           >
             {{ cat.name }}
@@ -70,180 +93,170 @@
         </div>
       </div>
     </div>
-  </template>
-  
-  <script setup>
-  import { computed, ref } from 'vue'
-  import dayjs from 'dayjs'
-  import BtnDual from '@/components/button/BtnDual.vue'
+  </div>
+</template>
 
-  const options = ['1주', '1개월', '3개월']
-  const selected = ref('1개월')
-  function selectRange(option) {
-  selected.value = option
-  // 여기에 필요한 로직 추가 (예: API 호출 등)
-    }
+<script setup>
+import { computed, ref } from 'vue'
+import dayjs from 'dayjs'
+import BtnDual from '@/components/button/BtnDual.vue'
+import backButton from '@/assets/icons/IconArrowBack.svg'
+import forwardButton from '@/assets/icons/IconArrowForward.svg'
 
+const props = defineProps({
+  categories: Array,
+  transactions: Array,
+})
+const emit = defineEmits(['filter-change'])
 
-  const isIncome = ref(false)
-  const isExpense = ref(false)
-  function clickIncome() {
+const currentDate = ref(dayjs())
+const selectedRange = ref('1개월')
+
+// ✅ 초기값: 수입/지출 모두 true → 전체 보기
+const isIncome = ref(true)
+const isExpense = ref(true)
+
+const selectedIncome = ref([])
+const selectedExpense = ref([])
+
+const options = ['1주', '1개월', '3개월']
+
+const monthText = computed(() => `${currentDate.value.month() + 1}월`)
+
+const handlePrev = () => {
+  currentDate.value = currentDate.value.subtract(1, 'month')
+  emitFilters()
+}
+const handleNext = () => {
+  currentDate.value = currentDate.value.add(1, 'month')
+  emitFilters()
+}
+
+const selectRange = (val) => {
+  selectedRange.value = val
+  emitFilters()
+}
+
+const clickIncome = () => {
   isIncome.value = !isIncome.value
-  // alert('Income button clicked!')
-  }
-  function clickExpense() {
+  emitFilters()
+}
+const clickExpense = () => {
   isExpense.value = !isExpense.value
-  // alert('Expense button clicked!')
-  }
+  emitFilters()
+}
 
-  const props = defineProps({
-    categories: {
-      type: Array,
-      required: true,
-    },
-    transactions: {
-      type: Array,
-      required: true,
-    },
+const selectIncome = (id) => {
+  selectedIncome.value.includes(id)
+    ? selectedIncome.value = selectedIncome.value.filter(i => i !== id)
+    : selectedIncome.value.push(id)
+  emitFilters()
+}
+const selectExpense = (id) => {
+  selectedExpense.value.includes(id)
+    ? selectedExpense.value = selectedExpense.value.filter(i => i !== id)
+    : selectedExpense.value.push(id)
+  emitFilters()
+}
+
+const incomeCategories = computed(() => props.categories.filter(c => c.type === 'Income'))
+const expenseCategories = computed(() => props.categories.filter(c => c.type === 'Expense'))
+
+const monthlyIncome = computed(() => {
+  const ym = currentDate.value.format('YYYY-MM')
+  return props.transactions
+    .filter(t => t.type === 'Income' && t.date.startsWith(ym))
+    .reduce((sum, t) => sum + t.amount, 0)
+})
+const monthlyExpense = computed(() => {
+  const ym = currentDate.value.format('YYYY-MM')
+  return props.transactions
+    .filter(t => t.type === 'Expense' && t.date.startsWith(ym))
+    .reduce((sum, t) => sum + t.amount, 0)
+})
+const totalColorClass = computed(() => {
+  const net = monthlyIncome.value - monthlyExpense.value
+  return net > 0 ? 'color-positive' : net < 0 ? 'color-negative' : ''
+})
+
+// 🔄 필터 상태 상위 컴포넌트로 전달
+const emitFilters = () => {
+  emit('filter-change', {
+    date: currentDate.value,
+    range: selectedRange.value,
+    showIncome: isIncome.value,
+    showExpense: isExpense.value,
+    incomeCategoryIds: selectedIncome.value,
+    expenseCategoryIds: selectedExpense.value,
   })
-  
-  const now = dayjs()
-  const currentMonth = now.month() + 1
-  const currentYear = now.year()
-  
-  // 현재 월의 트랜잭션 필터
-  const monthlyTransactions = computed(() =>
-    props.transactions.filter((tx) =>
-      dayjs(tx.date).isSame(`${currentYear}-${currentMonth}`, 'month')
-    )
-  )
-  
-  // 총 수입
-  const incomeTotal = computed(() =>
-    monthlyTransactions.value
-      .filter((tx) => tx.type === 'Income')
-      .reduce((sum, tx) => sum + tx.amount, 0)
-  )
-  
-  // 총 지출
-  const expenseTotal = computed(() =>
-    monthlyTransactions.value
-      .filter((tx) => tx.type === 'Expense')
-      .reduce((sum, tx) => sum + tx.amount, 0)
-  )
-  
-  const total = computed(() => incomeTotal.value - expenseTotal.value)
-  
-  const formattedIncomeTotal = computed(() => incomeTotal.value.toLocaleString())
-  const formattedExpenseTotal = computed(() =>
-    expenseTotal.value.toLocaleString()
-  )
-  const formattedTotal = computed(() => total.value.toLocaleString())
-  
-  // 카테고리 구분
-  const incomeCategories = computed(() =>
-    props.categories.filter((cat) => cat.type === 'Income')
-  )
-  const expenseCategories = computed(() =>
-    props.categories.filter((cat) => cat.type === 'Expense')
-  )
-  
-  // 선택 상태
-  const selectedIncome = ref(null)
-  const selectedExpense = ref(null)
-  
-  const selectIncome = (id) => {
-    selectedIncome.value = id
-  }
-  const selectExpense = (id) => {
-    selectedExpense.value = id
-  }
-  </script>
-  
-  <style scoped>
-  .sidebar-wrapper {
-    width: 100%;
-    padding: 0 16px;
-  }
-  
-  .header {
-    margin-bottom: 24px;
-  }
-  
-  .month-text {
-    display: inline-block;
-    margin-bottom: 8px;
-  }
-  
-  .summary {
-    margin-top: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .total {
-    margin-top: 8px;
-  }
-  .total .plus {
-    color: var(--color-income);
-  }
-  .total .minus {
-    color: var(--color-expense);
-  }
-  
-  .category-group {
-    margin-top: 24px;
-  }
-  .title {
-    margin-bottom: 8px;
-  }
-  .category-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .category-item {
-    min-width: 70px;
-    text-align: center;
-    cursor: pointer;
-    padding-bottom: 4px;
-    border-bottom: 2px solid transparent;
-    color: var(--color-semidark);
-    transition: 0.2s;
-  }
-  .category-item.selected {
-    border-bottom: 2px solid var(--color-dark);
-    color: var(--color-dark);
-    font-weight: 600;
-  }
+}
+</script>
 
-  .range {
+<style scoped>
+.sidebar-wrapper {
+  width: 100%;
+  padding: 0 16px;
+}
+.summary {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+}
+.summary .total-line {
+  margin: 32px 0;
+  border-top: 1px solid var(--color-light);
+}
+.sideBar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: start;
+}
+.range {
   display: flex;
   align-items: center;
   gap: 12px;
 }
-
 .range-name {
   font-weight: 600;
   color: var(--color-dark);
 }
-
 .range-list {
   display: flex;
   gap: 12px;
 }
-
 .range-option {
-  color: var(--color-light);
   cursor: pointer;
-  font-size: 1rem;
+  color: var(--color-light);
 }
-
 .range-option.active {
+  color: var(--color-dark);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-weight: 600;
+}
+.category-group {
+  width: 100%;
+}
+.category-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.category-item {
+  cursor: pointer;
+  color: var(--color-semidark);
+  transition: 0.2s;
+  text-align: center;
+  text-decoration: none;
+}
+.category-item.selected {
   color: var(--color-dark);
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
 }
-  </style>
-  
+</style>

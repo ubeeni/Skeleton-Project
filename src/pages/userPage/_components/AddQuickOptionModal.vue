@@ -1,7 +1,7 @@
 <template>
   <div class="modal">
     <div class="modal-box">
-      <h3 class="titleBold24px">기본 지출 추가</h3>
+      <h3 class="titleBold24px">고정 수입/지출 추가</h3>
       <div class="input-group">
         <!-- 구분 (수입 / 지출 버튼) -->
         <!-- 금액 -->

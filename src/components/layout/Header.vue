@@ -23,7 +23,7 @@
     </div>
     <!-- 마이페이지영역 -->
     <div class="nav-right bodySemibold18px">
-      <RouterLink :to="{ name: 'user', params: { id: 'AB78' } }"
+      <RouterLink :to="{ name: 'user', params: { id: '12CD' } }"
         ><span class="username">홍길동</span> 님</RouterLink
       >
     </div>

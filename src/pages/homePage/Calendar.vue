@@ -32,7 +32,23 @@
       </div>
 
       <div style="height: 2rem"></div>
-      <BtnMed :color="'var(--color-secondary)'" :text="`빠른추가`" @click="moveToAdd" />
+      <BtnMed
+        :color="'var(--color-secondary)'"
+        :text="`빠른추가`"
+        @click="toggleQuickAddDropdown"
+      />
+
+      <div v-if="showQuickAddDropdown" class="quick-add-dropdown">
+        <button
+          v-for="(option, index) in quickAddOptions"
+          :key="option.id"
+          class="quick-add-option"
+          @click="selectQuickAddOption(option)"
+        >
+          {{ option.title }} {{ option.amount.toLocaleString() }}원
+        </button>
+      </div>
+
       <div style="height: 1rem"></div>
       <BtnMed :color="'var(--color-primary)'" :text="`기본추가`" @click="moveToAdd" />
     </div>
@@ -101,12 +117,47 @@ function moveToAdd() {
 }
 
 const transactions = ref([])
+const quickAddOptions = ref([])
 
 onMounted(async () => {
   const res = await fetch('/db.json')
   const json = await res.json()
   transactions.value = json.transactions
+  quickAddOptions.value = json.quickAddOptions
 })
+
+const showQuickAddDropdown = ref(false)
+
+function toggleQuickAddDropdown() {
+  showQuickAddDropdown.value = !showQuickAddDropdown.value
+}
+
+async function selectQuickAddOption(option) {
+  const today = new Date()
+  const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(
+    today.getDate(),
+  ).padStart(2, '0')}`
+
+  const newTransaction = {
+    title: option.title,
+    member_id: option.member_id,
+    category_id: option.category_id,
+    type: option.type,
+    amount: option.amount,
+    date: formattedDate,
+    memo: option.memo,
+  }
+
+  try {
+    await axios.post('http://localhost:3000/transactions', newTransaction)
+    alert('추가되었습니다!')
+    transactions.value.push(newTransaction)
+    showQuickAddDropdown.value = false
+  } catch (err) {
+    console.error(err)
+    alert('추가 실패')
+  }
+}
 
 const groupedByDate = computed(() => {
   const result = {}
@@ -378,5 +429,29 @@ const calendarOptions = computed(() => ({
 
 .color-negative {
   color: var(--color-expense);
+}
+
+.quick-add-dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+  background: var(--color-light2);
+  border-radius: 12px;
+  padding: 0.5rem;
+}
+
+.quick-add-option {
+  background: var(--color-white);
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.quick-add-option:hover {
+  background: var(--color-secondary2);
 }
 </style>

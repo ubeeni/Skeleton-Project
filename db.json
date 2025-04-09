@@ -2,8 +2,8 @@
   "members": [
     {
       "id": "12CD",
-      "name": "홍길동",
-      "incomeDefault": "미분류",
+      "name": "asd",
+      "incomeDefault": "용돈",
       "expenseDefault": "미분류"
     }
   ],
@@ -385,7 +385,7 @@
       "type": "Expense",
       "cycle": "weekly",
       "day": null,
-      "week": "monday",
+      "week": "월요일",
       "month": null,
       "amount": 70000,
       "memo": "매주 모아서..."
@@ -399,21 +399,21 @@
       "cycle": "monthly",
       "day": null,
       "week": null,
-      "month": null,
+      "month": "52",
       "amount": 1000000,
       "memo": "돈 나가는 날..."
     },
     {
-      "id": "1744171608627",
+      "id": "1744173301704",
       "member_id": "12CD",
-      "title": "4",
-      "type": "Income",
-      "category_id": "1111",
-      "cycle": "daily",
-      "day": "매일",
-      "week": null,
+      "title": "123",
+      "type": "Expense",
+      "category_id": "0000",
+      "cycle": "weekly",
+      "day": null,
+      "week": "월요일",
       "month": null,
-      "amount": 4,
+      "amount": 1000,
       "memo": ""
     }
   ]

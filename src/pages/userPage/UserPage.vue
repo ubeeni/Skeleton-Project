@@ -1,44 +1,40 @@
 <template>
   <div class="wrapper">
-    <div class="content">
-      <div class="left-panel">
-        <div class="left-header">
-          <span class="titleBold24px">프로필</span>
-          <router-link :to="`/user/${userId}/edit`" class="bodyRegular16px">수정</router-link>
-        </div>
-        <div class="item">
-          <span class="bodySemibold18px">이름</span>
-          <span class="bodyRegular18px">{{ user?.name }}</span>
-        </div>
+    <div class="block">
+      <div class="header-row">
+        <span class="titleBold24px">프로필</span>
+        <router-link :to="`/user/${userId}/edit`" class="bodyRegular16px">수정</router-link>
+      </div>
+      <div class="item">
+        <span class="bodySemibold18px">이름</span>
+        <span class="bodyRegular18px">{{ user?.name }}</span>
+      </div>
+    </div>
+
+    <div class="horizontal-divider"></div>
+
+    <div class="block">
+      <div class="header-row">
+        <span class="titleBold24px">사용자 설정</span>
+        <router-link :to="`/user/${userId}/settings`" class="bodyRegular16px">수정</router-link>
       </div>
 
-      <!-- 세로 구분선 -->
-      <div class="divider"></div>
+      <div class="item">
+        <span class="bodySemibold18px">카테고리 기본값</span>
+        <span class="bodyRegular18px">
+          <span :style="{ color: 'var(--color-income)' }">{{ user?.incomeDefault }}</span>
+          <span> | </span>
+          <span :style="{ color: 'var(--color-expense)' }">{{ user?.expenseDefault }}</span>
+        </span>
+      </div>
 
-      <!-- 사용자 설정 -->
-      <div class="right-panel">
-        <div class="right-header">
-          <span class="titleBold24px">사용자 설정</span>
-          <router-link :to="`/user/${userId}/settings`" class="bodyRegular16px">수정</router-link>
-        </div>
-
-        <div class="item">
-          <span class="bodySemibold18px">카테고리 기본값</span>
-          <span class="bodyRegular18px">
-            <span :style="{ color: 'var(--color-income)' }">{{ user?.incomeDefault }}</span>
-            <span> | </span>
-            <span :style="{ color: 'var(--color-expense)' }">{{ user?.expenseDefault }}</span>
-          </span>
-        </div>
-
-        <div class="item">
-          <span class="bodySemibold18px">고정 수입/지출</span>
-          <ul>
-            <li v-for="item in quickOptions" :key="item.id" class="bodyRegular18px">
-              {{ formatOption(item) }}
-            </li>
-          </ul>
-        </div>
+      <div class="item vertical">
+        <span class="bodySemibold18px">고정 수입/지출</span>
+        <ul class="option-list">
+          <li v-for="item in quickOptions" :key="item.id" class="bodyRegular18px">
+            {{ formatOption(item) }}
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -82,40 +78,52 @@ onMounted(async () => {
   max-width: 48rem;
   width: 100%;
   margin: 0 auto;
-}
-
-.content {
-  margin-top: 1.25rem;
-  width: 100%;
+  padding: 2rem 1.5rem;
   display: flex;
-  justify-content: center;
-  gap: 2rem;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.left-panel,
-.right-panel {
-  flex: 1;
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
-.right-header,
-.left-header {
+.header-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
 }
 
-/* 세로줄 */
-.divider {
-  width: 1px;
-  background-color: var(--color-light);
-  height: 15rem;
-}
-
-/* 항목 */
 .item {
   display: flex;
-  margin-bottom: 12px;
   justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.item.vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.option-list {
+  padding: 0;
+  margin: 0;
+  align-self: flex-end;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.horizontal-divider {
+  height: 1px;
+  width: 100%;
+  background-color: var(--color-light);
+  margin: 1rem 0;
 }
 </style>

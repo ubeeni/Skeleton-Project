@@ -91,7 +91,7 @@ const options = computed(() => ({
   height: 100%;
   background-color: var(--color-white);
   border-radius: 2rem;
-  box-shadow: 0 0 1rem var(--color-light3);
+  box-shadow: var(--boxshadow-light);
   padding: 0.5rem;
 }
 

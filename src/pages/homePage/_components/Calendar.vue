@@ -312,7 +312,7 @@ const calendarOptions = computed(() => ({
 }
 
 .calendar-wrapper {
-  border: 1px solid var(--color-light);
+  box-shadow: var(--boxshadow-light);
   background: var(--color-white);
   border-radius: 16px;
   margin-left: 20px;
@@ -381,6 +381,7 @@ const calendarOptions = computed(() => ({
 .fc-daygrid-day:hover {
   background: var(--color-light2);
   border-radius: 12px;
+  cursor: pointer;
 }
 
 .modal-overlay {

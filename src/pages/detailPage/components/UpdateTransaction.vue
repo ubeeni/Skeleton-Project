@@ -41,7 +41,8 @@
 
     <div class="actions">
       <BtnLg text="수정" @click="updateTransaction" color="var(--color-primary)" />
-      <BtnLg text="취소" @click="cancleTransaction" color="var(--color-semidark)" />
+      <BtnLg text="삭제" @click="deleteTransaction" color="var(--color-semidark)" />
+      <BtnLg text="취소" @click="cancle" color="var(--color-semidark)" />
     </div>
   </div>
 </template>
@@ -66,7 +67,7 @@ const router = useRouter()
 
 const BASEURI = '/api'
 
-const transactionId = ref('SIVA') // 상세 보기할 트랜잭션 ID
+const transactionId = ref('9b14') // 상세 보기할 트랜잭션 ID
 
 const transactionTitle = ref('') // 거래명
 const amount = ref(null) // 금액
@@ -165,21 +166,6 @@ const selectType = (type) => {
 }
 
 const updateTransaction = async () => {
-  console.log(
-    '거래명: ' +
-      transactionTitle.value +
-      '\n금액: ' +
-      amount.value +
-      '\n카테고리 타입: ' +
-      categoryType.value +
-      '\n카테고리명: ' +
-      categoryName.value +
-      '\n날짜: ' +
-      date.value +
-      '\n메모: ' +
-      memo.value,
-  )
-
   try {
     const response = await axios.put(`${BASEURI}/transactions/${transactionId.value}`, {
       title: transactionTitle.value,
@@ -201,7 +187,22 @@ const updateTransaction = async () => {
   }
 }
 
-const cancleTransaction = () => {}
+const deleteTransaction = async () => {
+  try {
+    const response = await axios.delete(`${BASEURI}/transactions/${transactionId.value}`)
+
+    if (response.status === 200) {
+      console.log('삭제 성공')
+    } else {
+      console.log('삭제 실패')
+    }
+  } catch (error) {
+    console.log('에러 발생 : ' + error)
+    console.log(error.stack)
+  }
+}
+
+const cancle = () => {}
 </script>
 
 <!-- ----------------------------------- style  ----------------------------------- -->

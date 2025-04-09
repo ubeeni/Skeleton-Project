@@ -48,10 +48,11 @@
               :options="cycleOptions"
               placeholder="반복주기 선택"
             />
-            <InputMed
-              v-if="editItem.cycle === 'weekly'"
+            <SelectMed
+              v-if="newItem.cycle === 'weekly'"
+              :options="weeklyOptions"
               v-model="editItem.week"
-              placeholder="예: 월요일"
+              placeholder="요일 선택"
             />
             <InputMed
               v-if="editItem.cycle === 'monthly'"
@@ -97,6 +98,16 @@ const cycleOptions = [
   { value: 'daily', label: '매일' },
   { value: 'weekly', label: '매주' },
   { value: 'monthly', label: '매월' },
+]
+
+const weeklyOptions = [
+  { value: '월요일', label: '월요일' },
+  { value: '화요일', label: '화요일' },
+  { value: '수요일', label: '수요일' },
+  { value: '목요일', label: '목요일' },
+  { value: '금요일', label: '금요일' },
+  { value: '토요일', label: '토요일' },
+  { value: '일요일', label: '일요일' },
 ]
 
 const emit = defineEmits(['close', 'update', 'delete'])

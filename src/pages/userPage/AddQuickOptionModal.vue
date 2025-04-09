@@ -123,6 +123,7 @@ const newItem = ref({
   week: null,
   month: null,
   amount: 0,
+  memo: '',
 })
 
 const filteredCategories = computed(() =>

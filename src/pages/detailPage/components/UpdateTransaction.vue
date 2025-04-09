@@ -140,6 +140,9 @@ onMounted(async () => {
   prevPage.value = historyState.from
   transactionId.value = historyState.transaction_id
 
+  console.log('prevPage : ', prevPage.value)
+  console.log('transactionId : ', transactionId.value)
+
   try {
     const transResponse = await axios.get(BASEURI + '/transactions')
     const catResponse = await axios.get(BASEURI + '/categories')

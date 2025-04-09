@@ -88,9 +88,13 @@ import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
 import { ref, reactive, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 
 const prevPage = ref(null)
+
+const currentRoute = useRoute()
+const router = useRouter()
 
 const BASEURI = '/api'
 
@@ -143,6 +147,8 @@ function clickExpense() {
 onMounted(async () => {
   const historyState = window.history.state
   prevPage.value = historyState.from
+
+  console.log('add / prevPage : ', prevPage.value)
 
   try {
     const response = await axios.get(BASEURI + '/categories')

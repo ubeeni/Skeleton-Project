@@ -33,7 +33,7 @@ defineEmits(['click'])
 <style scoped>
 .btn-xs-wrapper {
   border-radius: 1rem;
-  width: 5rem;
+  width: 4rem;
   height: auto;
   color: var(--color-white);
   text-align: center;

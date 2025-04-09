@@ -41,35 +41,25 @@ const formattedTotal = computed(() => {
 
 <style scoped>
 .transaction-day {
-  margin-bottom: 24px;
-  padding: 12px 16px;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
-
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 0;
-  background-color: var(--color-white);
-
   align-items: center;
-  gap: 8px;
-}
-
-.date {
-  color: var(--Dark, #100d14);
-  text-align: center;
 }
 
 .summary {
-  color: var(--SemiDark, #797979);
-  text-align: center;
+  color: var(--color-semidark);
+  display: flex;
 }
 
 .items {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 1rem;
 }
 </style>

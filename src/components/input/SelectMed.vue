@@ -31,7 +31,7 @@ defineEmits(['update:modelValue'])
 </script>
 <style scoped>
 .select-med {
-  width: 18.75rem;
+  width: 17.5rem;
   height: 3.75rem;
   border-radius: 1rem;
   padding: 1.25rem 1rem;

@@ -1,89 +1,98 @@
 <template>
   <div class="modal">
     <div class="modal-box">
-      <h3>기본 지출 추가</h3>
-
-      <!-- 거래명 -->
-      <div class="form-row">
-        <span class="bodySemibold18px">거래명</span>
-        <InputLg
-          v-model="newItem.title"
-          :class="{ error: !newItem.title && triedSubmit }"
-          placeholder="거래명을 입력하세요"
-        />
-      </div>
-
-      <!-- 구분 (수입 / 지출 버튼) -->
-      <div class="form-row">
-        <div class="toggle-group">
-          <button
-            :class="[
-              'toggle-btn',
-              { active: newItem.type === 'Income', income: newItem.type === 'Income' },
-            ]"
-            @click="newItem.type = 'Income'"
-          >
-            수입
-          </button>
-          <button
-            :class="[
-              'toggle-btn',
-              { active: newItem.type === 'Expense', expense: newItem.type === 'Expense' },
-            ]"
-            @click="newItem.type = 'Expense'"
-          >
-            지출
-          </button>
-        </div>
-      </div>
-
-      <!-- 카테고리 드롭다운 -->
-      <div class="form-row">
-        <span class="bodySemibold18px">카테고리</span>
-        <SelectLg
-          v-model="newItem.category_id"
-          :options="filteredCategories.map((cat) => ({ label: cat.name, value: cat.id }))"
-          placeholder="카테고리 선택"
-        />
-      </div>
-
-      <!-- 반복주기 + 상세 입력 -->
-      <div class="form-row">
-        <span class="bodySemibold18px">반복주기</span>
-        <div class="select-group">
-          <SelectMed v-model="newItem.cycle" :options="cycleOptions" placeholder="반복주기 선택" />
-          <SelectMed
-            v-if="newItem.cycle === 'weekly'"
-            :options="weeklyOptions"
-            v-model="newItem.week"
-            placeholder="요일 선택"
+      <h3 class="titleBold24px">기본 지출 추가</h3>
+      <div class="input-group">
+        <!-- 구분 (수입 / 지출 버튼) -->
+        <!-- 금액 -->
+        <!-- <div class="form-row">
+          <div class="toggle-group">
+            <button
+              :class="[
+                'toggle-btn',
+                { active: newItem.type === 'Income', income: newItem.type === 'Income' },
+              ]"
+              @click="newItem.type = 'Income'"
+            >
+              수입
+            </button>
+            <button
+              :class="[
+                'toggle-btn',
+                { active: newItem.type === 'Expense', expense: newItem.type === 'Expense' },
+              ]"
+              @click="newItem.type = 'Expense'"
+            >
+              지출
+            </button>
+          </div>
+        </div> -->
+        <div class="form-row-dual">
+          <BtnDual
+            :is-income-active="newItem.type === 'Income'"
+            :is-expense-active="newItem.type === 'Expense'"
+            @clickIncome="newItem.type = 'Income'"
+            @clickExpense="newItem.type = 'Expense'"
           />
-
           <InputMed
-            v-if="newItem.cycle === 'monthly'"
-            v-model="newItem.month"
-            placeholder="예: 15"
+            v-model="newItem.amount"
             type="number"
+            :class="{ error: (!newItem.amount || newItem.amount <= 0) && triedSubmit }"
+            placeholder="금액을 입력하세요(단위: 원)"
           />
-          <InputMed v-if="newItem.cycle === 'daily'" value="매일" disabled />
+          <span class="bodySemibold18px"> 원</span>
         </div>
-      </div>
+        <!-- 거래명 -->
+        <div class="form-row">
+          <span class="bodySemibold18px">거래명</span>
+          <InputLg
+            v-model="newItem.title"
+            :class="{ error: !newItem.title && triedSubmit }"
+            placeholder="거래명을 입력하세요"
+          />
+        </div>
 
-      <!-- 금액 -->
-      <div class="form-row">
-        <span class="bodySemibold18px">금액</span>
-        <InputLg
-          v-model="newItem.amount"
-          type="number"
-          :class="{ error: (!newItem.amount || newItem.amount <= 0) && triedSubmit }"
-          placeholder="금액을 입력하세요"
-        />
-      </div>
+        <!-- 카테고리 드롭다운 -->
+        <div class="form-row">
+          <span class="bodySemibold18px">카테고리</span>
+          <SelectLg
+            v-model="newItem.category_id"
+            :options="filteredCategories.map((cat) => ({ label: cat.name, value: cat.id }))"
+            placeholder="카테고리 선택"
+          />
+        </div>
 
-      <!-- 메모 -->
-      <div class="form-row">
-        <span class="bodySemibold18px">메모</span>
-        <InputLg v-model="newItem.memo" placeholder="추가 정보를 입력하세요" />
+        <!-- 반복주기 + 상세 입력 -->
+        <div class="form-row">
+          <span class="bodySemibold18px">반복주기</span>
+          <div class="select-group">
+            <SelectMed
+              v-model="newItem.cycle"
+              :options="cycleOptions"
+              placeholder="반복주기 선택"
+            />
+            <SelectMed
+              v-if="newItem.cycle === 'weekly'"
+              :options="weeklyOptions"
+              v-model="newItem.week"
+              placeholder="요일 선택"
+            />
+
+            <InputMed
+              v-if="newItem.cycle === 'monthly'"
+              v-model="newItem.month"
+              placeholder="예: 15"
+              type="number"
+            />
+            <InputMed v-if="newItem.cycle === 'daily'" value="매일" disabled />
+          </div>
+        </div>
+
+        <!-- 메모 -->
+        <div class="form-row">
+          <span class="bodySemibold18px">메모</span>
+          <InputLg v-model="newItem.memo" placeholder="추가 정보를 입력하세요" />
+        </div>
       </div>
 
       <div class="button-group">
@@ -102,6 +111,7 @@ import InputMed from '@/components/input/InputMed.vue'
 import SelectLg from '@/components/input/SelectLg.vue'
 import SelectMed from '@/components/input/SelectMed.vue'
 import BtnLg from '@/components/button/BtnLg.vue'
+import BtnDual from '@/components/button/BtnDual.vue'
 
 const props = defineProps({
   categories: Array,
@@ -202,58 +212,74 @@ watchEffect(() => {
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background-color: var(--color-light2);
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-top: auto;
+  z-index: 1000;
 }
 
 .modal-box {
   background: var(--color-white);
-  padding: 40px;
-  border-radius: 20px;
-  height: 744px;
-  width: 839px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 3rem 3rem;
+  border-radius: 1.25rem;
+  box-shadow: var(--boxshadow-light);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 h3 {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 24px;
-  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .form-row {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
 }
 
-label {
-  width: 100px;
-  font-weight: 500;
+.form-row span {
+  width: 5rem;
 }
 
-input,
+.form-row-dual {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* input,
 select {
   flex: 1;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 12px;
   font-size: 14px;
-}
+}*/
 
 input.error {
   border: 1px solid red;
 }
 
 .select-group {
+  width: 100%;
   display: flex;
-  gap: 12px;
+  justify-content: right;
+  gap: 2.5rem;
 }
 
-.toggle-group {
+/* .toggle-group {
   display: flex;
   gap: 12px;
   flex: 1;
@@ -271,38 +297,28 @@ input.error {
 }
 
 .toggle-btn.active.income {
-  background-color: var(--color-income); /* 파란색 */
+  background-color: var(--color-income);
   color: var(--color-white);
 }
 
 .toggle-btn.active.expense {
-  background-color: var(--color-expense); /* 빨간색 */
+  background-color: var(--color-expense);
   color: var(--color-white);
-}
+} */
 
 .button-group {
-  margin-top: 40px;
+  margin-top: 4rem;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 1rem;
 }
 
-.button-group button {
+/* .button-group button {
   padding: 14px;
   border: none;
   border-radius: 14px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-}
-
-.button-group button:first-child {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-}
-
-.button-group button:last-child {
-  background-color: var(--color-light);
-  color: var(--color-white);
-}
+} */
 </style>

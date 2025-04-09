@@ -23,16 +23,26 @@
     </div>
     <!-- 마이페이지영역 -->
     <div class="nav-right bodySemibold18px">
-      <RouterLink :to="{ name: 'user', params: { id: '12CD' } }"
-        ><span class="username">홍길동</span> 님</RouterLink
-      >
+      <RouterLink :to="{ name: 'user', params: { id: route.params.id || '12CD' } }">
+        <span class="username">{{ userName }}</span> 님
+      </RouterLink>
     </div>
   </div>
 </template>
 
 <script setup>
 import { useRoute } from 'vue-router'
+import { ref, watchEffect } from 'vue'
+
 const route = useRoute()
+const userName = ref('')
+
+watchEffect(async () => {
+  const userId = route.params.id || '12CD'
+  const res = await fetch(`http://localhost:3000/members/${userId}`)
+  const data = await res.json()
+  userName.value = data.name
+})
 </script>
 <style scoped>
 .header {

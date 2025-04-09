@@ -84,6 +84,8 @@ onMounted(async () => {
   transactionId.value = historyState.transaction_id || 'e5f7'
 
   try {
+    console.log(transactionId)
+
     const transResponse = await axios.get(BASEURI + '/transactions')
     const catResponse = await axios.get(BASEURI + '/categories')
 

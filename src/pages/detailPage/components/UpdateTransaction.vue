@@ -106,7 +106,7 @@ const transactionTitle = ref('') // 거래명
 const amount = ref(0) // 금액
 
 const date = ref('') // 날짜
-const isoDate = computed(() => date.value.toISOString().slice(0, 19)) // 날짜 (iso 표준 - 실제 DB 저장 형식)
+const isoDate = computed(() => toKSTISOString(date.value).slice(0, 19)) // 날짜 (iso 표준 - 실제 DB 저장 형식)
 const dateDisplay = computed(() => (date.value ? date.value.toLocaleString('ko-KR') : '')) // 화면에 표시될 날짜 형식
 
 const memo = ref('') // 메모
@@ -200,6 +200,12 @@ const selectType = (type) => {
   )
   console.log('selectedCategory : ', category)
   categoryId.value = category.id
+}
+
+const toKSTISOString = (date) => {
+  const offset = 9 * 60 * 60 * 1000 // 9시간 (KST)
+  const kstDate = new Date(date.getTime() + offset)
+  return kstDate.toISOString().slice(0, 19)
 }
 
 const checkTransaction = () => {

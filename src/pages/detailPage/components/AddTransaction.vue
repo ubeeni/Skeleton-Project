@@ -105,7 +105,7 @@ const amount = ref(0) // 금액
 const memo = ref('') // 메모
 
 const date = ref('') // 날짜
-const isoDate = computed(() => date.value.toISOString().slice(0, 19)) // 날짜 (iso 표준 - 실제 DB 저장 형식)
+const isoDate = computed(() => toKSTISOString(date.value).slice(0, 19)) // 날짜 (iso 표준 - 실제 DB 저장 형식)
 const dateDisplay = computed(() => (date.value ? date.value.toLocaleString('ko-KR') : '')) // 화면에 표시될 날짜 형식
 
 // 선택된 카테고리 ID
@@ -172,7 +172,7 @@ const onlyAllowDigits = (e) => {
 
 const removeNonDigits = (e) => {
   e.target.value = e.target.value.replace(/[^0-9]/g, '')
-  amount.value = e.target.value
+  amount.value = Number(e.target.value)
 }
 
 const selectType = (type) => {
@@ -182,6 +182,12 @@ const selectType = (type) => {
   )
   console.log('category : ', category)
   categoryId.value = category.id
+}
+
+const toKSTISOString = (date) => {
+  const offset = 9 * 60 * 60 * 1000 // 9시간 (KST)
+  const kstDate = new Date(date.getTime() + offset)
+  return kstDate.toISOString().slice(0, 19)
 }
 
 const initInputData = () => {

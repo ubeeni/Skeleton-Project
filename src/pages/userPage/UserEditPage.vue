@@ -52,19 +52,16 @@ onMounted(fetchUser)
 
 <style scoped>
 .wrapper {
-  display: flex;
-  flex-direction: column;
+  max-width: 48rem;
   width: 100%;
-}
-
-.wrapper > .title {
-  margin-bottom: 1.25rem;
+  margin: 0 auto;
 }
 
 .form-row {
   display: flex;
   align-items: center;
-  gap: 20px;
+  justify-content: space-between;
+  margin-top: 1.25rem;
   margin-bottom: 10rem;
 }
 

@@ -2,9 +2,9 @@
   "members": [
     {
       "id": "12CD",
-      "name": "test",
-      "incomeDefault": "금융수입",
-      "expenseDefault": "카페"
+      "name": "홍길동",
+      "incomeDefault": "미분류",
+      "expenseDefault": "미분류"
     }
   ],
   "categories": [
@@ -333,26 +333,6 @@
       "amount": 200000,
       "date": "2025-04-08",
       "memo": "엄마 용돈"
-    },
-    {
-      "id": "2b56",
-      "title": "커피 수혈",
-      "member_id": "12CD",
-      "category_id": "0000",
-      "type": "Expense",
-      "amount": 2000,
-      "date": "2025-04-09",
-      "memo": "나는야 커피 자판기"
-    },
-    {
-      "id": "9238",
-      "title": "부모님 용돈",
-      "member_id": "12CD",
-      "category_id": "3333",
-      "type": "Income",
-      "amount": 200000,
-      "date": "2025-04-09",
-      "memo": "엄마 용돈"
     }
   ],
   "quickAddOptions": [
@@ -391,7 +371,7 @@
       "cycle": "monthly",
       "day": null,
       "week": null,
-      "month": "15",
+      "month": null,
       "amount": 600000,
       "memo": "돈 나가는 날..."
     },
@@ -401,25 +381,12 @@
       "member_id": "12CD",
       "category_id": "3333",
       "type": "Income",
-      "cycle": "weekly",
+      "cycle": "monthly",
       "day": null,
-      "week": "월요일",
+      "week": null,
       "month": null,
       "amount": 200000,
       "memo": "엄마 용돈"
-    },
-    {
-      "id": "1744158912853",
-      "member_id": "12CD",
-      "title": "5",
-      "type": "Expense",
-      "category_id": "0000",
-      "cycle": "weekly",
-      "day": "매일",
-      "week": "월요일",
-      "month": null,
-      "amoun": "",
-      "amount": "5"
     }
   ]
 }

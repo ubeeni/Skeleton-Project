@@ -49,45 +49,7 @@
 
     <div class="calendar-wrapper">
       <FullCalendar ref="calendarRef" :options="calendarOptions" />
-
-      <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
-        <div class="modal-content">
-          <button @click="closeModal" class="close-btn">
-            <img :src="closeButton" alt="close" />
-          </button>
-
-          <div class="bodySemibold18px">{{ clickedDate }}</div>
-          <br />
-
-          <div class="bodyRegular16px" style="color: var(--color-dark)" v-if="dailyData">
-            <div>
-              <strong>💰 수입</strong>
-              <ul>
-                <li v-for="(item, index) in dailyData.income" :key="'i' + index">
-                  {{ item.title }}
-                  <span style="color: var(--color-income)">
-                    {{ item.amount.toLocaleString() }}
-                  </span>
-                  원
-                </li>
-              </ul>
-            </div>
-            <div style="margin-top: 1rem">
-              <strong>💸 지출</strong>
-              <ul>
-                <li v-for="(item, index) in dailyData.expense" :key="'e' + index">
-                  {{ item.title }}
-                  <span style="color: var(--color-expense)">
-                    {{ item.amount.toLocaleString() }}
-                  </span>
-                  원
-                </li>
-              </ul>
-            </div>
-          </div>
-          <p class="bodyRegular16px" v-else>내역이 없습니다.</p>
-        </div>
-      </div>
+      <Modal v-if="showModal" :date="clickedDate" :data="dailyData" @close="closeModal" />
     </div>
   </div>
 </template>
@@ -98,10 +60,10 @@ import axios from 'axios'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import closeButton from '@/assets/icons/IconClose.svg'
 import backButton from '@/assets/icons/IconArrowBack.svg'
 import forwardButton from '@/assets/icons/IconArrowForward.svg'
 import BtnMed from '@/components/button/BtnMed.vue'
+import Modal from './Modal.vue'
 
 import { useRouter } from 'vue-router'
 const router = useRouter()
@@ -183,11 +145,24 @@ const totalColorClass = computed(() => {
   else return ''
 })
 
-const showModal = ref(false)
-const clickedDate = ref('')
-
 const calendarRef = ref(null)
 const currentDate = ref(formatDate(new Date()))
+const showModal = ref(false)
+const clickedDate = ref('')
+const dailyData = ref(null)
+
+const handleDateClick = (info) => {
+  const dateStr = info.dateStr
+  clickedDate.value = dateStr
+  dailyData.value = groupedByDate.value[dateStr] || null
+  showModal.value = true
+}
+
+const closeModal = () => {
+  showModal.value = false
+  clickedDate.value = ''
+  dailyData.value = null
+}
 
 function formatDate(date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
@@ -220,17 +195,6 @@ const monthlyExpense = computed(() => {
     .filter((t) => t.date.startsWith(selectedMonth) && t.type === 'Expense')
     .reduce((acc, cur) => acc + cur.amount, 0)
 })
-
-const closeModal = () => {
-  showModal.value = false
-}
-
-const dailyData = computed(() => groupedByDate.value[clickedDate.value] ?? null)
-
-const handleDateClick = (info) => {
-  clickedDate.value = info.dateStr
-  showModal.value = true
-}
 
 const events = computed(() =>
   Object.entries(groupedByDate.value).map(([date, data]) => {
@@ -385,46 +349,6 @@ const calendarOptions = computed(() => ({
   background: var(--color-light2);
   border-radius: 12px;
   cursor: pointer;
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--color-modal);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  position: relative;
-  background: var(--color-white);
-  padding: 2rem;
-  border-radius: 16px;
-  width: 340px;
-  max-width: 90%;
-  color: var(--color-dark);
-}
-
-.close-btn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  width: 24px;
-  height: 24px;
-}
-
-.close-btn img {
-  width: 100%;
-  height: 100%;
 }
 
 .color-positive {

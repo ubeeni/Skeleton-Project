@@ -363,6 +363,42 @@
       "amount": 200000,
       "date": "2025-04-09",
       "memo": "엄마 용돈"
+    },
+    {
+      "id": "82c2",
+      "title": "asdfs",
+      "category_id": "0000",
+      "type": "Expense",
+      "amount": "5555",
+      "date": "2025-04-24T04:34:00",
+      "memo": "aa"
+    },
+    {
+      "id": "af75",
+      "title": "asdfs333",
+      "category_id": "1111",
+      "type": "Income",
+      "amount": "100000",
+      "date": "2025-04-24T04:34:00",
+      "memo": "aa"
+    },
+    {
+      "id": "d042",
+      "title": "ㄷㄷㄷㄷ",
+      "category_id": "1111",
+      "type": "Income",
+      "amount": "100000",
+      "date": "2025-04-24T04:34:00",
+      "memo": "aaaaaaefwe"
+    },
+    {
+      "id": "52e3",
+      "title": "거래내역",
+      "category_id": "0000",
+      "type": "Expense",
+      "amount": 12345,
+      "date": "2025-04-09T04:37:17",
+      "memo": "ㅇㅇ"
     }
   ],
   "quickAddOptions": [

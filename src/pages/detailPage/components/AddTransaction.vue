@@ -8,7 +8,7 @@
 
     <div class="form-group">
       <label>금액</label>
-      <InputLg type="text" placeholder="금액을 입력하세요" v-model="amount" />
+      <InputLg type="number" placeholder="금액을 입력하세요" v-model.number="amount" />
     </div>
 
     <BtnDual
@@ -31,7 +31,27 @@
 
     <div class="form-group">
       <label>날짜</label>
-      <InputLg type="text" placeholder="날짜를 선택하세요" v-model="date" />
+      <InputLg
+        type="text"
+        placeholder="날짜를 선택하세요"
+        @click="openModal"
+        v-model="dateDisplay"
+      />
+    </div>
+
+    <div v-if="showModal" class="modal-backdrop">
+      <div class="modal-content">
+        <h3>날짜와 시간 선택</h3>
+        <Datepicker
+          v-model="date"
+          :enable-time-picker="true"
+          time-picker-inline
+          :input-props="{ readonly: true }"
+          :format="(d) => d.toLocaleString('ko-KR')"
+        />
+        <br />
+        <button @click="closeModal">닫기</button>
+      </div>
     </div>
 
     <div class="form-group">
@@ -57,20 +77,31 @@ import InputLg from '@/components/input/InputLg.vue'
 import InputMed from '@/components/input/InputMed.vue'
 import InputSm from '@/components/input/InputSm.vue'
 
+import Datepicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
+
 import { ref, reactive, computed, onMounted } from 'vue'
 import axios from 'axios'
 
 const BASEURI = '/api'
 
 const transactionTitle = ref('') // 거래 타이틀
-const amount = ref(null) // 금액
-const date = ref('') // 날짜
+
+const amount = ref(0) // 금액
+
 const memo = ref('') // 메모
+
+const date = ref('') // 날짜
+const isoDate = computed(() => date.value.toISOString().slice(0, 19)) // 날짜 (iso 표준 - 실제 DB 저장 형식)
+const dateDisplay = computed(() => (date.value ? date.value.toLocaleString('ko-KR') : '')) // 화면에 표시될 날짜 형식
+
+// 선택된 카테고리 ID
+const categoryId = ref('0000')
 
 // 모든 카테고리 목록 (id, name, type)
 const allCategories = reactive([])
 
-// 선택된 카테고리 타입 (수입 or 지출)
+// 카테고리 타입 (수입 or 지출)
 const categoryType = ref('')
 
 // type에 따른 카테고리 목록 (수입 -> [미분류, 월급, 용돈, 기타수입])
@@ -78,15 +109,17 @@ const filteredCategories = computed(() => {
   return allCategories.filter((category) => category.type === categoryType.value)
 })
 
-// 선택된 카테고리 이름
+// 카테고리 이름
 const categoryName = computed(() => {
   const category = allCategories.find((category) => category.id === categoryId.value)
 
   return category ? category.name : ''
 })
 
-// 선택된 카테고리 ID
-const categoryId = ref('0000')
+const showModal = ref(false) // 모달창 띄울 지 여부
+
+const openModal = () => (showModal.value = true) // 모달 열기
+const closeModal = () => (showModal.value = false) // 모달 닫기
 
 const isIncome = computed(() => categoryType.value === 'Income')
 const isExpense = computed(() => categoryType.value === 'Expense')
@@ -102,6 +135,7 @@ onMounted(async () => {
   try {
     const response = await axios.get(BASEURI + '/categories')
     allCategories.splice(0, allCategories.length, ...response.data)
+    date.value = new Date()
 
     const category = allCategories.find((category) => category.id === categoryId.value)
     categoryType.value = category.type
@@ -131,7 +165,7 @@ const addTransaction = async () => {
       '\n카테고리명: ' +
       categoryName.value +
       '\n날짜: ' +
-      date.value +
+      isoDate.value +
       '\n메모: ' +
       memo.value,
   )
@@ -142,7 +176,7 @@ const addTransaction = async () => {
       category_id: categoryId.value,
       type: categoryType.value,
       amount: amount.value,
-      date: date.value,
+      date: isoDate.value,
       memo: memo.value,
     })
 
@@ -187,5 +221,21 @@ const cancleTransaction = () => {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+.modal-content {
+  background: white;
+  padding: 24px;
+  width: 300px;
+  margin: 100px auto;
+  border-radius: 10px;
 }
 </style>

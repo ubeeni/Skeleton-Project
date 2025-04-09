@@ -8,7 +8,7 @@
 
     <div class="form-group">
       <label>금액</label>
-      <InputLg type="text" placeholder="금액을 입력하세요" v-model="amount" />
+      <InputLg type="number" placeholder="금액을 입력하세요" v-model.number="amount" />
     </div>
 
     <BtnDual
@@ -67,10 +67,10 @@ const router = useRouter()
 
 const BASEURI = '/api'
 
-const transactionId = ref('e081') // 상세 보기할 트랜잭션 ID
+const transactionId = ref('e081') // 상세 보기할 트랜잭션 ID - 추후 ViewTransaction 에서 받아올 것
 
 const transactionTitle = ref('') // 거래명
-const amount = ref(null) // 금액
+const amount = ref(0) // 금액
 const date = ref('') // 날짜
 const memo = ref('') // 메모
 

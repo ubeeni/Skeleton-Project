@@ -5,7 +5,7 @@
 
     <div class="form-group">
       <label>금액</label>
-      <InputLg type="text" placeholder="금액을 입력하세요" v-model="amount" readonly />
+      <InputLg type="number" placeholder="금액을 입력하세요" v-model.number="amount" readonly />
     </div>
 
     <BtnDual :is-income-active="isIncome" :is-expense-active="isExpense" />
@@ -57,7 +57,7 @@ const router = useRouter()
 
 const BASEURI = '/api'
 
-const transactionId = ref('SIVA') // 상세 보기할 트랜잭션 ID
+const transactionId = ref('SIVA') // 상세 보기할 트랜잭션 ID - 추후 pinia로 다른 페이지에서 받아올 것
 
 const transactionTitle = ref('') // 거래명
 const amount = ref(0) // 금액

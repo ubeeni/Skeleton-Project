@@ -4,6 +4,7 @@
       <ListSideBar
         :categories="categories"
         :transactions="transactions"
+        :filtered-transactions="filteredTransactions"
         @filter-change="handleFilterChange"
       />
     </div>

@@ -3,7 +3,7 @@
     <!-- 월 이동 -->
     <div class="month-nav">
       <img :src="backButton" alt="back" @click="handlePrev" />
-      <span class="titleBold24px"> {{ monthText }} </span>
+      <span class="titleBold24px"> {{ rangeText }} </span>
       <img :src="forwardButton" alt="forward" @click="handleNext" />
     </div>
 
@@ -11,16 +11,16 @@
     <div class="summary">
       <div class="bodyRegular16px">
         💰 수입:
-        <span style="color: var(--color-dark)"> {{ monthlyIncome.toLocaleString() }}원 </span>
+        <span style="color: var(--color-dark)"> {{ totalIncome.toLocaleString() }}원 </span>
       </div>
       <div class="bodyRegular16px">
         💸 지출:
-        <span style="color: var(--color-dark)"> {{ monthlyExpense.toLocaleString() }}원 </span>
+        <span style="color: var(--color-dark)"> {{ totalExpense.toLocaleString() }}원 </span>
       </div>
       <div class="bodySemibold18px" style="margin-top: 0.5rem">
         총합:
         <span :class="totalColorClass">
-          {{ (monthlyIncome - monthlyExpense).toLocaleString() }}
+          {{ netTotal.toLocaleString() }}
         </span>
         원
       </div>
@@ -93,9 +93,11 @@ import BtnDual from '@/components/button/BtnDual.vue'
 import backButton from '@/assets/icons/IconArrowBack.svg'
 import forwardButton from '@/assets/icons/IconArrowForward.svg'
 
+
 const props = defineProps({
   categories: Array,
   transactions: Array,
+  filteredTransactions: Array,
 })
 const emit = defineEmits(['filter-change'])
 
@@ -111,14 +113,56 @@ const selectedExpense = ref([])
 
 const options = ['1주', '1개월', '3개월']
 
-const monthText = computed(() => `${currentDate.value.month() + 1}월`)
+const rangeText = computed(() => {
+  const date = currentDate.value
+
+  if (selectedRange.value === '1주') {
+    const start = date.day() === 0 ? date.subtract(6, 'day') : date.subtract(date.day() - 1, 'day')
+    const end = start.add(6, 'day')
+    return `${start.format('M/D')} ~ ${end.format('M/D')}`
+  }
+
+  if (selectedRange.value === '1개월') {
+    if(date.year()=='2025') {
+      return `${date.month() + 1}월`
+    } else {
+      return `${date.year()}년 `+`${date.month() + 1}월`
+    }
+  }
+
+  if (selectedRange.value === '3개월') {
+    const start = date.subtract(2, 'month')
+    return `${start.month() + 1}월 ~ ${date.month() + 1}월`
+  }
+
+  return ''
+})
+
+const totalIncome = computed(() =>
+  props.filteredTransactions
+    .filter((t) => t.type === 'Income')
+    .reduce((sum, t) => sum + t.amount, 0)
+)
+const totalExpense = computed(() =>
+  props.filteredTransactions
+    .filter((t) => t.type === 'Expense')
+    .reduce((sum, t) => sum + t.amount, 0)
+)
+const netTotal = computed(() => totalIncome.value - totalExpense.value)
+const totalColorClass = computed(() =>
+  netTotal.value > 0 ? 'color-positive' : netTotal.value < 0 ? 'color-negative' : ''
+)
 
 const handlePrev = () => {
-  currentDate.value = currentDate.value.subtract(1, 'month')
+  if (selectedRange.value === '1주') currentDate.value = currentDate.value.subtract(1, 'week')
+  else if (selectedRange.value === '1개월') currentDate.value = currentDate.value.subtract(1, 'month')
+  else if (selectedRange.value === '3개월') currentDate.value = currentDate.value.subtract(3, 'month')
   emitFilters()
 }
 const handleNext = () => {
-  currentDate.value = currentDate.value.add(1, 'month')
+  if (selectedRange.value === '1주') currentDate.value = currentDate.value.add(1, 'week')
+  else if (selectedRange.value === '1개월') currentDate.value = currentDate.value.add(1, 'month')
+  else if (selectedRange.value === '3개월') currentDate.value = currentDate.value.add(3, 'month')
   emitFilters()
 }
 
@@ -154,6 +198,7 @@ const selectIncome = (id) => {
   }
   emitFilters()
 }
+
 const selectExpense = (id) => {
   if (selectedExpense.value.includes(id)) {
     selectedExpense.value = selectedExpense.value.filter((i) => i !== id)
@@ -168,22 +213,7 @@ const selectExpense = (id) => {
 const incomeCategories = computed(() => props.categories.filter((c) => c.type === 'Income'))
 const expenseCategories = computed(() => props.categories.filter((c) => c.type === 'Expense'))
 
-const monthlyIncome = computed(() => {
-  const ym = currentDate.value.format('YYYY-MM')
-  return props.transactions
-    .filter((t) => t.type === 'Income' && t.date.startsWith(ym))
-    .reduce((sum, t) => sum + t.amount, 0)
-})
-const monthlyExpense = computed(() => {
-  const ym = currentDate.value.format('YYYY-MM')
-  return props.transactions
-    .filter((t) => t.type === 'Expense' && t.date.startsWith(ym))
-    .reduce((sum, t) => sum + t.amount, 0)
-})
-const totalColorClass = computed(() => {
-  const net = monthlyIncome.value - monthlyExpense.value
-  return net > 0 ? 'color-positive' : net < 0 ? 'color-negative' : ''
-})
+
 
 // 필터 상태 상위 컴포넌트로 전달
 const emitFilters = () => {

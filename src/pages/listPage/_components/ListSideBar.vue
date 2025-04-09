@@ -93,6 +93,7 @@ import BtnDual from '@/components/button/BtnDual.vue'
 import backButton from '@/assets/icons/IconArrowBack.svg'
 import forwardButton from '@/assets/icons/IconArrowForward.svg'
 
+
 const props = defineProps({
   categories: Array,
   transactions: Array,

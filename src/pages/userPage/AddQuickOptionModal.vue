@@ -5,8 +5,8 @@
 
       <!-- 거래명 -->
       <div class="form-row">
-        <label>거래명</label>
-        <input
+        <span class="bodySemibold18px">거래명</span>
+        <InputLg
           v-model="newItem.title"
           :class="{ error: !newItem.title && triedSubmit }"
           placeholder="거래명을 입력하세요"
@@ -39,43 +39,38 @@
 
       <!-- 카테고리 드롭다운 -->
       <div class="form-row">
-        <label>카테고리</label>
-        <select v-model="newItem.category_id">
-          <option v-for="cat in filteredCategories" :key="cat.id" :value="cat.id">
-            {{ cat.name }}
-          </option>
-        </select>
+        <span class="bodySemibold18px">카테고리</span>
+        <SelectLg
+          v-model="newItem.category_id"
+          :options="filteredCategories.map((cat) => ({ label: cat.name, value: cat.id }))"
+          placeholder="카테고리 선택"
+        />
       </div>
 
       <!-- 반복주기 + 상세 입력 -->
       <div class="form-row">
-        <label>반복주기</label>
+        <span class="bodySemibold18px">반복주기</span>
         <div class="select-group">
-          <select v-model="newItem.cycle">
-            <option value="daily">매일</option>
-            <option value="weekly">매주</option>
-            <option value="monthly">매월</option>
-          </select>
-
-          <input
+          <SelectMed v-model="newItem.cycle" :options="cycleOptions" placeholder="반복주기 선택" />
+          <InputMed
             v-if="newItem.cycle === 'weekly'"
             v-model="newItem.week"
             placeholder="예: 월요일"
           />
-          <input
+          <InputMed
             v-if="newItem.cycle === 'monthly'"
             v-model="newItem.month"
             placeholder="예: 15"
             type="number"
           />
-          <input v-if="newItem.cycle === 'daily'" value="매일" disabled />
+          <InputMed v-if="newItem.cycle === 'daily'" value="매일" disabled />
         </div>
       </div>
 
       <!-- 금액 -->
       <div class="form-row">
-        <label>금액</label>
-        <input
+        <span class="bodySemibold18px">금액</span>
+        <InputLg
           v-model="newItem.amout"
           type="number"
           :class="{ error: (!newItem.amout || newItem.amout <= 0) && triedSubmit }"
@@ -85,13 +80,13 @@
 
       <!-- 메모 -->
       <div class="form-row">
-        <label>메모</label>
-        <input v-model="newItem.memo" placeholder="추가 정보를 입력하세요" />
+        <span class="bodySemibold18px">메모</span>
+        <InputLg v-model="newItem.memo" placeholder="추가 정보를 입력하세요" />
       </div>
 
       <div class="button-group">
-        <button @click="submit">추가</button>
-        <button @click="$emit('close')">취소</button>
+        <BtnLg :color="'var(--color-primary)'" :text="`추가`" @click="submit" />
+        <BtnLg :color="'var(--color-light)'" :text="`취소`" @click="$emit('close')" />
       </div>
     </div>
   </div>
@@ -100,6 +95,11 @@
 <script setup>
 import { ref, computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
+import InputLg from '@/components/input/InputLg.vue'
+import InputMed from '@/components/input/InputMed.vue'
+import SelectLg from '@/components/input/SelectLg.vue'
+import SelectMed from '@/components/input/SelectMed.vue'
+import BtnLg from '@/components/button/BtnLg.vue'
 
 const props = defineProps({
   categories: Array,
@@ -127,6 +127,12 @@ const newItem = ref({
 const filteredCategories = computed(() =>
   props.categories.filter((cat) => cat.type === newItem.value.type),
 )
+
+const cycleOptions = [
+  { value: 'daily', label: '매일' },
+  { value: 'weekly', label: '매주' },
+  { value: 'monthly', label: '매월' },
+]
 
 const triedSubmit = ref(false)
 
@@ -185,7 +191,8 @@ watchEffect(() => {
   background: var(--color-white);
   padding: 40px;
   border-radius: 20px;
-  width: 500px;
+  height: 744px;
+  width: 839px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 

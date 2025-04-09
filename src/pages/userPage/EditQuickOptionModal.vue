@@ -1,4 +1,3 @@
-<!-- components/EditQuickOptionModal.vue -->
 <template>
   <div class="modal">
     <div class="modal-box">
@@ -6,8 +5,8 @@
 
       <!-- 거래명 -->
       <div class="form-row">
-        <label>거래명</label>
-        <input
+        <span class="bodySemibold18px">거래명</span>
+        <InputLg
           v-model="editItem.title"
           :class="{ error: !editItem.title && triedSubmit }"
           placeholder="거래명을 입력하세요"
@@ -40,43 +39,38 @@
 
       <!-- 카테고리 -->
       <div class="form-row">
-        <label>카테고리</label>
-        <select v-model="editItem.category_id">
-          <option v-for="cat in filteredCategories" :key="cat.id" :value="cat.id">
-            {{ cat.name }}
-          </option>
-        </select>
+        <span class="bodySemibold18px">카테고리</span>
+        <SelectLg
+          v-model="editItem.category_id"
+          :options="filteredCategories.map((cat) => ({ label: cat.name, value: cat.id }))"
+          placeholder="카테고리 선택"
+        />
       </div>
 
       <!-- 반복주기 -->
       <div class="form-row">
-        <label>반복주기</label>
+        <span class="bodySemibold18px">반복주기</span>
         <div class="select-group">
-          <select v-model="editItem.cycle">
-            <option value="daily">매일</option>
-            <option value="weekly">매주</option>
-            <option value="monthly">매월</option>
-          </select>
-
-          <input
+          <SelectMed v-model="editItem.cycle" :options="cycleOptions" placeholder="반복주기 선택" />
+          <InputMed
             v-if="editItem.cycle === 'weekly'"
             v-model="editItem.week"
             placeholder="예: 월요일"
           />
-          <input
+          <InputMed
             v-if="editItem.cycle === 'monthly'"
             v-model="editItem.month"
             placeholder="예: 15"
             type="number"
           />
-          <input v-if="editItem.cycle === 'daily'" value="매일" disabled />
+          <InputMed v-if="editItem.cycle === 'daily'" value="매일" disabled />
         </div>
       </div>
 
       <!-- 금액 -->
       <div class="form-row">
-        <label>금액</label>
-        <input
+        <span class="bodySemibold18px">금액</span>
+        <InputLg
           v-model="editItem.amout"
           type="number"
           :class="{ error: (!editItem.amout || editItem.amout <= 0) && triedSubmit }"
@@ -86,14 +80,14 @@
 
       <!-- 메모 -->
       <div class="form-row">
-        <label>메모</label>
-        <input v-model="editItem.memo" placeholder="추가 정보를 입력하세요" />
+        <span class="bodySemibold18px">메모</span>
+        <InputLg v-model="editItem.memo" placeholder="추가 정보를 입력하세요" />
       </div>
 
       <div class="button-group">
-        <button @click="update">수정 완료</button>
-        <button @click="remove">삭제</button>
-        <button @click="$emit('close')">취소</button>
+        <BtnLg :color="'var(--color-primary)'" :text="`수정 완료`" @click="update" />
+        <BtnLg :color="'var(--color-light)'" :text="`삭제`" @click="remove" />
+        <BtnLg :color="'var(--color-light)'" :text="`취소`" @click="$emit('close')" />
       </div>
     </div>
   </div>
@@ -103,10 +97,22 @@
 import { ref, computed, watch } from 'vue'
 import axios from 'axios'
 
+import InputLg from '@/components/input/InputLg.vue'
+import InputMed from '@/components/input/InputMed.vue'
+import SelectLg from '@/components/input/SelectLg.vue'
+import SelectMed from '@/components/input/SelectMed.vue'
+import BtnLg from '@/components/button/BtnLg.vue'
+
 const props = defineProps({
   option: Object,
   categories: Array,
 })
+
+const cycleOptions = [
+  { value: 'daily', label: '매일' },
+  { value: 'weekly', label: '매주' },
+  { value: 'monthly', label: '매월' },
+]
 
 const emit = defineEmits(['close', 'update', 'delete'])
 

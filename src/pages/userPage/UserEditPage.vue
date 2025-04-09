@@ -1,15 +1,15 @@
 <template>
   <div class="wrapper">
-    <h1 class="title">프로필 수정</h1>
+    <span class="titleBold24px">프로필</span>
 
     <div class="form-row">
-      <label class="label">이름</label>
-      <input v-model="editedName" type="text" class="input" :placeholder="user?.name" />
+      <span class="bodySemibold18px">이름</span>
+      <InputLg v-model="editedName" type="text" :placeholder="user?.name" />
     </div>
 
     <div class="button-group">
-      <button class="btn complete" @click="saveName">완료</button>
-      <button class="btn cancel" @click="resetName">취소</button>
+      <BtnLg :color="'var(--color-primary)'" :text="`저장`" @click="saveName" />
+      <BtnLg :color="'var(--color-light)'" :text="`취소`" @click="resetName" />
     </div>
   </div>
 </template>
@@ -18,6 +18,8 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
+import InputLg from '@/components/input/InputLg.vue'
+import BtnLg from '@/components/button/BtnLg.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -54,12 +56,6 @@ onMounted(fetchUser)
   margin: 60px auto;
 }
 
-.title {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 40px;
-}
-
 .form-row {
   display: flex;
   align-items: center;
@@ -67,41 +63,9 @@ onMounted(fetchUser)
   margin-bottom: 60px;
 }
 
-.label {
-  width: 60px;
-  font-weight: 500;
-}
-
-.input {
-  flex: 1;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  font-size: 14px;
-}
-
 .button-group {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-}
-
-.btn {
-  padding: 14px;
-  border: none;
-  border-radius: 14px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.complete {
-  background-color: #8b5cf6;
-  color: white;
-}
-
-.cancel {
-  background-color: #ccc;
-  color: white;
+  gap: 10px;
 }
 </style>

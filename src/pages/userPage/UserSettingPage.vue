@@ -2,33 +2,38 @@
   <div class="wrapper">
     <!-- 왼쪽 패널 -->
     <div class="left-panel">
-      <h2 class="title">사용자 설정</h2>
+      <span class="titleBold24px">사용자 설정</span>
       <div class="select-group">
-        <label class="select-label">수입</label>
-        <select v-model="selectedIncome" class="select">
-          <option v-for="cat in incomeCategories" :key="cat.id" :value="cat.id">
-            {{ cat.name }}
-          </option>
-        </select>
+        <span class="bodySemibold18px">수입</span>
+        <SelectMed
+          v-model="selectedIncome"
+          :options="incomeCategories.map((cat) => ({ label: cat.name, value: cat.id }))"
+          placeholder="수입 카테고리 선택"
+        />
       </div>
       <div class="select-group">
-        <label class="select-label">지출</label>
-        <select v-model="selectedExpense" class="select">
-          <option v-for="cat in expenseCategories" :key="cat.id" :value="cat.id">
-            {{ cat.name }}
-          </option>
-        </select>
+        <span class="bodySemibold18px">지출</span>
+        <SelectMed
+          v-model="selectedExpense"
+          :options="expenseCategories.map((cat) => ({ label: cat.name, value: cat.id }))"
+          placeholder="지출 카테고리 선택"
+        />
       </div>
     </div>
 
     <!-- 오른쪽 패널 -->
     <div class="right-panel">
       <div class="right-header">
-        <label class="title">고정 수입/지출</label>
-        <button class="add-yellow" @click="showAddModal = true">추가</button>
+        <span class="bodySemibold18px">고정 수입/지출</span>
+        <BtnSm :color="'var(--color-secondary)'" :text="`저장`" @click="showAddModal = true" />
       </div>
       <ul>
-        <li v-for="item in quickOptions" :key="item.id" class="item" @click="openEditModal(item)">
+        <li
+          v-for="item in quickOptions"
+          :key="item.id"
+          class="item bodyRegular16px"
+          @click="openEditModal(item)"
+        >
           {{ formatOption(item) }}
         </li>
       </ul>
@@ -37,8 +42,8 @@
 
   <!-- 버튼 -->
   <div class="button-group">
-    <button class="btn save" @click="saveDefaults">저장</button>
-    <button class="btn cancel" @click="cancelAndRedirect">취소</button>
+    <BtnLg :color="'var(--color-primary)'" :text="`저장`" @click="saveName" />
+    <BtnLg :color="'var(--color-light)'" :text="`취소`" @click="resetName" />
   </div>
 
   <!-- 모달 -->
@@ -71,6 +76,9 @@ import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import AddQuickOptionModal from '@/pages/userPage/AddQuickOptionModal.vue'
 import EditQuickOptionModal from '@/pages/userPage/EditQuickOptionModal.vue'
+import SelectMed from '@/components/input/SelectMed.vue'
+import BtnLg from '@/components/button/BtnLg.vue'
+import BtnSm from '@/components/button/BtnSm.vue'
 
 // 라우터 및 경로
 const route = useRoute()
@@ -220,28 +228,8 @@ onMounted(async () => {
   flex: 1;
 }
 
-.title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 24px;
-}
-
 .select-group {
   margin-bottom: 24px;
-}
-
-.select-label {
-  font-weight: 600;
-  margin-bottom: 8px;
-  display: block;
-}
-
-.select {
-  width: 100%;
-  padding: 12px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 12px;
 }
 
 .right-header {
@@ -251,18 +239,8 @@ onMounted(async () => {
   margin-bottom: 12px;
 }
 
-.add-yellow {
-  background-color: #fde047;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 10px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
 .item {
   margin-bottom: 8px;
-  font-size: 15px;
   cursor: pointer;
 }
 
@@ -271,26 +249,6 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-}
-
-.btn {
-  width: 300px;
-  padding: 16px 0;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 16px;
-  border: none;
-  cursor: pointer;
-}
-
-.save {
-  background-color: #8b5cf6;
-  color: white;
-}
-
-.cancel {
-  background-color: #ccc;
-  color: white;
+  gap: 10px;
 }
 </style>

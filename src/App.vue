@@ -15,6 +15,9 @@ import { ref, computed, onMounted, provide } from 'vue'
 import Floating from './components/layout/Floating.vue'
 import Header from './components/layout/Header.vue'
 // import Footer from './components/layout/Footer.vue'
+import { toast } from 'vue3-toastify'
+
+const quickAddOptions = ref([])
 
 const transactions = ref([])
 const categories = ref([])
@@ -26,12 +29,37 @@ const periodDoughnut = ref('1개월')
 const PERIOD_OPTIONS = ['1주', '1개월', '3개월']
 
 onMounted(async () => {
-  const [txRes, catRes] = await Promise.all([
+  const [txRes, catRes, quickAddRes] = await Promise.all([
     axios.get('/api/transactions'),
     axios.get('/api/categories'),
+    axios.get('/api/quickAddOptions'),
   ])
   transactions.value = txRes.data
   categories.value = catRes.data
+  quickAddOptions.value = quickAddRes.data
+
+  const today = new Date()
+  const todayDate = today.getDate()
+  const todayDayKor = today.toLocaleDateString('ko-KR', { weekday: 'long' })
+  const todayMonth = String(today.getMonth() + 1)
+
+  const todayQuickAdds = quickAddOptions.value.filter((item) => {
+    if (item.cycle === 'daily') return true
+    if (item.cycle === 'weekly') return item.week === todayDayKor
+    if (item.cycle === 'monthly') {
+      const dayAsNumber = parseInt(item.month)
+      return !isNaN(dayAsNumber) && dayAsNumber === todayDate
+    }
+
+    return false
+  })
+
+  if (todayQuickAdds.length > 0) {
+    const titles = todayQuickAdds
+      .map((item) => `• ${item.title} (${item.amount.toLocaleString()}원)`)
+      .join('\n')
+    toast.info(`💡 오늘 예정 거래가 ${todayQuickAdds.length}건 있어요!\n${titles}`)
+  }
 })
 
 // 카테고리 매핑

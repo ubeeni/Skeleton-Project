@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <span class="titleBold24px title">프로필</span>
+    <span class="titleBold24px">프로필</span>
 
     <div class="form-row">
       <span class="bodySemibold18px">이름</span>
@@ -9,7 +9,7 @@
 
     <div class="button-group">
       <BtnLg :color="'var(--color-primary)'" :text="`저장`" @click="saveName" />
-      <BtnLg :color="'var(--color-light)'" :text="`취소`" @click="resetName" />
+      <BtnLg :color="'var(--color-light)'" :text="`취소`" @click="cancelAndRedirect" />
     </div>
   </div>
 </template>
@@ -41,10 +41,14 @@ const saveName = async () => {
   user.value.name = editedName.value
   editedName.value = ''
   alert('이름이 수정되었습니다!')
+  router.push(`/user/${userId}`)
 }
 
-const resetName = () => {
-  router.back()
+const cancelAndRedirect = () => {
+  const confirmCancel = confirm('수정 내용이 반영되지 않습니다. 정말 취소하시겠어요?')
+  if (confirmCancel) {
+    router.push(`/user/${userId}`)
+  }
 }
 
 onMounted(fetchUser)

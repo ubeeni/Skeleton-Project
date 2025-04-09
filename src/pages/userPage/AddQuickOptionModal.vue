@@ -122,7 +122,7 @@ const newItem = ref({
   day: '매일',
   week: null,
   month: null,
-  amoun: '',
+  amount: '',
 })
 
 const filteredCategories = computed(() =>

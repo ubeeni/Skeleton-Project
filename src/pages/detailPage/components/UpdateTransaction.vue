@@ -67,7 +67,7 @@ const router = useRouter()
 
 const BASEURI = '/api'
 
-const transactionId = ref('9b14') // 상세 보기할 트랜잭션 ID
+const transactionId = ref('e081') // 상세 보기할 트랜잭션 ID
 
 const transactionTitle = ref('') // 거래명
 const amount = ref(null) // 금액

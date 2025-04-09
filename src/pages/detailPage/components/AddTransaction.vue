@@ -71,7 +71,7 @@ const memo = ref('') // 메모
 const allCategories = reactive([])
 
 // 선택된 카테고리 타입 (수입 or 지출)
-const categoryType = ref('Income')
+const categoryType = ref('')
 
 // type에 따른 카테고리 목록 (수입 -> [미분류, 월급, 용돈, 기타수입])
 const filteredCategories = computed(() => {
@@ -102,8 +102,12 @@ onMounted(async () => {
   try {
     const response = await axios.get(BASEURI + '/categories')
     allCategories.splice(0, allCategories.length, ...response.data)
+
+    const category = allCategories.find((category) => category.id === categoryId.value)
+    categoryType.value = category.type
   } catch (error) {
     console.log('에러 발생 : ' + error)
+    console.log(error.stack)
   }
 })
 

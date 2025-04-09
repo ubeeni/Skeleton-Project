@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <span class="titleBold24px">프로필</span>
+    <span class="titleBold24px title">프로필</span>
 
     <div class="form-row">
       <span class="bodySemibold18px">이름</span>
@@ -52,20 +52,26 @@ onMounted(fetchUser)
 
 <style scoped>
 .wrapper {
-  max-width: 600px;
-  margin: 60px auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.wrapper > .title {
+  margin-bottom: 1.25rem;
 }
 
 .form-row {
   display: flex;
   align-items: center;
   gap: 20px;
-  margin-bottom: 60px;
+  margin-bottom: 10rem;
 }
 
 .button-group {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  gap: 1rem;
 }
 </style>

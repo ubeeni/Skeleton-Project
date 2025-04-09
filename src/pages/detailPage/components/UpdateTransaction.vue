@@ -54,6 +54,7 @@
           time-picker-inline
           :input-props="{ readonly: true }"
           :format="(d) => d.toLocaleString('ko-KR')"
+          :max-date="new Date()"
         />
         <br />
         <button @click="closeModal">닫기</button>

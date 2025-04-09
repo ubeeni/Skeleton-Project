@@ -19,8 +19,8 @@ import axios from 'axios'
 import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween'
 dayjs.extend(isBetween)
-import ListSideBar from './ListSideBar.vue'
-import TransactionList from './TransactionList.vue'
+import ListSideBar from '@/pages/listPage/_components/ListSideBar.vue'
+import TransactionList from '@/pages/listPage/_components/TransactionList.vue'
 
 const transactions = ref([])
 const categories = ref([])
@@ -54,14 +54,15 @@ function handleFilterChange(newOptions) {
 }
 
 const filteredTransactions = computed(() => {
-  const { date, range, showIncome, showExpense, incomeCategoryIds, expenseCategoryIds } = filterOptions.value
+  const { date, range, showIncome, showExpense, incomeCategoryIds, expenseCategoryIds } =
+    filterOptions.value
 
   const to = dayjs(date)
   let from
 
   if (range === '1주') {
     const day = to.day() // 일요일(0) ~ 토요일(6)
-    from = to.subtract((day === 0 ? 6 : day - 1), 'day') // 월요일까지 이동
+    from = to.subtract(day === 0 ? 6 : day - 1, 'day') // 월요일까지 이동
   } else if (range === '1개월') {
     from = to.startOf('month')
   } else if (range === '3개월') {
@@ -70,7 +71,8 @@ const filteredTransactions = computed(() => {
 
   return transactions.value.filter((tx) => {
     const txDate = dayjs(tx.date).startOf('day')
-    const inRange = txDate.isSame(from, 'day') || txDate.isSame(to, 'day') || txDate.isBetween(from, to)
+    const inRange =
+      txDate.isSame(from, 'day') || txDate.isSame(to, 'day') || txDate.isBetween(from, to)
 
     // 수입/지출 모두 꺼져 있을 때 → 전체 출력
     if (!showIncome && !showExpense) return inRange
@@ -94,12 +96,11 @@ const filteredTransactions = computed(() => {
 <style scoped>
 .list-page {
   display: flex;
-  padding: 24px;
-  gap: 32px;
+  gap: 2rem;
 }
 
 .left-area {
-  width: 250px;
+  width: 17.5rem;
 }
 
 .right-area {

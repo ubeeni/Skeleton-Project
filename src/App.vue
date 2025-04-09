@@ -1,7 +1,7 @@
 <template>
   <header><Header /></header>
 
-  <main>
+  <main class="bodyRegular16px">
     <RouterView />
     <Floating />
   </main>

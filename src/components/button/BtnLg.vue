@@ -26,7 +26,7 @@ defineEmits(['click'])
 <style scoped>
 .btn-lg-wrapper {
   border-radius: 1rem;
-  width: 25rem;
+  width: 22.5rem;
   height: auto;
   color: var(--color-white);
   text-align: center;

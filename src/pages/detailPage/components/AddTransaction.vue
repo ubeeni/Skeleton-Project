@@ -8,7 +8,13 @@
 
     <div class="form-group">
       <label>금액</label>
-      <InputLg type="number" placeholder="금액을 입력하세요" v-model.number="amount" />
+      <InputLg
+        type="number"
+        placeholder="금액을 입력하세요"
+        v-model.number="amount"
+        @keypress="onlyAllowDigits"
+        @input="removeNonDigits"
+      />
     </div>
 
     <BtnDual
@@ -61,7 +67,7 @@
 
     <div class="actions">
       <BtnLg text="추가" @click="addTransaction" color="var(--color-primary)" />
-      <BtnLg text="취소" @click="cancleTransaction" color="var(--color-semidark)" />
+      <BtnLg text="취소" @click="cancle" color="var(--color-semidark)" />
     </div>
   </div>
 </template>
@@ -82,6 +88,8 @@ import '@vuepic/vue-datepicker/dist/main.css'
 
 import { ref, reactive, computed, onMounted } from 'vue'
 import axios from 'axios'
+
+const prevPage = ref(null)
 
 const BASEURI = '/api'
 
@@ -132,6 +140,9 @@ function clickExpense() {
 }
 
 onMounted(async () => {
+  const historyState = window.history.state
+  prevPage.value = historyState.from
+
   try {
     const response = await axios.get(BASEURI + '/categories')
     allCategories.splice(0, allCategories.length, ...response.data)
@@ -144,6 +155,18 @@ onMounted(async () => {
     console.log(error.stack)
   }
 })
+
+const onlyAllowDigits = (e) => {
+  const key = e.key
+  if (!/^[0-9]$/.test(key)) {
+    e.preventDefault()
+  }
+}
+
+const removeNonDigits = (e) => {
+  e.target.value = e.target.value.replace(/[^0-9]/g, '')
+  amount.value = e.target.value
+}
 
 const selectType = (type) => {
   categoryType.value = type
@@ -182,6 +205,11 @@ const addTransaction = async () => {
 
     if (response.status === 201) {
       console.log('추가 성공')
+      transactionTitle.value = ''
+      amount.value = 0
+      categoryId.value = '0000'
+      date.value = ''
+      memo.value = ''
     } else {
       console.log('추가 실패')
     }
@@ -191,12 +219,11 @@ const addTransaction = async () => {
   }
 }
 
-const cancleTransaction = () => {
-  transactionTitle.value = ''
-  amount.value = 0
-  categoryId.value = '0000'
-  date.value = ''
-  memo.value = ''
+const cancle = () => {
+  console.log('취소 버튼')
+  router.push({
+    name: prevPage.value,
+  })
 }
 </script>
 

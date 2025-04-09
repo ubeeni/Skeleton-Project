@@ -52,12 +52,14 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 
+const prevPage = ref(null)
+
 const currentRoute = useRoute()
 const router = useRouter()
 
 const BASEURI = '/api'
 
-const transactionId = ref('SIVA') // 상세 보기할 트랜잭션 ID - 추후 pinia로 다른 페이지에서 받아올 것
+const transactionId = ref(null) // 상세 보기할 트랜잭션 ID - 추후 pinia로 다른 페이지에서 받아올 것
 
 const transactionTitle = ref('') // 거래명
 const amount = ref(0) // 금액
@@ -77,6 +79,10 @@ const isIncome = computed(() => categoryType.value === 'Income')
 const isExpense = computed(() => categoryType.value === 'Expense')
 
 onMounted(async () => {
+  const historyState = window.history.state
+  prevPage.value = historyState.from
+  transactionId.value = historyState.transaction_id
+
   try {
     const transResponse = await axios.get(BASEURI + '/transactions')
     const catResponse = await axios.get(BASEURI + '/categories')
@@ -125,11 +131,18 @@ onMounted(async () => {
 
 const gotoUpdate = () => {
   console.log('수정 버튼')
-  router.push('/detail/update')
+  router.push({
+    name: 'detail',
+    params: { action: 'update' },
+    state: { from: prevPage.value, transaction_id: transactionId.value },
+  })
 }
 
 const cancle = () => {
   console.log('취소 버튼')
+  router.push({
+    name: prevPage.value,
+  })
 }
 </script>
 

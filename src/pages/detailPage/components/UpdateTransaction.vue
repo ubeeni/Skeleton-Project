@@ -8,7 +8,13 @@
 
     <div class="form-group">
       <label>금액</label>
-      <InputLg type="number" placeholder="금액을 입력하세요" v-model.number="amount" />
+      <InputLg
+        type="number"
+        placeholder="금액을 입력하세요"
+        v-model.number="amount"
+        @keypress="onlyAllowDigits"
+        @input="removeNonDigits"
+      />
     </div>
 
     <BtnDual
@@ -85,12 +91,14 @@ import { ref, reactive, computed, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 
+const prevPage = ref(null)
+
 const currentRoute = useRoute()
 const router = useRouter()
 
 const BASEURI = '/api'
 
-const transactionId = ref('52e3') // 상세 보기할 트랜잭션 ID - 추후 ViewTransaction 에서 받아올 것
+const transactionId = ref(null) // 상세 보기할 트랜잭션 ID - 추후 ViewTransaction 에서 받아올 것
 
 const transactionTitle = ref('') // 거래명
 
@@ -127,6 +135,10 @@ const isIncome = computed(() => categoryType.value === 'Income')
 const isExpense = computed(() => categoryType.value === 'Expense')
 
 onMounted(async () => {
+  const historyState = window.history.state
+  prevPage.value = historyState.from
+  transactionId.value = historyState.transaction_id
+
   try {
     const transResponse = await axios.get(BASEURI + '/transactions')
     const catResponse = await axios.get(BASEURI + '/categories')
@@ -165,6 +177,18 @@ watch(categoryId, () => {
   }
 })
 
+const onlyAllowDigits = (e) => {
+  const key = e.key
+  if (!/^[0-9]$/.test(key)) {
+    e.preventDefault()
+  }
+}
+
+const removeNonDigits = (e) => {
+  e.target.value = e.target.value.replace(/[^0-9]/g, '')
+  onlyNumber.value = e.target.value
+}
+
 const selectType = (type) => {
   categoryType.value = type
   const category = allCategories.find(
@@ -191,8 +215,7 @@ const updateTransaction = async () => {
       console.log('수정 실패')
     }
   } catch (error) {
-    console.log('에러 발생 : ' + error)
-    console.log(error.stack)
+    console.log('에러 발생 : ' + error.stack)
   }
 }
 
@@ -206,12 +229,16 @@ const deleteTransaction = async () => {
       console.log('삭제 실패')
     }
   } catch (error) {
-    console.log('에러 발생 : ' + error)
-    console.log(error.stack)
+    console.log('에러 발생 : ' + error.stack)
   }
 }
 
-const cancle = () => {}
+const cancle = () => {
+  console.log('취소 버튼')
+  router.push({
+    name: prevPage.value,
+  })
+}
 </script>
 
 <!-- ----------------------------------- style  ----------------------------------- -->

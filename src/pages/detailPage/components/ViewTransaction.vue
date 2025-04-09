@@ -52,12 +52,17 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 
+const historyState = window.history.state
+
+const prevPage = historyState?.from
+
 const currentRoute = useRoute()
 const router = useRouter()
 
 const BASEURI = '/api'
 
-const transactionId = ref('SIVA') // 상세 보기할 트랜잭션 ID
+// const transactionId = ref('SIVA') // 상세 보기할 트랜잭션 ID
+const transactionId = ref(historyState.transaction_id)
 
 const transactionTitle = ref('') // 거래명
 const amount = ref(0) // 금액
@@ -78,6 +83,8 @@ const isExpense = computed(() => categoryType.value === 'Expense')
 
 onMounted(async () => {
   try {
+    console.log(transactionId)
+
     const transResponse = await axios.get(BASEURI + '/transactions')
     const catResponse = await axios.get(BASEURI + '/categories')
 

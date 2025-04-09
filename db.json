@@ -402,21 +402,32 @@
       "day": null,
       "week": null,
       "month": null,
-      "amount": 600000,
+      "amount": 1000000,
       "memo": "돈 나가는 날..."
     },
     {
-      "id": "SM12",
-      "title": "부모님 용돈",
+      "id": "1744163505567",
       "member_id": "12CD",
-      "category_id": "3333",
-      "type": "Income",
-      "cycle": "monthly",
-      "day": null,
+      "title": "123",
+      "type": "Expense",
+      "category_id": "0000",
+      "cycle": "daily",
+      "day": "매일",
       "week": null,
       "month": null,
-      "amount": 200000,
-      "memo": "엄마 용돈"
+      "amount": 200000
+    },
+    {
+      "id": "1744164354623",
+      "member_id": "12CD",
+      "title": "4",
+      "type": "Expense",
+      "category_id": "0000",
+      "cycle": "daily",
+      "day": "매일",
+      "week": null,
+      "month": null,
+      "amount": 10000
     }
   ]
 }

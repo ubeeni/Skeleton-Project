@@ -4,6 +4,9 @@
     <div class="content">
       <!-- 왼쪽 패널 -->
       <div class="left-panel">
+        <div class="left-header">
+          <span class="bodySemibold18px">카테고리 기본값</span>
+        </div>
         <div class="select-group">
           <span class="bodySemibold18px">수입</span>
           <SelectMed
@@ -248,7 +251,8 @@ onMounted(async () => {
   align-items: center;
 }
 
-.right-header {
+.right-header,
+.left-header {
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <span class="titleBold24px title">프로필</span>
+    <span class="titleBold24px">프로필</span>
 
     <div class="form-row">
       <span class="bodySemibold18px">이름</span>

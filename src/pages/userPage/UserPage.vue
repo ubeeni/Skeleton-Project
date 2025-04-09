@@ -3,12 +3,12 @@
     <!-- 프로필 -->
     <section class="section">
       <div class="section-header">
-        <h2 class="section-title">프로필</h2>
-        <router-link :to="`/user/${userId}/edit`" class="edit-link">수정</router-link>
+        <span class="titleBold24px">프로필</span>
+        <router-link :to="`/user/${userId}/edit`" class="bodyRegular16px">수정</router-link>
       </div>
       <div class="item">
-        <span class="label">이름</span>
-        <span class="value">{{ user?.name }}</span>
+        <span class="bodySemibold18px">이름</span>
+        <span class="bodyRegular18px">{{ user?.name }}</span>
       </div>
     </section>
 
@@ -18,16 +18,25 @@
     <!-- 사용자 설정 -->
     <section class="section">
       <div class="section-header">
-        <h2 class="section-title">사용자 설정</h2>
-        <router-link :to="`/user/${userId}/settings`" class="edit-link">수정</router-link>
+        <span class="titleBold24px">사용자 설정</span>
+        <router-link :to="`/user/${userId}/settings`" class="bodyRegular16px">수정</router-link>
       </div>
       <div class="item">
-        <span class="label">카테고리 기본값 설정</span>
-        <span class="value">미분류</span>
+        <span class="bodySemibold18px">카테고리 기본값</span>
+        <span class="bodyRegular18px">
+          <span :style="{ color: 'var(--color-income)' }">{{ user?.incomeDefault }}</span>
+          <span> | </span>
+          <span :style="{ color: 'var(--color-expense)' }">{{ user?.expenseDefault }}</span>
+        </span>
       </div>
+
       <div class="item">
-        <span class="label">기본 지출</span>
-        <span class="value">스타벅스</span>
+        <span class="bodySemibold18px">기본 지출</span>
+        <ul>
+          <li v-for="item in quickOptions" :key="item.id" class="bodyRegular18px">
+            {{ formatOption(item) }}
+          </li>
+        </ul>
       </div>
     </section>
   </div>
@@ -41,13 +50,29 @@ import axios from 'axios'
 const route = useRoute()
 const userId = route.params.id
 const user = ref(null)
+const quickOptions = ref([])
+
+const fetchQuickOptions = async () => {
+  const res = await axios.get('http://localhost:3000/quickAddOptions')
+  const userData = res.data.filter((item) => item.member_id === userId)
+  quickOptions.value = [...userData]
+}
+
+const formatOption = (item) => {
+  const dayText =
+    item.day || (item.week ? `매주 ${item.week}` : '') || (item.month ? `매월 ${item.month}일` : '')
+  return `${item.title} | ${dayText} | ${item.amount.toLocaleString()}원`
+}
 
 const fetchUser = async () => {
   const res = await axios.get(`http://localhost:3000/members/${userId}`)
   user.value = res.data
 }
 
-onMounted(fetchUser)
+onMounted(async () => {
+  fetchUser()
+  fetchQuickOptions()
+})
 </script>
 
 <style scoped>
@@ -66,7 +91,7 @@ onMounted(fetchUser)
 /* 세로줄 */
 .divider {
   width: 1px;
-  background-color: black;
+  background-color: var(--color-light);
   margin: 0 40px;
   align-self: stretch;
 }
@@ -77,18 +102,6 @@ onMounted(fetchUser)
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-}
-
-.section-title {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.edit-link {
-  font-size: 14px;
-  color: inherit;
-  text-decoration: none;
-  cursor: pointer;
 }
 
 /* 항목 */

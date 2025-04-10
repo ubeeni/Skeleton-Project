@@ -418,6 +418,24 @@
       "date": "2025-04-05T11:18:00",
       "memo": "",
       "id": "9b8f"
+    },
+    {
+      "id": "7786",
+      "title": "11",
+      "category_id": "8888",
+      "type": "Expense",
+      "amount": 11,
+      "date": "2025-04-10T16:09:50",
+      "memo": "1"
+    },
+    {
+      "id": "51bb",
+      "title": "11ㄹㄹ",
+      "category_id": "3333",
+      "type": "Income",
+      "amount": 213,
+      "date": "2025-04-10T09:10:00",
+      "memo": ""
     }
   ],
   "quickAddOptions": [

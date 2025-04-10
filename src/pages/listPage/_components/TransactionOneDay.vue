@@ -5,7 +5,7 @@
       <div class="summary bodyRegular16px">{{ formattedTotal }} {{ items.length }}건</div>
     </div>
     <div class="items">
-      <ListItem v-for="item in items" :key="item.id" :item="item" :categoryMap="categoryMap" />
+      <ListItem v-for="item in sortedItems" :key="item.id" :item="item" :categoryMap="categoryMap" />
     </div>
   </div>
 </template>
@@ -37,6 +37,12 @@ const formattedTotal = computed(() => {
   const sign = total.value >= 0 ? '+' : '-'
   return `${sign}${Math.abs(total.value).toLocaleString()}원`
 })
+
+const sortedItems = computed(() =>
+  [...props.items].sort((a, b) => {
+    return dayjs(b.date).valueOf() - dayjs(a.date).valueOf()
+  })
+)
 </script>
 
 <style scoped>

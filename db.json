@@ -363,6 +363,53 @@
       "amount": 200000,
       "date": "2025-04-09",
       "memo": "엄마 용돈"
+    },
+    {
+      "id": "8b99",
+      "title": "커피 수혈",
+      "member_id": "12CD",
+      "category_id": "0000",
+      "type": "Expense",
+      "amount": 2000,
+      "date": "2025-04-09",
+      "memo": "나는야 커피 자판기"
+    },
+    {
+      "id": "4fa3",
+      "title": "커피 수혈",
+      "member_id": "12CD",
+      "category_id": "0000",
+      "type": "Expense",
+      "amount": 2000,
+      "date": "2025-04-09",
+      "memo": "나는야 커피 자판기"
+    },
+    {
+      "id": "a242",
+      "title": "123",
+      "member_id": "12CD",
+      "category_id": "0000",
+      "type": "Expense",
+      "amount": 200000,
+      "date": "2025-04-09"
+    },
+    {
+      "id": "f6e3",
+      "title": "용돈",
+      "category_id": "0000",
+      "type": "Expense",
+      "amount": 123,
+      "date": "2025-04-09T17:24:26",
+      "memo": ""
+    },
+    {
+      "id": "3d81",
+      "title": "임시 추가",
+      "category_id": "1111",
+      "type": "Income",
+      "amount": 456,
+      "date": "2025-04-09T17:25:52",
+      "memo": ""
     }
   ],
   "quickAddOptions": [

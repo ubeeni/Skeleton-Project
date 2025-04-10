@@ -84,6 +84,9 @@ import BtnDual from '@/components/button/BtnDual.vue'
 import InputLg from '@/components/input/InputLg.vue'
 import InputMed from '@/components/input/InputMed.vue'
 import InputSm from '@/components/input/InputSm.vue'
+import SelectLg from '@/components/input/SelectLg.vue'
+import SelectMed from '@/components/input/SelectMed.vue'
+import SelectSm from '@/components/input/SelectSm.vue'
 
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -194,11 +197,9 @@ const removeNonDigits = (e) => {
 }
 
 const selectType = (type) => {
-  categoryType.value = type
   const category = allCategories.find(
-    (category) => category.name === '미분류' && category.type === type,
+    (category) => category.type === type && category.name === '미분류',
   )
-  console.log('selectedCategory : ', category)
   categoryId.value = category.id
 }
 
@@ -233,6 +234,11 @@ const updateTransaction = async () => {
 
     if (response.status === 200) {
       console.log('수정 성공')
+      router.push({
+        name: 'detail',
+        params: { action: 'view' },
+        state: { from: prevPage.value, transaction_id: transactionId.value },
+      })
     } else {
       console.log('수정 실패')
     }

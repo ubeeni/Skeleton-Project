@@ -3,7 +3,6 @@
     <div class="modal-box">
       <h3 class="titleBold24px">고정 수입/지출 수정</h3>
       <div class="input-group">
-        <!-- 구분 (수입 / 지출 버튼) -->
         <div class="form-row-dual">
           <BtnDual
             :is-income-active="editItem.type === 'Income'"
@@ -12,7 +11,7 @@
             @clickExpense="editItem.type = 'Expense'"
           />
           <InputMed
-            v-model="editItem.amount"
+            v-model.number="editItem.amount"
             type="number"
             :class="{ error: (!editItem.amount || editItem.amount <= 0) && triedSubmit }"
             placeholder="금액을 입력하세요"
@@ -52,15 +51,21 @@
               v-if="editItem.cycle === 'weekly'"
               :options="weeklyOptions"
               v-model="editItem.week"
+              :class="{ error: (!editItem.week || editItem.week === '') && triedSubmit }"
               placeholder="요일 선택"
             />
             <InputMed
               v-if="editItem.cycle === 'monthly'"
               v-model="editItem.month"
-              placeholder="예: 15"
+              :class="{
+                error:
+                  (!editItem.month || editItem.month < 1 || editItem.month > 31) && triedSubmit,
+              }"
+              placeholder="1 ~ 31일까지 입력 가능합니다."
               type="number"
             />
             <InputMed v-if="editItem.cycle === 'daily'" value="매일" disabled />
+            <InputMed v-if="editItem.cycle === 'onetime'" value="반복 없음" disabled />
           </div>
         </div>
         <!-- 메모 -->
@@ -95,6 +100,7 @@ const props = defineProps({
 })
 
 const cycleOptions = [
+  { value: 'onetime', label: '반복 없음' },
   { value: 'daily', label: '매일' },
   { value: 'weekly', label: '매주' },
   { value: 'monthly', label: '매월' },
@@ -115,20 +121,34 @@ const emit = defineEmits(['close', 'update', 'delete'])
 const editItem = ref({ ...props.option })
 const triedSubmit = ref(false)
 
-watch(
-  () => props.option,
-  (newVal) => {
-    const copied = { ...newVal }
+const prevCategoryByType = ref({
+  Income: null,
+  Expense: null,
+})
 
-    // amount가 문자열이면 숫자로 변환
-    if (typeof copied.amount === 'string') {
-      const parsed = Number(copied.amount)
-      copied.amount = isNaN(parsed) ? 0 : parsed
+watch(
+  () => editItem.value.type,
+  (newType, oldType) => {
+    // 현재 type에서 선택한 카테고리 저장
+    if (oldType && editItem.value.category_id) {
+      prevCategoryByType.value[oldType] = editItem.value.category_id
     }
 
-    editItem.value = copied
+    // 이전에 저장해둔 카테고리가 있다면 복원
+    const prevCategory = prevCategoryByType.value[newType]
+
+    if (prevCategory) {
+      editItem.value.category_id = prevCategory
+    } else {
+      // 없으면 미분류 설정
+      const defaultCategory = props.categories.find(
+        (c) => c.name === '미분류' && c.type === newType,
+      )
+      if (defaultCategory) {
+        editItem.value.category_id = defaultCategory.id
+      }
+    }
   },
-  { immediate: true },
 )
 
 const filteredCategories = computed(() =>
@@ -137,9 +157,48 @@ const filteredCategories = computed(() =>
 
 const update = () => {
   triedSubmit.value = true
-  if (!editItem.value.title || !editItem.value.amount || editItem.value.amount <= 0) {
-    alert('거래명과 금액은 필수 항목입니다.')
+  const errors = []
+
+  if (!editItem.value.amount || editItem.value.amount <= 0) {
+    errors.push('금액은 0보다 커야 합니다.')
+  }
+
+  if (!editItem.value.title) {
+    errors.push('거래명을 입력해주세요.')
+  }
+
+  if (editItem.value.cycle === 'monthly') {
+    const day = editItem.value.month
+    if (!day || day < 1 || day > 31) {
+      errors.push('1 ~ 31일 중 반복할 날짜를 선택해주세요.')
+    }
+  }
+
+  if (editItem.value.cycle === 'weekly') {
+    if (!editItem.value.week) {
+      errors.push('반복할 요일을 선택해주세요.')
+    }
+  }
+
+  if (errors.length > 0) {
+    alert('입력값을 확인해주세요:\n\n' + errors.join('\n'))
     return
+  }
+
+  if (editItem.value.cycle === 'daily') {
+    editItem.value.day = '매일'
+    editItem.value.week = null
+    editItem.value.month = null
+  } else if (editItem.value.cycle === 'weekly') {
+    editItem.value.day = null
+    editItem.value.month = null
+  } else if (editItem.value.cycle === 'monthly') {
+    editItem.value.day = null
+    editItem.value.week = null
+  } else if (editItem.value.cycle === 'onetime') {
+    editItem.value.day = null
+    editItem.value.week = null
+    editItem.value.month = null
   }
 
   emit('update', editItem.value) // ⬅️ 상위에 수정 내용 전달
@@ -205,7 +264,8 @@ h3 {
   gap: 2rem;
 }
 
-input.error {
+input.error,
+select.error {
   border: 1px solid red;
 }
 

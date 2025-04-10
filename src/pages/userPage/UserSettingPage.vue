@@ -155,8 +155,7 @@ const formatOption = (item) => {
     (item.week ? `매주 ${item.week}` : '') ||
     (item.month ? `매월 ${item.month}일` : '') ||
     `반복 없음`
-  const memoText = item.memo ? ` | ${item.memo}` : ''
-  return `${item.title} | ${dayText} | ${item.amount.toLocaleString()}원${memoText}`
+  return `${item.title} | ${dayText} | ${item.amount.toLocaleString()}원`
 }
 
 // 추가/수정/삭제 핸들러

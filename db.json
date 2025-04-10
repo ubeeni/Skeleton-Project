@@ -410,6 +410,16 @@
       "amount": 456,
       "date": "2025-04-09T17:25:52",
       "memo": ""
+    },
+    {
+      "id": "a4a6",
+      "title": "월세",
+      "member_id": "12CD",
+      "category_id": "6666",
+      "type": "Expense",
+      "amount": 1000000,
+      "date": "2025-04-10",
+      "memo": "돈 나가는 날..."
     }
   ],
   "quickAddOptions": [
@@ -430,7 +440,7 @@
       "id": "PIG7",
       "title": "주간 저금",
       "member_id": "12CD",
-      "category_id": "0000",
+      "category_id": "7777",
       "type": "Expense",
       "cycle": "weekly",
       "day": null,
@@ -443,7 +453,7 @@
       "id": "SMFM",
       "title": "월세",
       "member_id": "12CD",
-      "category_id": "0000",
+      "category_id": "6666",
       "type": "Expense",
       "cycle": "onetime",
       "day": null,
@@ -456,26 +466,13 @@
       "id": "1744251142237",
       "member_id": "12CD",
       "title": "1313",
-      "type": "Expense",
-      "category_id": "1111",
-      "cycle": "daily",
+      "type": "Income",
+      "category_id": "2222",
+      "cycle": "weekly",
       "day": null,
       "week": "화요일",
       "month": null,
       "amount": 1313,
-      "memo": ""
-    },
-    {
-      "id": "1744252300622",
-      "member_id": "12CD",
-      "title": "12",
-      "type": "Expense",
-      "category_id": "0000",
-      "cycle": "onetime",
-      "day": null,
-      "week": null,
-      "month": null,
-      "amount": 21,
       "memo": ""
     }
   ]

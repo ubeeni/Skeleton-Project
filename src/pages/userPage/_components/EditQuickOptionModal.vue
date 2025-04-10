@@ -137,6 +137,16 @@ watch(
   { immediate: true },
 )
 
+watch(
+  () => editItem.value.type,
+  (newType) => {
+    const defaultCategory = props.categories.find((c) => c.name === '미분류' && c.type === newType)
+    if (defaultCategory) {
+      editItem.value.category_id = defaultCategory.id
+    }
+  },
+)
+
 const filteredCategories = computed(() =>
   props.categories.filter((cat) => cat.type === editItem.value.type),
 )

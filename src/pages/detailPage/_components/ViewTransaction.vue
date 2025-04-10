@@ -1,38 +1,52 @@
 <template>
-  <div class="body">
-    <h3>상세보기</h3>
-    <br />
-
-    <div class="form-group">
-      <label>금액</label>
-      <InputLg type="number" placeholder="금액을 입력하세요" v-model.number="amount" readonly />
+  <div class="form-container">
+    <div class="form-body">
+      <div class="form-body-left">
+        <div class="form-input">
+          <span>{{ amount }} 원</span>
+          <BtnDual :is-income-active="isIncome" :is-expense-active="isExpense" />
+        </div>
+        <div class="form-input">
+          <label>거래명</label>
+          <InputLg
+            type="text"
+            placeholder="거래명을 입력하세요"
+            v-model="transactionTitle"
+            readonly
+          />
+        </div>
+      </div>
+      <div class="form-body-right">
+        <div class="form-input">
+          <label>카테고리</label>
+          <InputMed
+            type="text"
+            placeholder="카테고리를 선택하세요"
+            v-model="categoryName"
+            readonly
+          />
+        </div>
+        <div class="form-input">
+          <label>날짜</label>
+          <InputMed type="text" placeholder="날짜를 선택하세요" v-model="dateDisplay" readonly />
+        </div>
+        <div class="form-input">
+          <label>메모</label>
+          <InputMed
+            type="text"
+            placeholder="메모는 선택사항입니다"
+            v-model="memo"
+            color="var(--color-primary)"
+            readonly
+          />
+        </div>
+      </div>
     </div>
-
-    <BtnDual :is-income-active="isIncome" :is-expense-active="isExpense" />
-
-    <div class="form-group">
-      <label>거래명</label>
-      <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionTitle" readonly />
-    </div>
-
-    <div class="form-group">
-      <label>카테고리</label>
-      <InputLg type="text" placeholder="카테고리를 선택하세요" v-model="categoryName" readonly />
-    </div>
-
-    <div class="form-group">
-      <label>날짜</label>
-      <InputLg type="text" placeholder="날짜를 선택하세요" v-model="dateDisplay" readonly />
-    </div>
-
-    <div class="form-group">
-      <label>메모</label>
-      <InputLg type="text" placeholder="메모는 선택사항입니다" v-model="memo" readonly />
-    </div>
-
-    <div class="actions">
-      <BtnLg text="수정" @click="gotoUpdate" color="var(--color-primary)" />
-      <BtnLg text="취소" @click="cancle" color="var(--color-primary)" />
+    <div class="form-footer">
+      <div class="form-btn-container">
+        <BtnLg text="수정" @click="gotoUpdate" color="var(--color-primary)" />
+        <BtnLg text="취소" @click="cancle" color="var(--color-light)" />
+      </div>
     </div>
   </div>
 </template>
@@ -145,23 +159,76 @@ const cancle = () => {
 <!-- ----------------------------------- style  ----------------------------------- -->
 
 <style scoped>
-* {
-  padding: 0;
-  margin: 0;
-}
-.body {
-  width: 500px;
+.form-container {
+  max-width: 100%;
   margin: 0 auto;
-  font-family: sans-serif;
-  padding: 30px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
-.form-group {
-  margin-bottom: 15px;
+.form-body {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
 }
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
+
+.form-body-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-body-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+  gap: 16px;
+}
+
+.form-input span {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.form-input label {
+  white-space: nowrap; /* 줄바꿈 방지 */
+  font-size: 16px;
+  flex-shrink: 0; /* 작아지지 않게 */
+}
+
+.text-like-input {
+  width: auto;
+  min-width: 1ch;
+  max-width: 15ch;
+  font-size: 18px;
+  background: transparent;
+  border: none;
+}
+
+.form-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.form-btn-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
 }
 </style>

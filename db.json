@@ -355,14 +355,13 @@
       "memo": "매주 모아서..."
     },
     {
-      "id": "a710",
       "title": "부모님 용돈",
-      "member_id": "12CD",
       "category_id": "3333",
       "type": "Income",
       "amount": 200000,
-      "date": "2025-04-09",
-      "memo": "엄마 용돈"
+      "date": "2025-04-03T09:00:00",
+      "memo": "엄마 용돈",
+      "id": "a710"
     },
     {
       "id": "8b99",
@@ -403,12 +402,39 @@
       "memo": ""
     },
     {
-      "id": "3d81",
       "title": "임시 추가",
       "category_id": "1111",
       "type": "Income",
       "amount": 456,
-      "date": "2025-04-09T17:25:52",
+      "date": "2025-04-10T01:25:00",
+      "memo": "",
+      "id": "3d81"
+    },
+    {
+      "title": "수정 할때 날짜 저장되는지 확인",
+      "category_id": "BBBB",
+      "type": "Expense",
+      "amount": 456789,
+      "date": "2025-04-05T11:18:00",
+      "memo": "",
+      "id": "9b8f"
+    },
+    {
+      "id": "7786",
+      "title": "11",
+      "category_id": "8888",
+      "type": "Expense",
+      "amount": 11,
+      "date": "2025-04-10T16:09:50",
+      "memo": "1"
+    },
+    {
+      "id": "51bb",
+      "title": "11ㄹㄹ",
+      "category_id": "3333",
+      "type": "Income",
+      "amount": 213,
+      "date": "2025-04-10T09:10:00",
       "memo": ""
     },
     {

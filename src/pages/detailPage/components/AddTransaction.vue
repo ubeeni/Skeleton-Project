@@ -24,16 +24,12 @@
       :is-expense-active="isExpense"
     />
 
-    <div class="form-group">
-      <label>카테고리</label>
-      <InputLg type="text" placeholder="카테고리를 선택하세요" v-model="categoryName" readonly />
-      <select id="category" v-model="categoryId">
-        <option value="" disabled>카테고리를 선택하세요</option>
-        <option v-for="category in filteredCategories" :key="category.id" :value="category.id">
-          {{ category.name }}
-        </option>
-      </select>
-    </div>
+    <SelectLg
+      v-model="categoryId"
+      :options="filteredCategory"
+      placeholder="카테고리"
+      @onChange="handleCategorySelect"
+    />
 
     <div class="form-group">
       <label>날짜</label>
@@ -49,7 +45,7 @@
       <div class="modal-content">
         <h3>날짜와 시간 선택</h3>
         <Datepicker
-          v-model="date"
+          v-model="dateStr"
           :enable-time-picker="true"
           time-picker-inline
           :input-props="{ readonly: true }"
@@ -70,6 +66,12 @@
       <BtnLg text="추가" @click="addTransaction" color="var(--color-primary)" />
       <BtnLg text="취소" @click="cancle" color="var(--color-semidark)" />
     </div>
+
+    <div>
+      <p>categoryId : {{ categoryId }}</p>
+      <p>categoryType : {{ categoryType }}</p>
+      <p>categoryName : {{ categoryName }}</p>
+    </div>
   </div>
 </template>
 
@@ -83,6 +85,9 @@ import BtnDual from '@/components/button/BtnDual.vue'
 import InputLg from '@/components/input/InputLg.vue'
 import InputMed from '@/components/input/InputMed.vue'
 import InputSm from '@/components/input/InputSm.vue'
+import SelectLg from '@/components/input/SelectLg.vue'
+import SelectMed from '@/components/input/SelectMed.vue'
+import SelectSm from '@/components/input/SelectSm.vue'
 
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -104,29 +109,44 @@ const amount = ref(0) // 금액
 
 const memo = ref('') // 메모
 
-const date = ref('') // 날짜
-const isoDate = computed(() => toKSTISOString(date.value).slice(0, 19)) // 날짜 (iso 표준 - 실제 DB 저장 형식)
-const dateDisplay = computed(() => (date.value ? date.value.toLocaleString('ko-KR') : '')) // 화면에 표시될 날짜 형식
-
-// 선택된 카테고리 ID
-const categoryId = ref('0000')
+const dateStr = ref('') // 날짜 (문자열)
+const dateObj = computed(() => {
+  return !dateStr.value
+    ? ''
+    : typeof dateStr.value === 'string'
+      ? new Date(dateStr.value)
+      : dateStr.value
+}) // 날짜 (Date 객체)
+const dateDisplay = computed(() => (dateObj.value ? dateObj.value.toLocaleString('ko-KR') : '')) // 화면에 표시될 날짜 형식
+const isoDate = computed(() => toKSTISOString(dateStr.value).slice(0, 19)) // 날짜 (iso 표준 - 실제 DB 저장 형식)
 
 // 모든 카테고리 목록 (id, name, type)
 const allCategories = reactive([])
 
-// 카테고리 타입 (수입 or 지출)
-const categoryType = ref('')
+// 선택된 카테고리 ID
+const categoryId = ref('0000')
 
-// type에 따른 카테고리 목록 (수입 -> [미분류, 월급, 용돈, 기타수입])
-const filteredCategories = computed(() => {
-  return allCategories.filter((category) => category.type === categoryType.value)
+// 선택된 카테고리 (type, name)
+const category = computed(() => allCategories.find((category) => category.id === categoryId.value))
+
+// 카테고리 타입 (수입 or 지출)
+const categoryType = computed(() => {
+  return category.value?.type || ''
 })
 
 // 카테고리 이름
 const categoryName = computed(() => {
-  const category = allCategories.find((category) => category.id === categoryId.value)
+  return category.value?.name || ''
+})
 
-  return category ? category.name : ''
+// type에 따른 카테고리 목록 [ {label : name, value : id} ]
+const filteredCategory = computed(() => {
+  return allCategories
+    .filter((category) => category.type === categoryType.value)
+    .map((category) => ({
+      value: category.id,
+      label: category.name,
+    }))
 })
 
 const showModal = ref(false) // 모달창 띄울 지 여부
@@ -138,25 +158,36 @@ const isIncome = computed(() => categoryType.value === 'Income')
 const isExpense = computed(() => categoryType.value === 'Expense')
 
 function clickIncome() {
+  // console.log('수입 클릭!')
   selectType('Income')
 }
 function clickExpense() {
+  // console.log('지출 클릭!')
   selectType('Expense')
+}
+
+const handleCategorySelect = () => {
+  categoryId.value = allCategories.find(
+    (category) =>
+      category.type === categoryType.value && category.name === selectedCategoryName.value,
+  )
 }
 
 onMounted(async () => {
   const historyState = window.history.state
   prevPage.value = historyState.from
 
-  console.log('add / prevPage : ', prevPage.value)
-
   try {
     const response = await axios.get(BASEURI + '/categories')
-    allCategories.splice(0, allCategories.length, ...response.data)
-    date.value = new Date()
+    dateStr.value = new Date()
 
-    const category = allCategories.find((category) => category.id === categoryId.value)
-    categoryType.value = category.type
+    if (response.status === 200) {
+      console.log('성공')
+      allCategories.splice(0, allCategories.length, ...response.data)
+      console.log(allCategories)
+    } else {
+      console.log('실패')
+    }
   } catch (error) {
     console.log('에러 발생 : ' + error)
     console.log(error.stack)
@@ -176,11 +207,10 @@ const removeNonDigits = (e) => {
 }
 
 const selectType = (type) => {
-  categoryType.value = type
   const category = allCategories.find(
-    (category) => category.name === '미분류' && category.type === type,
+    (category) => category.type === type && category.name === '미분류',
   )
-  console.log('category : ', category)
+  // console.log(category.id)
   categoryId.value = category.id
 }
 
@@ -194,7 +224,7 @@ const initInputData = () => {
   transactionTitle.value = ''
   amount.value = 0
   categoryId.value = '0000'
-  date.value = ''
+  dateStr.value = ''
   memo.value = ''
 }
 

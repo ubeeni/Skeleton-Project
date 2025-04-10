@@ -37,4 +37,15 @@ defineEmits(['update:modelValue'])
   padding: 1.25rem 1rem;
   border: 1px solid var(--color-light);
 }
+
+@media screen and (max-width: 767px) {
+  /** Mobile */
+  .select-lg {
+    width: 22.125rem;
+    height: 3.75rem;
+    border-radius: 1rem;
+    padding: 1.25rem 1rem;
+    border: 1px solid var(--color-light);
+  }
+}
 </style>

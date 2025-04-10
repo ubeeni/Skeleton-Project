@@ -3,7 +3,7 @@
     <!-- 월 이동 -->
     <div class="month-nav">
       <img :src="backButton" alt="back" @click="handlePrev" />
-      <span class="titleBold24px"> {{ rangeText }} </span>
+      <span class="titleBold24px range-text" @click="resetToToday" > {{ rangeText }} </span>
       <img :src="forwardButton" alt="forward" @click="handleNext" />
     </div>
 
@@ -28,6 +28,12 @@
     </div>
 
     <div class="sideBar-bottom">
+      <!--초기화 버튼-->
+      <div class="reset-container" @click="resetFilters">
+        <img :src="resetButton" alt="리셋아이콘" />
+        <span class="bodyRegular18px" > 초기화</span>
+      </div>
+
       <!-- 날짜 범위 -->
       <div class="range">
         <div class="range-name">범위</div>
@@ -92,13 +98,23 @@ import dayjs from 'dayjs'
 import BtnDual from '@/components/button/BtnDual.vue'
 import backButton from '@/assets/icons/IconArrowBack.svg'
 import forwardButton from '@/assets/icons/IconArrowForward.svg'
-
+import resetButton from '@/assets/icons/IconReset.svg'
 
 const props = defineProps({
   categories: Array,
   transactions: Array,
   filteredTransactions: Array,
 })
+
+const resetFilters = () => {
+  selectedRange.value = '1개월'
+  isIncome.value = false
+  isExpense.value = false
+  selectedIncome.value = []
+  selectedExpense.value = []
+  emitFilters()
+}
+
 const emit = defineEmits(['filter-change'])
 
 const currentDate = ref(dayjs())
@@ -113,6 +129,13 @@ const selectedExpense = ref([])
 
 const options = ['1주', '1개월', '3개월']
 
+function resetToToday() {
+  
+  currentDate.value = dayjs()
+  selectedRange.value = '1개월'
+  resetFilters()
+}
+
 const rangeText = computed(() => {
   const date = currentDate.value
 
@@ -123,10 +146,10 @@ const rangeText = computed(() => {
   }
 
   if (selectedRange.value === '1개월') {
-    if(date.year()=='2025') {
+    if (date.year() == '2025') {
       return `${date.month() + 1}월`
     } else {
-      return `${date.year()}년 `+`${date.month() + 1}월`
+      return `${date.year()}년 ` + `${date.month() + 1}월`
     }
   }
 
@@ -141,22 +164,24 @@ const rangeText = computed(() => {
 const totalIncome = computed(() =>
   props.filteredTransactions
     .filter((t) => t.type === 'Income')
-    .reduce((sum, t) => sum + t.amount, 0)
+    .reduce((sum, t) => sum + t.amount, 0),
 )
 const totalExpense = computed(() =>
   props.filteredTransactions
     .filter((t) => t.type === 'Expense')
-    .reduce((sum, t) => sum + t.amount, 0)
+    .reduce((sum, t) => sum + t.amount, 0),
 )
 const netTotal = computed(() => totalIncome.value - totalExpense.value)
 const totalColorClass = computed(() =>
-  netTotal.value > 0 ? 'color-positive' : netTotal.value < 0 ? 'color-negative' : ''
+  netTotal.value > 0 ? 'color-positive' : netTotal.value < 0 ? 'color-negative' : '',
 )
 
 const handlePrev = () => {
   if (selectedRange.value === '1주') currentDate.value = currentDate.value.subtract(1, 'week')
-  else if (selectedRange.value === '1개월') currentDate.value = currentDate.value.subtract(1, 'month')
-  else if (selectedRange.value === '3개월') currentDate.value = currentDate.value.subtract(3, 'month')
+  else if (selectedRange.value === '1개월')
+    currentDate.value = currentDate.value.subtract(1, 'month')
+  else if (selectedRange.value === '3개월')
+    currentDate.value = currentDate.value.subtract(3, 'month')
   emitFilters()
 }
 const handleNext = () => {
@@ -213,8 +238,6 @@ const selectExpense = (id) => {
 const incomeCategories = computed(() => props.categories.filter((c) => c.type === 'Income'))
 const expenseCategories = computed(() => props.categories.filter((c) => c.type === 'Expense'))
 
-
-
 // 필터 상태 상위 컴포넌트로 전달
 const emitFilters = () => {
   emit('filter-change', {
@@ -226,6 +249,7 @@ const emitFilters = () => {
     expenseCategoryIds: selectedExpense.value,
   })
 }
+
 </script>
 
 <style scoped>
@@ -249,7 +273,9 @@ const emitFilters = () => {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  position: relative;
 }
+
 .summary .total-line {
   margin: 2rem 0;
   border-top: 1px solid var(--color-light);
@@ -264,6 +290,25 @@ const emitFilters = () => {
   display: flex;
   align-items: center;
   gap: 1rem;
+  justify-content: space-between;
+}
+
+.reset-container {
+  cursor: pointer;
+  display: flex;
+  align-items: center; /* 세로 가운데 정렬 */
+  justify-content: flex-end; /* 오른쪽 정렬 */
+  gap: 4px;
+  width: 100%;
+  cursor: pointer;
+}
+.reset-btn {
+  margin-left: auto;
+  font-size: 14px;
+  color: var(--color-semidark);
+  text-decoration: underline;
+  color: var(--SemiDark, #797979);
+  text-align: center;
 }
 .range-list {
   display: flex;
@@ -300,5 +345,8 @@ const emitFilters = () => {
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 0.25rem;
+}
+.range-text {
+  cursor: pointer;
 }
 </style>

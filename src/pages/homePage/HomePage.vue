@@ -4,10 +4,14 @@
       <Calendar />
     </div>
     <div class="report-divider"></div>
-    <div class="report-title titleBold24px">소비리포트</div>
+    <div class="report-title titleBold24px">
+      <RouterLink :to="{ name: 'report' }">1개월 소비리포트</RouterLink>
+    </div>
     <div class="report-wrapper bodySemibold18px">
       <div class="report-left">
-        <div class="report-subtitle">소비 분석 그래프</div>
+        <div class="report-subtitle">
+          <RouterLink :to="{ name: 'report', hash: '#line' }">소비 분석 그래프</RouterLink>
+        </div>
         <Line
           :labels="grouped.labels"
           :income-data="grouped.incomeData"
@@ -17,7 +21,9 @@
         />
       </div>
       <div class="report-right">
-        <div class="report-subtitle">지출 카테고리</div>
+        <div class="report-subtitle">
+          <RouterLink :to="{ name: 'report', hash: '#doughnut' }">지출 카테고리</RouterLink>
+        </div>
         <Doughnut :labels="doughnutData.labels" :series="doughnutData.series" />
       </div>
     </div>

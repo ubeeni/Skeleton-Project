@@ -430,6 +430,36 @@
       "amount": "2000",
       "date": "2025-04-10",
       "memo": "나는야 커피 자판기"
+    },
+    {
+      "id": "4d57",
+      "title": "월세",
+      "member_id": "12CD",
+      "category_id": "6666",
+      "type": "Expense",
+      "amount": 1000000,
+      "date": "2025-04-10",
+      "memo": "돈 나가는 날..."
+    },
+    {
+      "id": "5212",
+      "title": "월세",
+      "member_id": "12CD",
+      "category_id": "6666",
+      "type": "Expense",
+      "amount": 1000000,
+      "date": "2025-04-10",
+      "memo": "돈 나가는 날..."
+    },
+    {
+      "id": "2441",
+      "title": "커피 수혈",
+      "member_id": "12CD",
+      "category_id": "0000",
+      "type": "Expense",
+      "amount": 2000,
+      "date": "2025-04-10",
+      "memo": "나는야 커피 자판기"
     }
   ],
   "quickAddOptions": [

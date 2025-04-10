@@ -30,7 +30,7 @@
       <!-- 오른쪽 패널 -->
       <div class="right-panel">
         <div class="right-header">
-          <span class="bodySemibold18px">고정 수입/지출</span>
+          <span class="bodySemibold18px">고정 수입/지출 (최대 5개)</span>
           <BtnXs :color="'var(--color-secondary)'" :text="`추가`" @click="showAddModal = true" />
         </div>
         <ul>
@@ -104,6 +104,8 @@ const userId = route.params.id
 const showAddModal = ref(false)
 const showEditModal = ref(false)
 const selectedOption = ref(null)
+const originalQuickOptions = ref([])
+
 const hasUnsavedChanges = ref(false)
 
 // 사용자 정보 및 선택된 카테고리
@@ -145,7 +147,14 @@ const fetchCategories = async () => {
 const fetchQuickOptions = async () => {
   const res = await axios.get('http://localhost:3000/quickAddOptions')
   const userData = res.data.filter((item) => item.member_id === userId)
-  quickOptions.value = [...userData]
+  quickOptions.value = JSON.parse(JSON.stringify(userData)) // 현재 상태
+  originalQuickOptions.value = JSON.parse(JSON.stringify(userData)) // 초기 상태
+}
+
+const isQuickOptionsChanged = () => {
+  const current = JSON.stringify(quickOptions.value)
+  const original = JSON.stringify(originalQuickOptions.value)
+  return current !== original
 }
 
 // 항목 포맷
@@ -169,16 +178,20 @@ const handleAddOption = (newOption) => {
 const handleUpdateOption = (updatedItem) => {
   const idx = quickOptions.value.findIndex((opt) => opt.id === updatedItem.id)
   if (idx !== -1) quickOptions.value[idx] = { ...updatedItem }
-  hasUnsavedChanges.value = true
+  hasUnsavedChanges.value = isQuickOptionsChanged()
 }
 
 const handleDeleteOption = (id) => {
   quickOptions.value = quickOptions.value.filter((item) => item.id !== id)
-  hasUnsavedChanges.value = true
+  hasUnsavedChanges.value = isQuickOptionsChanged()
 }
 
 const onCategoryChange = () => {
-  hasUnsavedChanges.value = true
+  const incomeName = findCategoryNameById(selectedIncome.value)
+  const expenseName = findCategoryNameById(selectedExpense.value)
+
+  hasUnsavedChanges.value =
+    incomeName !== user.value.incomeDefault || expenseName !== user.value.expenseDefault
 }
 
 // 저장
@@ -213,6 +226,7 @@ const saveDefaults = async () => {
   ])
 
   alert('저장되었습니다!')
+  originalQuickOptions.value = JSON.parse(JSON.stringify(quickOptions.value))
   hasUnsavedChanges.value = false
   router.push(`/user/${userId}`)
 }

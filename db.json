@@ -412,13 +412,13 @@
       "memo": ""
     },
     {
-      "id": "0cd7",
-      "title": "임시 데이터 추가",
-      "category_id": "FFFF",
+      "title": "수정 할때 날짜 저장되는지 확인",
+      "category_id": "BBBB",
       "type": "Expense",
-      "amount": 123456,
-      "date": "2025-04-09T10:53:00",
-      "memo": "짜잔"
+      "amount": 456789,
+      "date": "2025-04-05T11:18:00",
+      "memo": "",
+      "id": "9b8f"
     }
   ],
   "quickAddOptions": [

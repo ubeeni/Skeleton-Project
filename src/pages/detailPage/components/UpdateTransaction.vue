@@ -24,16 +24,7 @@
       :is-expense-active="isExpense"
     />
 
-    <div class="form-group">
-      <label>카테고리</label>
-      <InputLg type="text" placeholder="카테고리를 선택하세요" v-model="categoryName" readonly />
-      <select id="category" v-model="categoryId">
-        <option value="" disabled>카테고리를 선택하세요</option>
-        <option v-for="category in filteredCategories" :key="category.id" :value="category.id">
-          {{ category.name }}
-        </option>
-      </select>
-    </div>
+    <SelectLg v-model="categoryId" :options="filteredCategory" placeholder="카테고리" />
 
     <div class="form-group">
       <label>날짜</label>
@@ -49,7 +40,7 @@
       <div class="modal-content">
         <h3>날짜와 시간 선택</h3>
         <Datepicker
-          v-model="date"
+          v-model="dateStr"
           :enable-time-picker="true"
           time-picker-inline
           :input-props="{ readonly: true }"
@@ -108,27 +99,47 @@ const transactionTitle = ref('') // 거래명
 
 const amount = ref(0) // 금액
 
-const date = ref('') // 날짜
-const isoDate = computed(() => toKSTISOString(date.value).slice(0, 19)) // 날짜 (iso 표준 - 실제 DB 저장 형식)
-const dateDisplay = computed(() => (date.value ? date.value.toLocaleString('ko-KR') : '')) // 화면에 표시될 날짜 형식
+const dateStr = ref('') // 날짜 (문자열)
+const dateObj = computed(() => {
+  return !dateStr.value
+    ? ''
+    : typeof dateStr.value === 'string'
+      ? new Date(dateStr.value)
+      : dateStr.value
+}) // 날짜 (Date 객체)
+const dateDisplay = computed(() => (dateObj.value ? dateObj.value.toLocaleString('ko-KR') : '')) // 화면에 표시될 날짜 형식
+const isoDate = computed(() => toKSTISOString(dateStr.value).slice(0, 19)) // 날짜 (iso 표준 - 실제 DB 저장 형식)
 
 const memo = ref('') // 메모
+
+// 모든 카테고리 목록 (id, name, type)
+const allCategories = reactive([])
 
 // 선택된 카테고리 ID
 const categoryId = ref('')
 
-const allCategories = reactive([])
+// 선택된 카테고리 (type, name)
+const category = computed(() => allCategories.find((category) => category.id === categoryId.value))
 
-// 선택된 카테고리 타입 (수입 or 지출)
-const categoryType = ref('')
-
-// type에 따른 카테고리 목록 (수입 -> [미분류, 월급, 용돈, 기타수입])
-const filteredCategories = computed(() => {
-  return allCategories.filter((category) => category.type === categoryType.value)
+// 카테고리 타입 (수입 or 지출)
+const categoryType = computed(() => {
+  return category.value?.type || ''
 })
 
-// 선택된 카테고리 이름
-const categoryName = ref('')
+// 카테고리 이름
+const categoryName = computed(() => {
+  return category.value?.name || ''
+})
+
+// type에 따른 카테고리 목록 [ {label : name, value : id} ]
+const filteredCategory = computed(() => {
+  return allCategories
+    .filter((category) => category.type === categoryType.value)
+    .map((category) => ({
+      value: category.id,
+      label: category.name,
+    }))
+})
 
 const showModal = ref(false) // 모달창 띄울 지 여부
 
@@ -159,7 +170,7 @@ onMounted(async () => {
 
     transactionTitle.value = transaction.title
     amount.value = transaction.amount
-    date.value = transaction.date
+    dateStr.value = transaction.date
     memo.value = transaction.memo
 
     categoryId.value = transaction.category_id
@@ -193,7 +204,7 @@ const onlyAllowDigits = (e) => {
 
 const removeNonDigits = (e) => {
   e.target.value = e.target.value.replace(/[^0-9]/g, '')
-  onlyNumber.value = e.target.value
+  // onlyNumber.value = e.target.value
 }
 
 const selectType = (type) => {
@@ -259,6 +270,9 @@ const deleteTransaction = async () => {
 
     if (response.status === 200) {
       console.log('삭제 성공')
+      router.push({
+        name: prevPage.value,
+      })
     } else {
       console.log('삭제 실패')
     }

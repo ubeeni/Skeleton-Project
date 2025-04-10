@@ -31,17 +31,6 @@
       @onChange="handleCategorySelect"
     />
 
-    <!-- <div class="form-group">
-      <label>카테고리</label>
-      <InputLg type="text" placeholder="카테고리를 선택하세요" v-model="categoryName" readonly />
-      <select id="category" v-model="categoryId">
-        <option value="" disabled>카테고리를 선택하세요</option>
-        <option v-for="category in filteredCategories" :key="category.id" :value="category.id">
-          {{ category.name }}
-        </option>
-      </select>
-    </div> -->
-
     <div class="form-group">
       <label>날짜</label>
       <InputLg
@@ -56,7 +45,7 @@
       <div class="modal-content">
         <h3>날짜와 시간 선택</h3>
         <Datepicker
-          v-model="date"
+          v-model="dateStr"
           :enable-time-picker="true"
           time-picker-inline
           :input-props="{ readonly: true }"
@@ -120,9 +109,16 @@ const amount = ref(0) // 금액
 
 const memo = ref('') // 메모
 
-const date = ref('') // 날짜
-const isoDate = computed(() => toKSTISOString(date.value).slice(0, 19)) // 날짜 (iso 표준 - 실제 DB 저장 형식)
-const dateDisplay = computed(() => (date.value ? date.value.toLocaleString('ko-KR') : '')) // 화면에 표시될 날짜 형식
+const dateStr = ref('') // 날짜 (문자열)
+const dateObj = computed(() => {
+  return !dateStr.value
+    ? ''
+    : typeof dateStr.value === 'string'
+      ? new Date(dateStr.value)
+      : dateStr.value
+}) // 날짜 (Date 객체)
+const dateDisplay = computed(() => (dateObj.value ? dateObj.value.toLocaleString('ko-KR') : '')) // 화면에 표시될 날짜 형식
+const isoDate = computed(() => toKSTISOString(dateStr.value).slice(0, 19)) // 날짜 (iso 표준 - 실제 DB 저장 형식)
 
 // 모든 카테고리 목록 (id, name, type)
 const allCategories = reactive([])
@@ -152,9 +148,6 @@ const filteredCategory = computed(() => {
       label: category.name,
     }))
 })
-
-// 유저가 선택한 카테고리 이름
-const selectedCategoryName = ref('')
 
 const showModal = ref(false) // 모달창 띄울 지 여부
 
@@ -186,7 +179,7 @@ onMounted(async () => {
 
   try {
     const response = await axios.get(BASEURI + '/categories')
-    date.value = new Date()
+    dateStr.value = new Date()
 
     if (response.status === 200) {
       console.log('성공')
@@ -231,7 +224,7 @@ const initInputData = () => {
   transactionTitle.value = ''
   amount.value = 0
   categoryId.value = '0000'
-  date.value = ''
+  dateStr.value = ''
   memo.value = ''
 }
 

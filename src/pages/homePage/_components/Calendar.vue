@@ -11,13 +11,15 @@
 
       <!-- 수입/지출 요약 정보 -->
       <div class="summary">
-        <div class="bodyRegular16px">
-          💰 수입:
-          <span style="color: var(--color-dark)"> {{ monthlyIncome.toLocaleString() }}원 </span>
-        </div>
-        <div class="bodyRegular16px">
-          💸 지출:
-          <span style="color: var(--color-dark)"> {{ monthlyExpense.toLocaleString() }}원 </span>
+        <div class="summary-inout">
+          <div class="bodyRegular16px">
+            💰 수입:
+            <span style="color: var(--color-dark)"> {{ monthlyIncome.toLocaleString() }}원 </span>
+          </div>
+          <div class="bodyRegular16px">
+            💸 지출:
+            <span style="color: var(--color-dark)"> {{ monthlyExpense.toLocaleString() }}원 </span>
+          </div>
         </div>
         <div class="bodySemibold18px" style="margin-top: 0.5rem">
           총합:
@@ -27,9 +29,38 @@
           원
         </div>
       </div>
+      <div class="add-buttons" v-if="!isMobile">
+        <BtnMed
+          :color="'var(--color-secondary)'"
+          :text="`빠른추가`"
+          @click="toggleQuickAddDropdown"
+        />
 
-      <!-- 빠른 추가 버튼 -->
-      <div style="height: 2rem"></div>
+        <!-- 빠른 추가 드롭다운 목록 -->
+        <div v-if="showQuickAddDropdown" class="quick-add-dropdown">
+          <button
+            v-for="(option, index) in quickAddOptions"
+            :key="option.id"
+            class="quick-add-option"
+            @click="selectQuickAddOption(option)"
+          >
+            {{ option.title }} {{ option.amount.toLocaleString() }}원
+          </button>
+        </div>
+
+        <!-- 기본 추가 버튼 -->
+        <div style="height: 1rem"></div>
+        <BtnMed :color="'var(--color-primary)'" :text="`기본추가`" @click="moveToAdd" />
+      </div>
+    </div>
+
+    <!-- FullCalendar가 들어가는 영역 -->
+    <div class="calendar-wrapper">
+      <FullCalendar ref="calendarRef" :options="calendarOptions" />
+      <!-- 날짜 클릭 시 모달 표시 -->
+      <Modal v-if="showModal" :date="clickedDate" :data="dailyData" @close="closeModal" />
+    </div>
+    <div class="add-buttons" v-if="isMobile">
       <BtnMed
         :color="'var(--color-secondary)'"
         :text="`빠른추가`"
@@ -52,18 +83,12 @@
       <div style="height: 1rem"></div>
       <BtnMed :color="'var(--color-primary)'" :text="`기본추가`" @click="moveToAdd" />
     </div>
-
-    <!-- FullCalendar가 들어가는 영역 -->
-    <div class="calendar-wrapper">
-      <FullCalendar ref="calendarRef" :options="calendarOptions" />
-      <!-- 날짜 클릭 시 모달 표시 -->
-      <Modal v-if="showModal" :date="clickedDate" :data="dailyData" @close="closeModal" />
-    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useIsMobile } from '@/composables/UseIsMobile'
 import axios from 'axios'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -73,6 +98,8 @@ import forwardButton from '@/assets/icons/IconArrowForward.svg'
 import BtnMed from '@/components/button/BtnMed.vue'
 import Modal from './Modal.vue'
 import { useRouter } from 'vue-router'
+
+const { isMobile } = useIsMobile()
 
 const router = useRouter()
 
@@ -442,6 +469,16 @@ function resetToToday() {
   cursor: pointer;
 }
 
+.add-buttons {
+  margin-top: 2rem;
+}
+
+.summary-inout {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 @media screen and (max-width: 767px) {
   .container {
     display: flex;
@@ -453,26 +490,22 @@ function resetToToday() {
     width: 100%;
     margin-bottom: 1rem;
   }
-
-  /* .calendar-wrapper {
-    width: 100%;
-    margin-left: 0;
-  } */
-
-  /* .month-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 1rem;
-    margin-bottom: 1rem;
-  }
-
   .summary {
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
-    padding: 0 1rem;
-    margin-bottom: 1rem;
-  } */
+    align-items: end;
+  }
+
+  .add-buttons {
+    margin: auto;
+    margin-top: 2rem;
+  }
+
+  .calendar-wrapper {
+    width: 100%;
+    margin-left: 0;
+  }
 
   .quick-add-buttons {
     width: 100%;
@@ -493,4 +526,6 @@ function resetToToday() {
     text-align: center;
   }
 }
+
+
 </style>

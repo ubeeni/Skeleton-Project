@@ -441,4 +441,56 @@ function resetToToday() {
 .month-text {
   cursor: pointer;
 }
+
+@media screen and (max-width: 767px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  /* .calendar-wrapper {
+    width: 100%;
+    margin-left: 0;
+  } */
+
+  /* .month-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .summary {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+    margin-bottom: 1rem;
+  } */
+
+  .quick-add-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .quick-add-buttons button {
+    display: block;
+    margin: 0 auto;
+    width: 80%;
+    font-size: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    text-align: center;
+  }
+}
 </style>

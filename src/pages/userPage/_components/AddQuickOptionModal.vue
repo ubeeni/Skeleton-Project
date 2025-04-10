@@ -85,150 +85,126 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import axios from 'axios'
-import AddQuickOptionModal from '@/pages/userPage/_components/AddQuickOptionModal.vue'
-import EditQuickOptionModal from '@/pages/userPage/_components/EditQuickOptionModal.vue'
+import { ref, computed, watchEffect } from 'vue'
+import { useRoute } from 'vue-router'
+import InputLg from '@/components/input/InputLg.vue'
+import InputMed from '@/components/input/InputMed.vue'
+import SelectLg from '@/components/input/SelectLg.vue'
 import SelectMed from '@/components/input/SelectMed.vue'
 import BtnLg from '@/components/button/BtnLg.vue'
-import BtnXs from '@/components/button/BtnXs.vue'
+import BtnDual from '@/components/button/BtnDual.vue'
+
+const props = defineProps({
+  categories: Array,
+  currentCount: Number,
+})
+
+const emit = defineEmits(['close', 'add'])
 
 const route = useRoute()
-const router = useRouter()
 const userId = route.params.id
 
-const showAddModal = ref(false)
-const showEditModal = ref(false)
-const selectedOption = ref(null)
-const originalQuickOptions = ref([])
-
-const user = ref(null)
-const selectedIncome = ref('')
-const selectedExpense = ref('')
-
-const categories = ref([])
-const quickOptions = ref([])
-
-const incomeCategories = computed(() => categories.value.filter((c) => c.type === 'Income'))
-const expenseCategories = computed(() => categories.value.filter((c) => c.type === 'Expense'))
-
-const fetchUser = async () => {
-  const res = await axios.get(`http://localhost:3000/members/${userId}`)
-  user.value = res.data
-
-  selectedIncome.value =
-    categories.value.find((c) => c.name === res.data.incomeDefault && c.type === 'Income')?.id || ''
-
-  selectedExpense.value =
-    categories.value.find((c) => c.name === res.data.expenseDefault && c.type === 'Expense')?.id ||
-    ''
-}
-
-const fetchCategories = async () => {
-  const res = await axios.get('http://localhost:3000/categories')
-  categories.value = res.data
-
-  selectedIncome.value = categories.value.find((c) => c.type === 'Income')?.id || ''
-  selectedExpense.value = categories.value.find((c) => c.type === 'Expense')?.id || ''
-}
-
-const fetchQuickOptions = async () => {
-  const res = await axios.get('http://localhost:3000/quickAddOptions')
-  const userData = res.data.filter((item) => item.member_id === userId)
-  quickOptions.value = JSON.parse(JSON.stringify(userData))
-  originalQuickOptions.value = JSON.parse(JSON.stringify(userData))
-}
-
-const findCategoryNameById = (id) => {
-  return categories.value.find((c) => c.id === id)?.name || ''
-}
-
-const defaultChanged = computed(() => {
-  const incomeName = findCategoryNameById(selectedIncome.value)
-  const expenseName = findCategoryNameById(selectedExpense.value)
-  return incomeName !== user.value.incomeDefault || expenseName !== user.value.expenseDefault
+const newItem = ref({
+  member_id: userId,
+  title: '',
+  type: 'Expense',
+  category_id: '',
+  cycle: 'onetime',
+  day: null,
+  week: null,
+  month: null,
+  amount: 0,
+  memo: '',
 })
 
-const quickOptionsChanged = computed(() => {
-  return JSON.stringify(quickOptions.value) !== JSON.stringify(originalQuickOptions.value)
-})
+const filteredCategories = computed(() =>
+  props.categories.filter((cat) => cat.type === newItem.value.type),
+)
 
-const hasUnsavedChanges = computed(() => {
-  return defaultChanged.value || quickOptionsChanged.value
-})
+const cycleOptions = [
+  { value: 'onetime', label: '반복 없음' },
+  { value: 'daily', label: '매일' },
+  { value: 'weekly', label: '매주' },
+  { value: 'monthly', label: '매월' },
+]
 
-const formatOption = (item) => {
-  const dayText =
-    item.day ||
-    (item.week ? `\uB9E4\uC8FC ${item.week}` : '') ||
-    (item.month ? `\uB9E4\uC6D4 ${item.month}\uC77C` : '') ||
-    `\uBC18\uBCF5 \uC5C6\uC74C`
-  return `${item.title} | ${dayText} | ${item.amount.toLocaleString()}\uC6D0`
-}
+const weeklyOptions = [
+  { value: '월요일', label: '월요일' },
+  { value: '화요일', label: '화요일' },
+  { value: '수요일', label: '수요일' },
+  { value: '목요일', label: '목요일' },
+  { value: '금요일', label: '금요일' },
+  { value: '토요일', label: '토요일' },
+  { value: '일요일', label: '일요일' },
+]
 
-const handleAddOption = (newOption) => {
-  newOption.id = Date.now().toString()
-  newOption.member_id = userId
-  quickOptions.value.push(newOption)
-}
+const triedSubmit = ref(false)
 
-const handleUpdateOption = (updatedItem) => {
-  const idx = quickOptions.value.findIndex((opt) => opt.id === updatedItem.id)
-  if (idx !== -1) quickOptions.value[idx] = { ...updatedItem }
-}
+const submit = () => {
+  triedSubmit.value = true
 
-const handleDeleteOption = (id) => {
-  quickOptions.value = quickOptions.value.filter((item) => item.id !== id)
-}
+  const errors = []
 
-const saveDefaults = async () => {
-  if (!user.value) return
-
-  const payload = {
-    incomeDefault: findCategoryNameById(selectedIncome.value),
-    expenseDefault: findCategoryNameById(selectedExpense.value),
+  if (!newItem.value.amount || newItem.value.amount <= 0) {
+    errors.push('금액은 0보다 커야 합니다.')
   }
-  await axios.patch(`http://localhost:3000/members/${userId}`, payload)
 
-  const existing = await axios.get(`http://localhost:3000/quickAddOptions?member_id=${userId}`)
-
-  const toAdd = quickOptions.value.filter((item) => !existing.data.some((e) => e.id === item.id))
-
-  const toUpdate = quickOptions.value.filter((item) => {
-    const original = existing.data.find((e) => e.id === item.id)
-    return original && JSON.stringify(original) !== JSON.stringify(item)
-  })
-
-  const toDelete = existing.data.filter((item) => !quickOptions.value.some((e) => e.id === item.id))
-
-  await Promise.all([
-    ...toAdd.map((item) => axios.post(`http://localhost:3000/quickAddOptions`, item)),
-    ...toUpdate.map((item) => axios.put(`http://localhost:3000/quickAddOptions/${item.id}`, item)),
-    ...toDelete.map((item) => axios.delete(`http://localhost:3000/quickAddOptions/${item.id}`)),
-  ])
-
-  alert('저장되었습니다!')
-  originalQuickOptions.value = JSON.parse(JSON.stringify(quickOptions.value))
-  router.push(`/user/${userId}`)
-}
-
-const cancelAndRedirect = () => {
-  const confirmCancel = confirm('수정 내용이 반영되지 않습니다. 정말 취소하시겠어요?')
-  if (confirmCancel) {
-    router.push(`/user/${userId}`)
+  if (!newItem.value.title) {
+    errors.push('거래명을 입력해주세요.')
   }
+
+  if (newItem.value.cycle === 'monthly') {
+    const day = newItem.value.month
+    if (!day || day < 1 || day > 31) {
+      errors.push('1 ~ 31일 중 반복할 날짜를 선택해주세요.')
+    }
+  }
+
+  if (newItem.value.cycle === 'weekly') {
+    if (!newItem.value.week) {
+      errors.push('반복할 요일을 선택해주세요.')
+    }
+  }
+
+  if (errors.length > 0) {
+    alert('입력값을 확인해주세요:\n\n' + errors.join('\n'))
+    return
+  }
+
+  if (props.currentCount >= 5) {
+    alert('기본 지출은 최대 5개까지만 추가할 수 있습니다.')
+    return
+  }
+
+  if (newItem.value.cycle === 'daily') {
+    newItem.value.day = '매일'
+    newItem.value.week = null
+    newItem.value.month = null
+  } else if (newItem.value.cycle === 'weekly') {
+    newItem.value.day = null
+    newItem.value.month = null
+  } else if (newItem.value.cycle === 'monthly') {
+    newItem.value.day = null
+    newItem.value.week = null
+  } else if (newItem.value.cycle === 'onetime') {
+    newItem.value.day = null
+    newItem.value.week = null
+    newItem.value.month = null
+  }
+
+  emit('add', { ...newItem.value })
+  emit('close')
 }
 
-const openEditModal = (item) => {
-  selectedOption.value = item
-  showEditModal.value = true
-}
-
-onMounted(async () => {
-  await fetchCategories()
-  await fetchUser()
-  fetchQuickOptions()
+watchEffect(() => {
+  if (props.categories.length > 0) {
+    const defaultCategory = props.categories.find(
+      (c) => c.name === '미분류' && c.type === newItem.value.type,
+    )
+    if (defaultCategory) {
+      newItem.value.category_id = defaultCategory.id
+    }
+  }
 })
 </script>
 

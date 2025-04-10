@@ -13,7 +13,6 @@
             v-model="selectedIncome"
             :options="incomeCategories.map((cat) => ({ label: cat.name, value: cat.id }))"
             placeholder="수입 카테고리 선택"
-            @change="onCategoryChange"
           />
         </div>
         <div class="select-group">
@@ -22,16 +21,17 @@
             v-model="selectedExpense"
             :options="expenseCategories.map((cat) => ({ label: cat.name, value: cat.id }))"
             placeholder="지출 카테고리 선택"
-            @change="onCategoryChange"
           />
         </div>
       </div>
+
       <div class="divider"></div>
+
       <!-- 오른쪽 패널 -->
       <div class="right-panel">
         <div class="right-header">
           <span class="bodySemibold18px">고정 수입/지출 (최대 5개)</span>
-          <BtnXs :color="'var(--color-secondary)'" :text="`추가`" @click="showAddModal = true" />
+          <BtnXs :color="'var(--color-secondary)'" :text="'추가'" @click="showAddModal = true" />
         </div>
         <ul>
           <li
@@ -46,43 +46,43 @@
       </div>
     </div>
 
-    <!-- 버튼 -->
+    <!-- 하단 버튼 -->
     <div class="button-group">
       <p class="unsaved-warning" :class="{ show: hasUnsavedChanges }">
         저장하지 않은 변경사항이 있습니다.
       </p>
       <BtnLg
         :color="'var(--color-primary)'"
-        :text="`저장`"
+        :text="'저장'"
         :class="{ 'btn-warning': hasUnsavedChanges }"
         @click="saveDefaults"
       />
-      <BtnLg :color="'var(--color-light)'" :text="`취소`" @click="cancelAndRedirect" />
+      <BtnLg :color="'var(--color-light)'" :text="'취소'" @click="cancelAndRedirect" />
     </div>
+
+    <!-- 모달 -->
+    <AddQuickOptionModal
+      v-if="showAddModal"
+      :categories="categories"
+      :currentCount="quickOptions.length"
+      @close="showAddModal = false"
+      @add="handleAddOption"
+    />
+
+    <EditQuickOptionModal
+      v-if="showEditModal"
+      :option="selectedOption"
+      :categories="categories"
+      @update="handleUpdateOption"
+      @delete="handleDeleteOption"
+      @close="
+        () => {
+          showEditModal = false
+          selectedOption = null
+        }
+      "
+    />
   </div>
-
-  <!-- 모달 -->
-  <AddQuickOptionModal
-    v-if="showAddModal"
-    :categories="categories"
-    :currentCount="quickOptions.length"
-    @close="showAddModal = false"
-    @add="handleAddOption"
-  />
-
-  <EditQuickOptionModal
-    v-if="showEditModal"
-    :option="selectedOption"
-    :categories="categories"
-    @update="handleUpdateOption"
-    @delete="handleDeleteOption"
-    @close="
-      () => {
-        showEditModal = false
-        selectedOption = null
-      }
-    "
-  />
 </template>
 
 <script setup>
@@ -95,33 +95,25 @@ import SelectMed from '@/components/input/SelectMed.vue'
 import BtnLg from '@/components/button/BtnLg.vue'
 import BtnXs from '@/components/button/BtnXs.vue'
 
-// 라우터 및 경로
 const route = useRoute()
 const router = useRouter()
 const userId = route.params.id
 
-// 상태 변수
 const showAddModal = ref(false)
 const showEditModal = ref(false)
 const selectedOption = ref(null)
 const originalQuickOptions = ref([])
 
-const hasUnsavedChanges = ref(false)
-
-// 사용자 정보 및 선택된 카테고리
 const user = ref(null)
 const selectedIncome = ref('')
 const selectedExpense = ref('')
 
-// 데이터 목록
 const categories = ref([])
 const quickOptions = ref([])
 
-// 카테고리 필터링
 const incomeCategories = computed(() => categories.value.filter((c) => c.type === 'Income'))
 const expenseCategories = computed(() => categories.value.filter((c) => c.type === 'Expense'))
 
-// 유저 데이터 가져오기
 const fetchUser = async () => {
   const res = await axios.get(`http://localhost:3000/members/${userId}`)
   user.value = res.data
@@ -134,7 +126,6 @@ const fetchUser = async () => {
     ''
 }
 
-// 카테고리 가져오기
 const fetchCategories = async () => {
   const res = await axios.get('http://localhost:3000/categories')
   categories.value = res.data
@@ -143,60 +134,53 @@ const fetchCategories = async () => {
   selectedExpense.value = categories.value.find((c) => c.type === 'Expense')?.id || ''
 }
 
-// 고정지출 옵션 가져오기
 const fetchQuickOptions = async () => {
   const res = await axios.get('http://localhost:3000/quickAddOptions')
   const userData = res.data.filter((item) => item.member_id === userId)
-  quickOptions.value = JSON.parse(JSON.stringify(userData)) // 현재 상태
-  originalQuickOptions.value = JSON.parse(JSON.stringify(userData)) // 초기 상태
+  quickOptions.value = JSON.parse(JSON.stringify(userData))
+  originalQuickOptions.value = JSON.parse(JSON.stringify(userData))
 }
 
-const isQuickOptionsChanged = () => {
-  const current = JSON.stringify(quickOptions.value)
-  const original = JSON.stringify(originalQuickOptions.value)
-  return current !== original
+const findCategoryNameById = (id) => {
+  return categories.value.find((c) => c.id === id)?.name || ''
 }
 
-// 항목 포맷
+const defaultChanged = computed(() => {
+  const incomeName = findCategoryNameById(selectedIncome.value)
+  const expenseName = findCategoryNameById(selectedExpense.value)
+  return incomeName !== user.value.incomeDefault || expenseName !== user.value.expenseDefault
+})
+
+const quickOptionsChanged = computed(() => {
+  return JSON.stringify(quickOptions.value) !== JSON.stringify(originalQuickOptions.value)
+})
+
+const hasUnsavedChanges = computed(() => {
+  return defaultChanged.value || quickOptionsChanged.value
+})
+
 const formatOption = (item) => {
   const dayText =
     item.day ||
-    (item.week ? `매주 ${item.week}` : '') ||
-    (item.month ? `매월 ${item.month}일` : '') ||
-    `반복 없음`
-  return `${item.title} | ${dayText} | ${item.amount.toLocaleString()}원`
+    (item.week ? `\uB9E4\uC8FC ${item.week}` : '') ||
+    (item.month ? `\uB9E4\uC6D4 ${item.month}\uC77C` : '') ||
+    `\uBC18\uBCF5 \uC5C6\uC74C`
+  return `${item.title} | ${dayText} | ${item.amount.toLocaleString()}\uC6D0`
 }
 
-// 추가/수정/삭제 핸들러
 const handleAddOption = (newOption) => {
   newOption.id = Date.now().toString()
   newOption.member_id = userId
   quickOptions.value.push(newOption)
-  hasUnsavedChanges.value = true
 }
 
 const handleUpdateOption = (updatedItem) => {
   const idx = quickOptions.value.findIndex((opt) => opt.id === updatedItem.id)
   if (idx !== -1) quickOptions.value[idx] = { ...updatedItem }
-  hasUnsavedChanges.value = isQuickOptionsChanged()
 }
 
 const handleDeleteOption = (id) => {
   quickOptions.value = quickOptions.value.filter((item) => item.id !== id)
-  hasUnsavedChanges.value = isQuickOptionsChanged()
-}
-
-const onCategoryChange = () => {
-  const incomeName = findCategoryNameById(selectedIncome.value)
-  const expenseName = findCategoryNameById(selectedExpense.value)
-
-  hasUnsavedChanges.value =
-    incomeName !== user.value.incomeDefault || expenseName !== user.value.expenseDefault
-}
-
-// 저장
-const findCategoryNameById = (id) => {
-  return categories.value.find((c) => c.id === id)?.name || ''
 }
 
 const saveDefaults = async () => {
@@ -227,20 +211,16 @@ const saveDefaults = async () => {
 
   alert('저장되었습니다!')
   originalQuickOptions.value = JSON.parse(JSON.stringify(quickOptions.value))
-  hasUnsavedChanges.value = false
   router.push(`/user/${userId}`)
 }
 
-// 취소
 const cancelAndRedirect = () => {
   const confirmCancel = confirm('수정 내용이 반영되지 않습니다. 정말 취소하시겠어요?')
   if (confirmCancel) {
-    hasUnsavedChanges.value = false
     router.push(`/user/${userId}`)
   }
 }
 
-// 수정 모달 열기
 const openEditModal = (item) => {
   selectedOption.value = item
   showEditModal.value = true

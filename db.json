@@ -401,10 +401,10 @@
       "memo": ""
     },
     {
-      "title": "모달테스트 a2",
+      "title": "sdf",
       "category_id": "1111",
       "type": "Income",
-      "amount": 789789,
+      "amount": 2,
       "date": "2025-04-10T13:07:00",
       "memo": "",
       "id": "3d81"
@@ -428,57 +428,30 @@
       "memo": ""
     },
     {
-      "id": "f343",
-      "title": "asdf",
+      "id": "5f76",
+      "title": "추가 테스트 ",
+      "category_id": "8888",
+      "type": "Expense",
+      "amount": 2580,
+      "date": "2025-04-01T16:10:00",
+      "memo": "추가 메모"
+    },
+    {
+      "id": "6407",
+      "title": "qw",
       "category_id": "0000",
       "type": "Expense",
-      "amount": 0,
-      "date": "2025-04-10T13:50:36",
+      "amount": 1,
+      "date": "2025-04-10T16:34:31",
       "memo": ""
     },
     {
-      "id": "00d8",
-      "title": "qweqwe",
+      "id": "9c35",
+      "title": "qew",
       "category_id": "0000",
       "type": "Expense",
-      "amount": 0,
-      "date": "2025-04-10T13:50:48",
-      "memo": ""
-    },
-    {
-      "id": "3dc7",
-      "title": "qwe",
-      "category_id": "0000",
-      "type": "Expense",
-      "amount": 0,
-      "date": "2025-04-10T13:52:15",
-      "memo": ""
-    },
-    {
-      "id": "23fa",
-      "title": "모달 테스트 b",
-      "category_id": "0000",
-      "type": "Expense",
-      "amount": 0,
-      "date": "2025-04-10T13:55:21",
-      "memo": ""
-    },
-    {
-      "id": "7eae",
-      "title": "ㅁㄴㅇㄹㄴㅇㄹ",
-      "category_id": "0000",
-      "type": "Expense",
-      "amount": 0,
-      "date": "2025-04-10T14:00:51",
-      "memo": "ㄷㄷ"
-    },
-    {
-      "id": "6dce",
-      "title": "ㅇㄹㄴㅇㄹ",
-      "category_id": "0000",
-      "type": "Expense",
-      "amount": 0,
-      "date": "2025-04-10T14:00:59",
+      "amount": 122,
+      "date": "2025-04-10T16:35:31",
       "memo": ""
     }
   ],

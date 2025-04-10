@@ -1,40 +1,73 @@
 <template>
-  <div class="body">
-    <h3>거래 수정</h3>
-    <div class="form-group">
-      <label>거래명</label>
-      <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionTitle" />
+  <div class="form-container">
+    <div class="form-body">
+      <div class="form-body-left">
+        <div class="form-input">
+          <div class="form-input-amount">
+            <InputSm
+              type="number"
+              placeholder="금액을 입력하세요"
+              v-model.number="amount"
+              @keypress="onlyAllowDigits"
+              @input="removeNonDigits"
+              style="text-align: right"
+            /><span> 원</span>
+            <p class="form-alert" v-if="!isValidAmount">&nbsp;*</p>
+          </div>
+          <BtnDual
+            @clickIncome="selectType('Income')"
+            @clickExpense="selectType('Expense')"
+            :is-income-active="isIncome"
+            :is-expense-active="isExpense"
+          />
+        </div>
+        <div class="form-input">
+          <label>거래명</label>
+          <div class="input-with-alert">
+            <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionTitle" />
+            <p class="form-alert" v-show="!isValidTitle">*</p>
+          </div>
+        </div>
+      </div>
+      <div class="form-body-right">
+        <div class="form-input">
+          <label>카테고리</label>
+          <SelectMed
+            v-model="categoryId"
+            :options="filteredCategory"
+            placeholder="카테고리"
+            @onChange="handleCategorySelect"
+          />
+        </div>
+        <div class="form-input">
+          <label>날짜</label>
+          <InputMed
+            type="text"
+            placeholder="날짜를 선택하세요"
+            @click="openCalenderModal"
+            v-model="dateDisplay"
+          />
+        </div>
+        <div class="form-input">
+          <label>메모</label>
+          <InputMed
+            type="text"
+            placeholder="메모는 선택사항입니다"
+            v-model="memo"
+            color="var(--color-primary)"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="form-footer">
+      <div class="form-btn-container">
+        <BtnLg text="수정" @click="updateTransaction" color="var(--color-primary)" />
+        <BtnLg text="삭제" @click="deleteTransaction" color="var(--color-light)" />
+        <BtnLg text="취소" @click="cancle" color="var(--color-light)" />
+      </div>
     </div>
 
-    <div class="form-group">
-      <label>금액</label>
-      <InputLg
-        type="number"
-        placeholder="금액을 입력하세요"
-        v-model.number="amount"
-        @keypress="onlyAllowDigits"
-        @input="removeNonDigits"
-      />
-    </div>
-
-    <BtnDual
-      @clickIncome="selectType('Income')"
-      @clickExpense="selectType('Expense')"
-      :is-income-active="isIncome"
-      :is-expense-active="isExpense"
-    />
-
-    <SelectLg v-model="categoryId" :options="filteredCategory" placeholder="카테고리" />
-
-    <div class="form-group">
-      <label>날짜</label>
-      <InputLg
-        type="text"
-        placeholder="날짜를 선택하세요"
-        @click="openCalenderModal"
-        v-model="dateDisplay"
-      />
-    </div>
+    <!-- 캘린더 모달 -->
 
     <div v-if="showCalenderModal" class="modal-backdrop">
       <div class="modal-content">
@@ -52,16 +85,7 @@
       </div>
     </div>
 
-    <div class="form-group">
-      <label>메모</label>
-      <InputLg type="text" placeholder="메모는 선택사항입니다" v-model="memo" />
-    </div>
-
-    <div class="actions">
-      <BtnLg text="수정" @click="updateTransaction" color="var(--color-primary)" />
-      <BtnLg text="삭제" @click="deleteTransaction" color="var(--color-semidark)" />
-      <BtnLg text="취소" @click="cancle" color="var(--color-semidark)" />
-    </div>
+    <!-- 컨펌 모달 -->
 
     <div v-if="showConfirmModal" class="modal-backdrop">
       <div class="modal-content">
@@ -109,8 +133,10 @@ const BASEURI = '/api'
 const transactionId = ref(null) // 상세 보기할 트랜잭션 ID - 추후 ViewTransaction 에서 받아올 것
 
 const transactionTitle = ref('') // 거래명
+const isValidTitle = computed(() => transactionTitle.value !== '')
 
 const amount = ref(0) // 금액
+const isValidAmount = computed(() => amount.value > 0)
 
 const dateStr = ref('') // 날짜 (문자열)
 const dateObj = computed(() => {
@@ -238,15 +264,8 @@ const toKSTISOString = (date) => {
   return kstDate.toISOString().slice(0, 19)
 }
 
-const checkTransaction = () => {
-  if (transactionTitle.value === '' || Number(amount.value) < 0) {
-    return false
-  }
-  return true
-}
-
 const updateTransaction = async () => {
-  if (!checkTransaction()) {
+  if (!(isValidAmount.value && isValidTitle.value)) {
     alert('데이터 입력이 잘못되었습니다.')
     return
   }
@@ -306,26 +325,6 @@ const cancle = () => {
 <!-- ----------------------------------- style  ----------------------------------- -->
 
 <style scoped>
-* {
-  padding: 0;
-  margin: 0;
-}
-.body {
-  width: 500px;
-  margin: 0 auto;
-  font-family: sans-serif;
-  padding: 30px;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -347,5 +346,98 @@ div.modal-button-container {
   gap: 12px; /* 버튼 간 간격 */
   align-items: center; /* 가운데 정렬 */
   margin-top: 1rem;
+}
+/* ------------------------ */
+
+.form-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.form-body {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+}
+
+.form-body-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-body-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+  gap: 16px;
+}
+
+.input-with-alert {
+  display: flex;
+  align-items: center;
+}
+
+.form-alert {
+  color: red;
+}
+
+.form-input-amount {
+  justify-content: left;
+  display: inline-flex;
+  align-items: center;
+}
+
+.form-input span {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.form-input label {
+  white-space: nowrap; /* 줄바꿈 방지 */
+  font-size: 16px;
+  flex-shrink: 0; /* 작아지지 않게 */
+}
+
+.text-like-input {
+  width: auto;
+  min-width: 1ch;
+  max-width: 15ch;
+  font-size: 18px;
+  background: transparent;
+  border: none;
+}
+
+.form-alert p {
+  color: red;
+}
+
+.form-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.form-btn-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
 }
 </style>

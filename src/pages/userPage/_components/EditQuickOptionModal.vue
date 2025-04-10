@@ -136,13 +136,32 @@ watch(
   },
   { immediate: true },
 )
+const prevCategoryByType = ref({
+  Income: null,
+  Expense: null,
+})
 
 watch(
   () => editItem.value.type,
-  (newType) => {
-    const defaultCategory = props.categories.find((c) => c.name === '미분류' && c.type === newType)
-    if (defaultCategory) {
-      editItem.value.category_id = defaultCategory.id
+  (newType, oldType) => {
+    // 현재 type에서 선택한 카테고리 저장
+    if (oldType && editItem.value.category_id) {
+      prevCategoryByType.value[oldType] = editItem.value.category_id
+    }
+
+    // 이전에 저장해둔 카테고리가 있다면 복원
+    const prevCategory = prevCategoryByType.value[newType]
+
+    if (prevCategory) {
+      editItem.value.category_id = prevCategory
+    } else {
+      // 없으면 미분류 설정
+      const defaultCategory = props.categories.find(
+        (c) => c.name === '미분류' && c.type === newType,
+      )
+      if (defaultCategory) {
+        editItem.value.category_id = defaultCategory.id
+      }
     }
   },
 )

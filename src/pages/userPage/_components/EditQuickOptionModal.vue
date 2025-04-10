@@ -171,6 +171,22 @@ const update = () => {
     return
   }
 
+  if (editItem.value.cycle === 'daily') {
+    editItem.value.day = '매일'
+    editItem.value.week = null
+    editItem.value.month = null
+  } else if (editItem.value.cycle === 'weekly') {
+    editItem.value.day = null
+    editItem.value.month = null
+  } else if (editItem.value.cycle === 'monthly') {
+    editItem.value.day = null
+    editItem.value.week = null
+  } else if (editItem.value.cycle === 'onetime') {
+    editItem.value.day = null
+    editItem.value.week = null
+    editItem.value.month = null
+  }
+
   emit('update', editItem.value) // ⬅️ 상위에 수정 내용 전달
   emit('close')
 }

@@ -453,16 +453,30 @@
       "memo": "돈 나가는 날..."
     },
     {
-      "id": "1744163505567",
+      "id": "1744251142237",
       "member_id": "12CD",
-      "title": "123",
+      "title": "1313",
+      "type": "Expense",
+      "category_id": "1111",
+      "cycle": "daily",
+      "day": null,
+      "week": "화요일",
+      "month": null,
+      "amount": 1313,
+      "memo": ""
+    },
+    {
+      "id": "1744252300622",
+      "member_id": "12CD",
+      "title": "12",
       "type": "Expense",
       "category_id": "0000",
       "cycle": "onetime",
-      "day": "매일",
+      "day": null,
       "week": null,
       "month": null,
-      "amount": 200000
+      "amount": 21,
+      "memo": ""
     }
   ]
 }

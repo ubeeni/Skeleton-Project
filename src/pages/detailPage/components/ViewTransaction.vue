@@ -22,7 +22,7 @@
 
     <div class="form-group">
       <label>날짜</label>
-      <InputLg type="text" placeholder="날짜를 선택하세요" v-model="date" readonly />
+      <InputLg type="text" placeholder="날짜를 선택하세요" v-model="dateDisplay" readonly />
     </div>
 
     <div class="form-group">
@@ -47,6 +47,9 @@ import BtnDual from '@/components/button/BtnDual.vue'
 import InputLg from '@/components/input/InputLg.vue'
 import InputMed from '@/components/input/InputMed.vue'
 import InputSm from '@/components/input/InputSm.vue'
+import SelectLg from '@/components/input/SelectLg.vue'
+import SelectMed from '@/components/input/SelectMed.vue'
+import SelectSm from '@/components/input/SelectSm.vue'
 
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -62,8 +65,19 @@ const BASEURI = '/api'
 const transactionId = ref(null) // 상세 보기할 트랜잭션 ID - 추후 pinia로 다른 페이지에서 받아올 것
 
 const transactionTitle = ref('') // 거래명
+
 const amount = ref(0) // 금액
-const date = ref('') // 날짜
+
+const dateStr = ref('') // 날짜 (문자열)
+const dateObj = computed(() => {
+  return !dateStr.value
+    ? ''
+    : typeof dateStr.value === 'string'
+      ? new Date(dateStr.value)
+      : dateStr.value
+}) // 날짜 (Date 객체)
+const dateDisplay = computed(() => (dateObj.value ? dateObj.value.toLocaleString('ko-KR') : '')) // 화면에 표시될 날짜 형식
+
 const memo = ref('') // 메모
 
 // 선택된 카테고리 ID
@@ -98,7 +112,7 @@ onMounted(async () => {
 
     transactionTitle.value = transaction.title
     amount.value = transaction.amount
-    date.value = transaction.date
+    dateStr.value = transaction.date
     memo.value = transaction.memo
 
     categoryId.value = transaction.category_id
@@ -106,21 +120,6 @@ onMounted(async () => {
 
     categoryType.value = category.type
     categoryName.value = category.name
-
-    console.log(
-      '거래명: ' +
-        transactionTitle.value +
-        '\n금액: ' +
-        amount.value +
-        '\n카테고리 타입: ' +
-        categoryType.value +
-        '\n카테고리명: ' +
-        categoryName.value +
-        '\n날짜: ' +
-        date.value +
-        '\n메모: ' +
-        memo.value,
-    )
   } catch (error) {
     console.log('에러 발생 : ' + error)
   }

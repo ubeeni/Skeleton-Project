@@ -129,9 +129,6 @@ const fetchUser = async () => {
 const fetchCategories = async () => {
   const res = await axios.get('http://localhost:3000/categories')
   categories.value = res.data
-
-  selectedIncome.value = categories.value.find((c) => c.type === 'Income')?.id || ''
-  selectedExpense.value = categories.value.find((c) => c.type === 'Expense')?.id || ''
 }
 
 const fetchQuickOptions = async () => {
@@ -146,6 +143,7 @@ const findCategoryNameById = (id) => {
 }
 
 const defaultChanged = computed(() => {
+  if (!user.value) return false
   const incomeName = findCategoryNameById(selectedIncome.value)
   const expenseName = findCategoryNameById(selectedExpense.value)
   return incomeName !== user.value.incomeDefault || expenseName !== user.value.expenseDefault
@@ -162,10 +160,10 @@ const hasUnsavedChanges = computed(() => {
 const formatOption = (item) => {
   const dayText =
     item.day ||
-    (item.week ? `\uB9E4\uC8FC ${item.week}` : '') ||
-    (item.month ? `\uB9E4\uC6D4 ${item.month}\uC77C` : '') ||
-    `\uBC18\uBCF5 \uC5C6\uC74C`
-  return `${item.title} | ${dayText} | ${item.amount.toLocaleString()}\uC6D0`
+    (item.week ? `매주 ${item.week}` : '') ||
+    (item.month ? `매월 ${item.month}일` : '') ||
+    `반복 없음`
+  return `${item.title} | ${dayText} | ${item.amount.toLocaleString()}원`
 }
 
 const handleAddOption = (newOption) => {

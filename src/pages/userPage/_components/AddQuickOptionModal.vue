@@ -169,6 +169,10 @@ const submit = () => {
   } else if (newItem.value.cycle === 'monthly') {
     newItem.value.day = null
     newItem.value.week = null
+  } else if (newItem.value.cycle === 'onetime') {
+    newItem.value.day = null
+    newItem.value.week = null
+    newItem.value.month = null
   }
 
   emit('add', { ...newItem.value })

@@ -434,7 +434,7 @@
       "type": "Expense",
       "cycle": "weekly",
       "day": null,
-      "week": "monday",
+      "week": "월요일",
       "month": null,
       "amount": 70000,
       "memo": "매주 모아서..."
@@ -445,7 +445,7 @@
       "member_id": "12CD",
       "category_id": "0000",
       "type": "Expense",
-      "cycle": "monthly",
+      "cycle": "onetime",
       "day": null,
       "week": null,
       "month": null,
@@ -458,23 +458,11 @@
       "title": "123",
       "type": "Expense",
       "category_id": "0000",
-      "cycle": "daily",
+      "cycle": "onetime",
       "day": "매일",
       "week": null,
       "month": null,
       "amount": 200000
-    },
-    {
-      "id": "1744164354623",
-      "member_id": "12CD",
-      "title": "4",
-      "type": "Expense",
-      "category_id": "0000",
-      "cycle": "daily",
-      "day": "매일",
-      "week": null,
-      "month": null,
-      "amount": 10000
     }
   ]
 }

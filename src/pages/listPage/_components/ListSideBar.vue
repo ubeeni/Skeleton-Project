@@ -3,7 +3,7 @@
     <!-- 월 이동 -->
     <div class="month-nav">
       <img :src="backButton" alt="back" @click="handlePrev" />
-      <span class="titleBold24px"> {{ rangeText }} </span>
+      <span class="titleBold24px range-text" @click="resetToToday" > {{ rangeText }} </span>
       <img :src="forwardButton" alt="forward" @click="handleNext" />
     </div>
 
@@ -129,6 +129,13 @@ const selectedExpense = ref([])
 
 const options = ['1주', '1개월', '3개월']
 
+function resetToToday() {
+  
+  currentDate.value = dayjs()
+  selectedRange.value = '1개월'
+  resetFilters()
+}
+
 const rangeText = computed(() => {
   const date = currentDate.value
 
@@ -242,6 +249,7 @@ const emitFilters = () => {
     expenseCategoryIds: selectedExpense.value,
   })
 }
+
 </script>
 
 <style scoped>
@@ -337,5 +345,8 @@ const emitFilters = () => {
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 0.25rem;
+}
+.range-text {
+  cursor: pointer;
 }
 </style>

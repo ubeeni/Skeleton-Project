@@ -1,29 +1,33 @@
 <template>
-  <!-- 월 이동 -->
-  <div class="month-nav">
-    <img :src="backButton" alt="back" @click="handlePrev" />
-    <span class="titleBold24px range-text" @click="resetToToday"> {{ rangeText }} </span>
-    <img :src="forwardButton" alt="forward" @click="handleNext" />
-  </div>
-  <!-- 기간 선택 버튼 -->
-  <div class="report-selector">
-    <BtnXs
-      v-for="p in PERIOD_OPTIONS"
-      :key="p"
-      :text="p"
-      :is-active="p === periodDoughnut"
-      @click="periodDoughnut = p"
-      color="var(--color-accent)"
-    />
-  </div>
-  <BtnDual
-    @clickIncome="clickIncome"
-    @clickExpense="clickExpense"
-    :is-income-active="isIncome"
-    :is-expense-active="isExpense"
-  />
-  <div class="report-subtitle">
-    <div v-for="(label, index) in top5Labels" :key="index">{{ index + 1 }}위: {{ label }}</div>
+  <div class="filter-wrapper">
+    <!-- 월 이동 -->
+    <div class="month-nav">
+      <img :src="backButton" alt="back" @click="handlePrev" />
+      <span class="titleBold24px range-text" @click="resetToToday"> {{ rangeText }} </span>
+      <img :src="forwardButton" alt="forward" @click="handleNext" />
+    </div>
+    <div class="filter-button">
+      <!-- 기간 선택 버튼 -->
+      <div class="report-selector">
+        <BtnXs
+          v-for="p in PERIOD_OPTIONS"
+          :key="p"
+          :text="p"
+          :is-active="p === periodDoughnut"
+          @click="periodDoughnut = p"
+          color="var(--color-accent)"
+        />
+      </div>
+      <BtnDual
+        @clickIncome="clickIncome"
+        @clickExpense="clickExpense"
+        :is-income-active="isIncome"
+        :is-expense-active="isExpense"
+      />
+    </div>
+    <div class="report-subtitle">
+      <div v-for="(label, index) in top5Labels" :key="index">{{ index + 1 }}위: {{ label }}</div>
+    </div>
   </div>
 </template>
 
@@ -113,5 +117,26 @@ function resetToToday() {
 
 .range-text {
   cursor: pointer;
+}
+
+@media screen and (max-width: 767px) {
+  /** Mobile */
+  .filter-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .report-subtitle {
+    margin-bottom: 1rem;
+  }
+
+  .filter-button {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.5rem;
+  }
 }
 </style>

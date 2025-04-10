@@ -1,6 +1,12 @@
 <template>
   <div class="line-wrapper">
-    <apexchart class="line-chart" type="line" :options="options" :series="series"></apexchart>
+    <apexchart
+      class="line-chart"
+      type="line"
+      :options="options"
+      :series="series"
+      :height="'100%'"
+    ></apexchart>
   </div>
 </template>
 
@@ -34,7 +40,6 @@ const series = computed(() => [
 const options = computed(() => ({
   chart: {
     width: '100%',
-    height: '100%',
     id: 'line-chart',
     type: 'line',
     // 차트 도구 비활성화
@@ -82,6 +87,16 @@ const options = computed(() => ({
       `
     },
   },
+  responsive: [
+    {
+      breakpoint: 768,
+      options: {
+        yaxis: {
+          show: false,
+        },
+      },
+    },
+  ],
 }))
 </script>
 
@@ -98,5 +113,13 @@ const options = computed(() => ({
 .line-chart {
   width: 100%;
   height: 100%;
+}
+
+@media screen and (max-width: 767px) {
+  /** Mobile */
+  .line-wrapper {
+    padding: 0.5rem;
+    height: 50vh;
+  }
 }
 </style>

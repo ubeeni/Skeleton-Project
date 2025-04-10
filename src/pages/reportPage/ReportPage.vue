@@ -67,4 +67,20 @@ const doughnutData = inject('doughnutData')
   height: 0.0625rem;
   background-color: var(--color-light);
 }
+
+@media screen and (max-width: 767px) {
+  /** Mobile */
+  .report-wrapper {
+    flex-direction: column;
+    align-items: start;
+    justify-content: left;
+  }
+
+  .report-left {
+    width: 100%;
+  }
+  .report-right {
+    width: 100%;
+  }
+}
 </style>

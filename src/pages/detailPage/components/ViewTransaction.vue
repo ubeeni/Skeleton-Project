@@ -120,21 +120,6 @@ onMounted(async () => {
 
     categoryType.value = category.type
     categoryName.value = category.name
-
-    console.log(
-      '거래명: ' +
-        transactionTitle.value +
-        '\n금액: ' +
-        amount.value +
-        '\n카테고리 타입: ' +
-        categoryType.value +
-        '\n카테고리명: ' +
-        categoryName.value +
-        '\n날짜: ' +
-        date.value +
-        '\n메모: ' +
-        memo.value,
-    )
   } catch (error) {
     console.log('에러 발생 : ' + error)
   }

@@ -108,7 +108,7 @@ const dateObj = computed(() => {
       : dateStr.value
 }) // 날짜 (Date 객체)
 const dateDisplay = computed(() => (dateObj.value ? dateObj.value.toLocaleString('ko-KR') : '')) // 화면에 표시될 날짜 형식
-const isoDate = computed(() => toKSTISOString(dateStr.value).slice(0, 19)) // 날짜 (iso 표준 - 실제 DB 저장 형식)
+const isoDate = computed(() => toKSTISOString(dateObj.value).slice(0, 19)) // 날짜 (iso 표준 - 실제 DB 저장 형식)
 
 const memo = ref('') // 메모
 
@@ -172,26 +172,10 @@ onMounted(async () => {
     amount.value = transaction.amount
     dateStr.value = transaction.date
     memo.value = transaction.memo
-
     categoryId.value = transaction.category_id
-    const category = allCategories.find((category) => category.id === categoryId.value)
-
-    categoryType.value = category.type
-    categoryName.value = category.name
   } catch (error) {
     console.log('에러 발생 : ' + error)
     console.log(error.stack)
-  }
-})
-
-watch(categoryId, () => {
-  if (categoryId) {
-    const category = allCategories.find((category) => category.id === categoryId.value)
-
-    console.log('watch : ')
-    console.log(category)
-    categoryType.value = category.type
-    categoryName.value = category.name
   }
 })
 

@@ -5,19 +5,21 @@
       <!-- 월 이동 네비게이션 -->
       <div class="month-nav">
         <img :src="backButton" alt="back" @click="handlePrev" />
-        <span class="titleBold24px">{{ displayMonth }}</span>
+        <span class="titleBold24px month-text" @click="resetToToday"> {{ displayMonth }} </span>
         <img :src="forwardButton" alt="forward" @click="handleNext" />
       </div>
 
       <!-- 수입/지출 요약 정보 -->
       <div class="summary">
-        <div class="bodyRegular16px">
-          💰 수입:
-          <span style="color: var(--color-dark)"> {{ monthlyIncome.toLocaleString() }}원 </span>
-        </div>
-        <div class="bodyRegular16px">
-          💸 지출:
-          <span style="color: var(--color-dark)"> {{ monthlyExpense.toLocaleString() }}원 </span>
+        <div class="summary-inout">
+          <div class="bodyRegular16px">
+            💰 수입:
+            <span style="color: var(--color-dark)"> {{ monthlyIncome.toLocaleString() }}원 </span>
+          </div>
+          <div class="bodyRegular16px">
+            💸 지출:
+            <span style="color: var(--color-dark)"> {{ monthlyExpense.toLocaleString() }}원 </span>
+          </div>
         </div>
         <div class="bodySemibold18px" style="margin-top: 0.5rem">
           총합:
@@ -27,9 +29,38 @@
           원
         </div>
       </div>
+      <div class="add-buttons" v-if="!isMobile">
+        <BtnMed
+          :color="'var(--color-secondary)'"
+          :text="`빠른추가`"
+          @click="toggleQuickAddDropdown"
+        />
 
-      <!-- 빠른 추가 버튼 -->
-      <div style="height: 2rem"></div>
+        <!-- 빠른 추가 드롭다운 목록 -->
+        <div v-if="showQuickAddDropdown" class="quick-add-dropdown">
+          <button
+            v-for="(option, index) in quickAddOptions"
+            :key="option.id"
+            class="quick-add-option"
+            @click="selectQuickAddOption(option)"
+          >
+            {{ option.title }} {{ option.amount.toLocaleString() }}원
+          </button>
+        </div>
+
+        <!-- 기본 추가 버튼 -->
+        <div style="height: 1rem"></div>
+        <BtnMed :color="'var(--color-primary)'" :text="`기본추가`" @click="moveToAdd" />
+      </div>
+    </div>
+
+    <!-- FullCalendar가 들어가는 영역 -->
+    <div class="calendar-wrapper">
+      <FullCalendar ref="calendarRef" :options="calendarOptions" />
+      <!-- 날짜 클릭 시 모달 표시 -->
+      <Modal v-if="showModal" :date="clickedDate" :data="dailyData" @close="closeModal" />
+    </div>
+    <div class="add-buttons" v-if="isMobile">
       <BtnMed
         :color="'var(--color-secondary)'"
         :text="`빠른추가`"
@@ -52,18 +83,12 @@
       <div style="height: 1rem"></div>
       <BtnMed :color="'var(--color-primary)'" :text="`기본추가`" @click="moveToAdd" />
     </div>
-
-    <!-- FullCalendar가 들어가는 영역 -->
-    <div class="calendar-wrapper">
-      <FullCalendar ref="calendarRef" :options="calendarOptions" />
-      <!-- 날짜 클릭 시 모달 표시 -->
-      <Modal v-if="showModal" :date="clickedDate" :data="dailyData" @close="closeModal" />
-    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useIsMobile } from '@/composables/UseIsMobile'
 import axios from 'axios'
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -73,6 +98,8 @@ import forwardButton from '@/assets/icons/IconArrowForward.svg'
 import BtnMed from '@/components/button/BtnMed.vue'
 import Modal from './Modal.vue'
 import { useRouter } from 'vue-router'
+
+const { isMobile } = useIsMobile()
 
 const router = useRouter()
 
@@ -295,6 +322,15 @@ const displayMonth = computed(() => {
 
   return year === currentYear ? `${month}월` : `${year}년 ${month}월`
 })
+
+// 월 새로고침
+function resetToToday() {
+  const today = new Date()
+  currentDate.value = formatDate(today)
+
+  const calendarApi = calendarRef.value.getApi()
+  calendarApi.today() // 캘린더도 오늘 날짜 기준으로 이동
+}
 </script>
 
 <style>
@@ -428,4 +464,68 @@ const displayMonth = computed(() => {
 .quick-add-option:hover {
   background: var(--color-secondary2);
 }
+
+.month-text {
+  cursor: pointer;
+}
+
+.add-buttons {
+  margin-top: 2rem;
+}
+
+.summary-inout {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media screen and (max-width: 767px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  .summary {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: end;
+  }
+
+  .add-buttons {
+    margin: auto;
+    margin-top: 2rem;
+  }
+
+  .calendar-wrapper {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .quick-add-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .quick-add-buttons button {
+    display: block;
+    margin: 0 auto;
+    width: 80%;
+    font-size: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    text-align: center;
+  }
+}
+
+
 </style>

@@ -5,7 +5,7 @@
       <!-- 월 이동 네비게이션 -->
       <div class="month-nav">
         <img :src="backButton" alt="back" @click="handlePrev" />
-        <span class="titleBold24px">{{ displayMonth }}</span>
+        <span class="titleBold24px month-text" @click="resetToToday"> {{ displayMonth }} </span>
         <img :src="forwardButton" alt="forward" @click="handleNext" />
       </div>
 
@@ -295,6 +295,15 @@ const displayMonth = computed(() => {
 
   return year === currentYear ? `${month}월` : `${year}년 ${month}월`
 })
+
+// 월 새로고침
+function resetToToday() {
+  const today = new Date()
+  currentDate.value = formatDate(today)
+
+  const calendarApi = calendarRef.value.getApi()
+  calendarApi.today() // 캘린더도 오늘 날짜 기준으로 이동
+}
 </script>
 
 <style>
@@ -427,5 +436,9 @@ const displayMonth = computed(() => {
 
 .quick-add-option:hover {
   background: var(--color-secondary2);
+}
+
+.month-text {
+  cursor: pointer;
 }
 </style>

@@ -110,6 +110,13 @@ function resetToToday() {
 </script>
 
 <style scoped>
+.filter-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .report-selector {
   display: flex;
   gap: 0.5rem;
@@ -117,6 +124,13 @@ function resetToToday() {
 
 .range-text {
   cursor: pointer;
+}
+
+.filter-button {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 0.5rem;
 }
 
 @media screen and (max-width: 767px) {
@@ -130,13 +144,6 @@ function resetToToday() {
 
   .report-subtitle {
     margin-bottom: 1rem;
-  }
-
-  .filter-button {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    gap: 0.5rem;
   }
 }
 </style>

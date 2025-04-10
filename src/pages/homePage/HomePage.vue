@@ -68,4 +68,18 @@ const doughnutData = inject('doughnutData')
 .report-right {
   width: 48%;
 }
+
+@media screen and (max-width: 767px) {
+  /** Mobile */
+  .report-wrapper {
+    width: 90vw;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .report-left,
+  .report-right {
+    width: 100%;
+  }
+}
 </style>

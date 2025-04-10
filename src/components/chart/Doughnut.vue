@@ -57,7 +57,7 @@ const options = computed(() => ({
 <style scoped>
 .doughnut-wrapper {
   width: 100%;
-  height: 100%;
+  height: 30rem;
   background-color: var(--color-white);
   border-radius: 2rem;
   box-shadow: var(--boxshadow-light);

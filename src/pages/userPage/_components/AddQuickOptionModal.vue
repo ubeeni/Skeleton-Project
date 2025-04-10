@@ -51,13 +51,17 @@
               v-if="newItem.cycle === 'weekly'"
               :options="weeklyOptions"
               v-model="newItem.week"
+              :class="{ error: (!newItem.week || newItem.week === '') && triedSubmit }"
               placeholder="요일 선택"
             />
 
             <InputMed
               v-if="newItem.cycle === 'monthly'"
               v-model="newItem.month"
-              placeholder="예: 15"
+              :class="{
+                error: (!newItem.month || newItem.month < 1 || newItem.month > 31) && triedSubmit,
+              }"
+              placeholder="1 ~ 31일까지 입력 가능합니다."
               type="number"
             />
             <InputMed v-if="newItem.cycle === 'daily'" value="매일" disabled />
@@ -149,8 +153,31 @@ watch(
 const submit = () => {
   triedSubmit.value = true
 
-  if (!newItem.value.title || !newItem.value.amount || newItem.value.amount <= 0) {
-    alert('거래명과 금액은 필수 항목입니다.')
+  const errors = []
+
+  if (!newItem.value.amount || newItem.value.amount <= 0) {
+    errors.push('금액은 0보다 커야 합니다.')
+  }
+
+  if (!newItem.value.title) {
+    errors.push('거래명을 입력해주세요.')
+  }
+
+  if (newItem.value.cycle === 'monthly') {
+    const day = newItem.value.month
+    if (!day || day < 1 || day > 31) {
+      errors.push('1 ~ 31일 중 반복할 날짜를 선택해주세요.')
+    }
+  }
+
+  if (newItem.value.cycle === 'weekly') {
+    if (!newItem.value.week) {
+      errors.push('반복할 요일을 선택해주세요.')
+    }
+  }
+
+  if (errors.length > 0) {
+    alert('입력값을 확인해주세요:\n\n' + errors.join('\n'))
     return
   }
 
@@ -251,7 +278,8 @@ select {
   font-size: 14px;
 }*/
 
-input.error {
+input.error,
+select.error {
   border: 1px solid red;
 }
 

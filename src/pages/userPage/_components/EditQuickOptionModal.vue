@@ -3,7 +3,6 @@
     <div class="modal-box">
       <h3 class="titleBold24px">고정 수입/지출 수정</h3>
       <div class="input-group">
-        <!-- 구분 (수입 / 지출 버튼) -->
         <div class="form-row-dual">
           <BtnDual
             :is-income-active="editItem.type === 'Income'"
@@ -52,12 +51,17 @@
               v-if="editItem.cycle === 'weekly'"
               :options="weeklyOptions"
               v-model="editItem.week"
+              :class="{ error: (!editItem.week || editItem.week === '') && triedSubmit }"
               placeholder="요일 선택"
             />
             <InputMed
               v-if="editItem.cycle === 'monthly'"
               v-model="editItem.month"
-              placeholder="예: 15"
+              :class="{
+                error:
+                  (!editItem.month || editItem.month < 1 || editItem.month > 31) && triedSubmit,
+              }"
+              placeholder="1 ~ 31일까지 입력 가능합니다."
               type="number"
             />
             <InputMed v-if="editItem.cycle === 'daily'" value="매일" disabled />
@@ -139,8 +143,31 @@ const filteredCategories = computed(() =>
 
 const update = () => {
   triedSubmit.value = true
-  if (!editItem.value.title || !editItem.value.amount || editItem.value.amount <= 0) {
-    alert('거래명과 금액은 필수 항목입니다.')
+  const errors = []
+
+  if (!editItem.value.amount || editItem.value.amount <= 0) {
+    errors.push('금액은 0보다 커야 합니다.')
+  }
+
+  if (!editItem.value.title) {
+    errors.push('거래명을 입력해주세요.')
+  }
+
+  if (editItem.value.cycle === 'monthly') {
+    const day = editItem.value.month
+    if (!day || day < 1 || day > 31) {
+      errors.push('1 ~ 31일 중 반복할 날짜를 선택해주세요.')
+    }
+  }
+
+  if (editItem.value.cycle === 'weekly') {
+    if (!editItem.value.week) {
+      errors.push('반복할 요일을 선택해주세요.')
+    }
+  }
+
+  if (errors.length > 0) {
+    alert('입력값을 확인해주세요:\n\n' + errors.join('\n'))
     return
   }
 
@@ -207,7 +234,8 @@ h3 {
   gap: 2rem;
 }
 
-input.error {
+input.error,
+select.error {
   border: 1px solid red;
 }
 

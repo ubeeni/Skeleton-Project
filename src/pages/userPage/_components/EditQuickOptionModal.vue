@@ -11,7 +11,7 @@
             @clickExpense="editItem.type = 'Expense'"
           />
           <InputMed
-            v-model="editItem.amount"
+            v-model.number="editItem.amount"
             type="number"
             :class="{ error: (!editItem.amount || editItem.amount <= 0) && triedSubmit }"
             placeholder="금액을 입력하세요"
@@ -121,21 +121,6 @@ const emit = defineEmits(['close', 'update', 'delete'])
 const editItem = ref({ ...props.option })
 const triedSubmit = ref(false)
 
-watch(
-  () => props.option,
-  (newVal) => {
-    const copied = { ...newVal }
-
-    // amount가 문자열이면 숫자로 변환
-    if (typeof copied.amount === 'string') {
-      const parsed = Number(copied.amount)
-      copied.amount = isNaN(parsed) ? 0 : parsed
-    }
-
-    editItem.value = copied
-  },
-  { immediate: true },
-)
 const prevCategoryByType = ref({
   Income: null,
   Expense: null,

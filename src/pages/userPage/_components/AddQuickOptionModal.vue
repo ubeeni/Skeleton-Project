@@ -11,7 +11,7 @@
             @clickExpense="newItem.type = 'Expense'"
           />
           <InputMed
-            v-model="newItem.amount"
+            v-model.number="newItem.amount"
             type="number"
             :class="{ error: (!newItem.amount || newItem.amount <= 0) && triedSubmit }"
             placeholder="금액을 입력하세요(단위: 원)"
@@ -85,7 +85,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watchEffect, watch } from 'vue'
+import { ref, computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import InputLg from '@/components/input/InputLg.vue'
 import InputMed from '@/components/input/InputMed.vue'
@@ -139,16 +139,6 @@ const weeklyOptions = [
 ]
 
 const triedSubmit = ref(false)
-
-watch(
-  () => newItem.value.amount,
-  (val) => {
-    if (typeof val === 'string') {
-      const parsed = Number(val)
-      newItem.value.amount = isNaN(parsed) ? 0 : parsed
-    }
-  },
-)
 
 const submit = () => {
   triedSubmit.value = true

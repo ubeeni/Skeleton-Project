@@ -420,6 +420,16 @@
       "amount": 1000000,
       "date": "2025-04-10",
       "memo": "돈 나가는 날..."
+    },
+    {
+      "id": "44f1",
+      "title": "커피 수혈",
+      "member_id": "12CD",
+      "category_id": "0000",
+      "type": "Expense",
+      "amount": "2000",
+      "date": "2025-04-10",
+      "memo": "나는야 커피 자판기"
     }
   ],
   "quickAddOptions": [
@@ -429,9 +439,9 @@
       "member_id": "12CD",
       "category_id": "0000",
       "type": "Expense",
-      "cycle": "daily",
-      "day": "매일",
-      "week": null,
+      "cycle": "weekly",
+      "day": null,
+      "week": "월요일",
       "month": null,
       "amount": 2000,
       "memo": "나는야 커피 자판기"
@@ -463,16 +473,16 @@
       "memo": "돈 나가는 날..."
     },
     {
-      "id": "1744251142237",
+      "id": "1744267302752",
       "member_id": "12CD",
-      "title": "1313",
-      "type": "Income",
-      "category_id": "2222",
-      "cycle": "weekly",
+      "title": "123123",
+      "type": "Expense",
+      "category_id": "0000",
+      "cycle": "onetime",
       "day": null,
-      "week": "화요일",
+      "week": null,
       "month": null,
-      "amount": 1313,
+      "amount": 123123,
       "memo": ""
     }
   ]

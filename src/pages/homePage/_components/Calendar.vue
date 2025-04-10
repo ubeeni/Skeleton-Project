@@ -1,12 +1,15 @@
 <template>
   <div class="container">
+    <!-- 좌측 사이드바 -->
     <div class="sidebar">
+      <!-- 월 이동 네비게이션 -->
       <div class="month-nav">
         <img :src="backButton" alt="back" @click="handlePrev" />
-        <span class="titleBold24px"> {{ parseInt(currentDate.split('-')[1]) }}월 </span>
+        <span class="titleBold24px">{{ displayMonth }}</span>
         <img :src="forwardButton" alt="forward" @click="handleNext" />
       </div>
 
+      <!-- 수입/지출 요약 정보 -->
       <div class="summary">
         <div class="bodyRegular16px">
           💰 수입:
@@ -25,6 +28,7 @@
         </div>
       </div>
 
+      <!-- 빠른 추가 버튼 -->
       <div style="height: 2rem"></div>
       <BtnMed
         :color="'var(--color-secondary)'"
@@ -32,6 +36,7 @@
         @click="toggleQuickAddDropdown"
       />
 
+      <!-- 빠른 추가 드롭다운 목록 -->
       <div v-if="showQuickAddDropdown" class="quick-add-dropdown">
         <button
           v-for="(option, index) in quickAddOptions"
@@ -43,12 +48,15 @@
         </button>
       </div>
 
+      <!-- 기본 추가 버튼 -->
       <div style="height: 1rem"></div>
       <BtnMed :color="'var(--color-primary)'" :text="`기본추가`" @click="moveToAdd" />
     </div>
 
+    <!-- FullCalendar가 들어가는 영역 -->
     <div class="calendar-wrapper">
       <FullCalendar ref="calendarRef" :options="calendarOptions" />
+      <!-- 날짜 클릭 시 모달 표시 -->
       <Modal v-if="showModal" :date="clickedDate" :data="dailyData" @close="closeModal" />
     </div>
   </div>
@@ -64,10 +72,11 @@ import backButton from '@/assets/icons/IconArrowBack.svg'
 import forwardButton from '@/assets/icons/IconArrowForward.svg'
 import BtnMed from '@/components/button/BtnMed.vue'
 import Modal from './Modal.vue'
-
 import { useRouter } from 'vue-router'
+
 const router = useRouter()
 
+// 기본 추가 페이지 이동
 function moveToAdd() {
   router.push({
     name: 'detail',
@@ -76,9 +85,11 @@ function moveToAdd() {
   })
 }
 
+// 트랜잭션 및 빠른추가 옵션 저장용 ref
 const transactions = ref([])
 const quickAddOptions = ref([])
 
+// mount 시 json 데이터 fetch
 onMounted(async () => {
   const res = await fetch('/db.json')
   const json = await res.json()
@@ -86,17 +97,16 @@ onMounted(async () => {
   quickAddOptions.value = json.quickAddOptions
 })
 
+// 빠른 추가 드롭다운 제어
 const showQuickAddDropdown = ref(false)
-
 function toggleQuickAddDropdown() {
   showQuickAddDropdown.value = !showQuickAddDropdown.value
 }
 
+// 빠른 추가 클릭 시 POST 후 화면에 반영
 async function selectQuickAddOption(option) {
   const today = new Date()
-  const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(
-    today.getDate(),
-  ).padStart(2, '0')}`
+  const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
 
   const newTransaction = {
     title: option.title,
@@ -111,7 +121,7 @@ async function selectQuickAddOption(option) {
   try {
     await axios.post('http://localhost:3000/transactions', newTransaction)
     alert('추가되었습니다!')
-    transactions.value.push(newTransaction)
+    transactions.value.push(newTransaction) // 화면 반영
     showQuickAddDropdown.value = false
   } catch (err) {
     console.error(err)
@@ -119,29 +129,36 @@ async function selectQuickAddOption(option) {
   }
 }
 
+// 날짜별로 수입/지출 데이터를 그룹화 (YYYY-MM-DD 기준)
 const groupedByDate = computed(() => {
   const result = {}
 
   transactions.value.forEach((item) => {
-    const date = item.date
-    const type = item.type
-    const amount = item.amount
-    const title = item.title
+    const { id, title, type, amount, date } = item
+    // date가 문자열인지 확인하고, 맞다면 앞 10자리(YYYY-MM-DD)를 잘라냄
+    // 문자열이 아니라면 빈 문자열 반환하여 오류 방지
+    const normalizedDate = typeof date === 'string' ? date.slice(0, 10) : ''
 
-    if (!result[date]) {
-      result[date] = { income: [], expense: [] }
+    if (!result[normalizedDate]) {
+      result[normalizedDate] = { income: [], expense: [] }
     }
 
     if (type === 'Income') {
-      result[date].income.push({ title, amount })
+      result[normalizedDate].income.push({ id, title, amount })
     } else if (type === 'Expense') {
-      result[date].expense.push({ title, amount })
+      result[normalizedDate].expense.push({ id, title, amount })
     }
   })
 
+  // 최신순 정렬
+  Object.values(result).forEach((day) => {
+    day.income.sort((a, b) => new Date(b.fullDate) - new Date(a.fullDate))
+    day.expense.sort((a, b) => new Date(b.fullDate) - new Date(a.fullDate))
+  })
   return result
 })
 
+// 총합 색상 class 동적 적용
 const totalColorClass = computed(() => {
   const net = monthlyIncome.value - monthlyExpense.value
   if (net > 0) return 'color-positive'
@@ -149,12 +166,14 @@ const totalColorClass = computed(() => {
   else return ''
 })
 
+// 캘린더 및 날짜 클릭 관련 상태값
 const calendarRef = ref(null)
 const currentDate = ref(formatDate(new Date()))
 const showModal = ref(false)
 const clickedDate = ref('')
 const dailyData = ref(null)
 
+// 날짜 클릭 시 모달 표시
 const handleDateClick = (info) => {
   const dateStr = info.dateStr
   clickedDate.value = dateStr
@@ -162,16 +181,19 @@ const handleDateClick = (info) => {
   showModal.value = true
 }
 
+// 모달 닫기
 const closeModal = () => {
   showModal.value = false
   clickedDate.value = ''
   dailyData.value = null
 }
 
+// 현재 날짜 포맷 YYYY-MM
 function formatDate(date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
 }
 
+// 월 이동 (이전/다음)
 const handlePrev = () => {
   const calendarApi = calendarRef.value.getApi()
   calendarApi.prev()
@@ -186,20 +208,27 @@ const handleNext = () => {
   currentDate.value = formatDate(newDate)
 }
 
+// 월별 수입 계산
 const monthlyIncome = computed(() => {
   const selectedMonth = currentDate.value
   return transactions.value
-    .filter((t) => t.date.startsWith(selectedMonth) && t.type === 'Income')
+    .filter(
+      (t) => typeof t.date === 'string' && t.date.startsWith(selectedMonth) && t.type === 'Income',
+    )
     .reduce((acc, cur) => acc + cur.amount, 0)
 })
 
+// 월별 지출 계산
 const monthlyExpense = computed(() => {
   const selectedMonth = currentDate.value
   return transactions.value
-    .filter((t) => t.date.startsWith(selectedMonth) && t.type === 'Expense')
+    .filter(
+      (t) => typeof t.date === 'string' && t.date.startsWith(selectedMonth) && t.type === 'Expense',
+    )
     .reduce((acc, cur) => acc + cur.amount, 0)
 })
 
+// FullCalendar에 표시할 이벤트 데이터 생성
 const events = computed(() =>
   Object.entries(groupedByDate.value).map(([date, data]) => {
     const expenseTotal = data.expense.reduce((acc, cur) => acc + cur.amount, 0)
@@ -214,6 +243,7 @@ const events = computed(() =>
   }),
 )
 
+// 캘린더에 출력할 커스텀 이벤트 디자인
 const renderEventContent = (arg) => {
   const expense = arg.event.extendedProps.expenseTotal
   const income = arg.event.extendedProps.incomeTotal
@@ -237,6 +267,7 @@ const renderEventContent = (arg) => {
   return { domNodes: [wrapper] }
 }
 
+// 캘린더 옵션 정의
 const calendarOptions = computed(() => ({
   plugins: [dayGridPlugin, interactionPlugin],
   initialView: 'dayGridMonth',
@@ -252,6 +283,18 @@ const calendarOptions = computed(() => ({
   events: events.value,
   eventContent: renderEventContent,
 }))
+
+// 사이드바 월 표기 형식
+const displayMonth = computed(() => {
+  const now = new Date()
+  const currentYear = now.getFullYear()
+
+  const [yearStr, monthStr] = currentDate.value.split('-')
+  const year = parseInt(yearStr)
+  const month = parseInt(monthStr)
+
+  return year === currentYear ? `${month}월` : `${year}년 ${month}월`
+})
 </script>
 
 <style>

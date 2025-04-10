@@ -419,39 +419,21 @@
       "id": "9b8f"
     },
     {
-      "id": "1536",
-      "title": "ㄴㅇㄹㄴㅇㄹ",
-      "category_id": "0000",
-      "type": "Expense",
-      "amount": 1222,
-      "date": "2025-04-10T13:50:04",
-      "memo": ""
-    },
-    {
-      "id": "5f76",
-      "title": "추가 테스트 ",
+      "id": "7786",
+      "title": "11",
       "category_id": "8888",
       "type": "Expense",
-      "amount": 2580,
-      "date": "2025-04-01T16:10:00",
-      "memo": "추가 메모"
+      "amount": 11,
+      "date": "2025-04-10T16:09:50",
+      "memo": "1"
     },
     {
-      "id": "6407",
-      "title": "qw",
-      "category_id": "0000",
-      "type": "Expense",
-      "amount": 1,
-      "date": "2025-04-10T16:34:31",
-      "memo": ""
-    },
-    {
-      "id": "9c35",
-      "title": "qew",
-      "category_id": "0000",
-      "type": "Expense",
-      "amount": 122,
-      "date": "2025-04-10T16:35:31",
+      "id": "51bb",
+      "title": "11ㄹㄹ",
+      "category_id": "3333",
+      "type": "Income",
+      "amount": 213,
+      "date": "2025-04-10T09:10:00",
       "memo": ""
     }
   ],

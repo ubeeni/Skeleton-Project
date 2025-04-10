@@ -35,4 +35,12 @@ defineEmits(['click'])
   height: 2.5rem;
   color: var(--color-white);
 }
+
+@media screen and (max-width: 767px) {
+  /** Mobile */
+  .btn-circle {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
 </style>

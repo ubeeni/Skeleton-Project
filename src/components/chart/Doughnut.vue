@@ -1,6 +1,12 @@
 <template>
   <div class="doughnut-wrapper">
-    <apexchart class="doughnut-chart" type="donut" :options="options" :series="series" />
+    <apexchart
+      class="doughnut-chart"
+      type="donut"
+      :options="options"
+      :series="series"
+      :height="'100%'"
+    />
   </div>
 </template>
 
@@ -35,13 +41,23 @@ const options = computed(() => ({
       formatter: (val) => `${val.toLocaleString()}원`,
     },
   },
+  responsive: [
+    {
+      breakpoint: 768,
+      options: {
+        legend: {
+          show: false,
+        },
+      },
+    },
+  ],
 }))
 </script>
 
 <style scoped>
 .doughnut-wrapper {
   width: 100%;
-  height: 100%;
+  height: 30rem;
   background-color: var(--color-white);
   border-radius: 2rem;
   box-shadow: var(--boxshadow-light);
@@ -51,5 +67,13 @@ const options = computed(() => ({
 .doughnut-chart {
   width: 100%;
   height: 100%;
+}
+
+@media screen and (max-width: 767px) {
+  /** Mobile */
+  .doughnut-wrapper {
+    padding: 0.25rem;
+    height: 50vh;
+  }
 }
 </style>

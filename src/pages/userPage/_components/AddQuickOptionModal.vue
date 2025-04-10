@@ -3,30 +3,6 @@
     <div class="modal-box">
       <h3 class="titleBold24px">고정 수입/지출 추가</h3>
       <div class="input-group">
-        <!-- 구분 (수입 / 지출 버튼) -->
-        <!-- 금액 -->
-        <!-- <div class="form-row">
-          <div class="toggle-group">
-            <button
-              :class="[
-                'toggle-btn',
-                { active: newItem.type === 'Income', income: newItem.type === 'Income' },
-              ]"
-              @click="newItem.type = 'Income'"
-            >
-              수입
-            </button>
-            <button
-              :class="[
-                'toggle-btn',
-                { active: newItem.type === 'Expense', expense: newItem.type === 'Expense' },
-              ]"
-              @click="newItem.type = 'Expense'"
-            >
-              지출
-            </button>
-          </div>
-        </div> -->
         <div class="form-row-dual">
           <BtnDual
             :is-income-active="newItem.type === 'Income'"
@@ -85,6 +61,7 @@
               type="number"
             />
             <InputMed v-if="newItem.cycle === 'daily'" value="매일" disabled />
+            <InputMed v-if="newItem.cycle === 'onetime'" value="반복 없음" disabled />
           </div>
         </div>
 
@@ -128,8 +105,8 @@ const newItem = ref({
   title: '',
   type: 'Expense',
   category_id: '',
-  cycle: 'daily',
-  day: '매일',
+  cycle: 'onetime',
+  day: null,
   week: null,
   month: null,
   amount: 0,
@@ -141,6 +118,7 @@ const filteredCategories = computed(() =>
 )
 
 const cycleOptions = [
+  { value: 'onetime', label: '반복 없음' },
   { value: 'daily', label: '매일' },
   { value: 'weekly', label: '매주' },
   { value: 'monthly', label: '매월' },

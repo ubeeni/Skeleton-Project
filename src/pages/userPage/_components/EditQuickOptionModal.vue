@@ -61,6 +61,7 @@
               type="number"
             />
             <InputMed v-if="editItem.cycle === 'daily'" value="매일" disabled />
+            <InputMed v-if="editItem.cycle === 'onetime'" value="반복 없음" disabled />
           </div>
         </div>
         <!-- 메모 -->
@@ -95,6 +96,7 @@ const props = defineProps({
 })
 
 const cycleOptions = [
+  { value: 'onetime', label: '반복 없음' },
   { value: 'daily', label: '매일' },
   { value: 'weekly', label: '매주' },
   { value: 'monthly', label: '매월' },

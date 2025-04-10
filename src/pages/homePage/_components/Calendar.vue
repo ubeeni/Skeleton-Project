@@ -5,7 +5,7 @@
       <!-- 월 이동 네비게이션 -->
       <div class="month-nav">
         <img :src="backButton" alt="back" @click="handlePrev" />
-        <span class="titleBold24px"> {{ parseInt(currentDate.split('-')[1]) }}월 </span>
+        <span class="titleBold24px">{{ displayMonth }}</span>
         <img :src="forwardButton" alt="forward" @click="handleNext" />
       </div>
 
@@ -150,7 +150,7 @@ const groupedByDate = computed(() => {
     }
   })
 
-  // 최신순 정렬 (옵션)
+  // 최신순 정렬
   Object.values(result).forEach((day) => {
     day.income.sort((a, b) => new Date(b.fullDate) - new Date(a.fullDate))
     day.expense.sort((a, b) => new Date(b.fullDate) - new Date(a.fullDate))
@@ -283,6 +283,18 @@ const calendarOptions = computed(() => ({
   events: events.value,
   eventContent: renderEventContent,
 }))
+
+// 사이드바 월 표기 형식
+const displayMonth = computed(() => {
+  const now = new Date()
+  const currentYear = now.getFullYear()
+
+  const [yearStr, monthStr] = currentDate.value.split('-')
+  const year = parseInt(yearStr)
+  const month = parseInt(monthStr)
+
+  return year === currentYear ? `${month}월` : `${year}년 ${month}월`
+})
 </script>
 
 <style>

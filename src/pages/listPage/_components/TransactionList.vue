@@ -12,6 +12,7 @@
 
 <script setup>
 import { computed } from 'vue'
+import dayjs from 'dayjs'
 import TransactionOneDay from './TransactionOneDay.vue'
 
 const props = defineProps({
@@ -22,11 +23,21 @@ const props = defineProps({
 const groupedTransactions = computed(() => {
   const groups = {}
   for (const item of props.transactions) {
-    const date = item.date
-    if (!groups[date]) groups[date] = []
-    groups[date].push(item)
+    // ✅ 날짜 포맷 통일
+    const dateKey = dayjs(item.date).format('YYYY-MM-DD')
+    if (!groups[dateKey]) groups[dateKey] = []
+    groups[dateKey].push(item)
   }
-  return Object.fromEntries(Object.entries(groups).sort((a, b) => new Date(b[0]) - new Date(a[0])))
+
+  // 최신 날짜가 위로 오도록 정렬
+  return Object.fromEntries(
+    Object.entries(groups).sort((a, b) => new Date(b[0]) - new Date(a[0]))
+  )
+  //   const date = item.date
+  //   if (!groups[date]) groups[date] = []
+  //   groups[date].push(item)
+  // }
+  // return Object.fromEntries(Object.entries(groups).sort((a, b) => new Date(b[0]) - new Date(a[0])))
 })
 </script>
 

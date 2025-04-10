@@ -363,6 +363,60 @@
       "amount": 200000,
       "date": "2025-04-09",
       "memo": "엄마 용돈"
+    },
+    {
+      "id": "3e5b",
+      "title": "채린테스트",
+      "category_id": "8888",
+      "type": "Expense",
+      "amount": 10000,
+      "date": "2025-04-09T07:43:56",
+      "memo": "아메리카노"
+    },
+    {
+      "id": "3756",
+      "title": "채린테스트 3시",
+      "category_id": "7777",
+      "type": "Expense",
+      "amount": 10000,
+      "date": "2025-04-09T06:45:00",
+      "memo": "3시에 거래"
+    },
+    {
+      "id": "5b13",
+      "title": "4/5 정렬 테스트",
+      "category_id": "7777",
+      "type": "Expense",
+      "amount": 10000,
+      "date": "2025-04-05T08:00:00",
+      "memo": "5시"
+    },
+    {
+      "id": "53c8",
+      "title": "4/5 테스트2222",
+      "category_id": "9999",
+      "type": "Expense",
+      "amount": 100000,
+      "date": "2025-04-04T22:00:00",
+      "memo": "ㅋㅋㅋ"
+    },
+    {
+      "id": "3bc8",
+      "title": "4/5 333",
+      "category_id": "8888",
+      "type": "Expense",
+      "amount": 10000,
+      "date": "2025-04-05T08:01:00",
+      "memo": "222"
+    },
+    {
+      "id": "82a4",
+      "title": "4번쨰 테스트",
+      "category_id": "BBBB",
+      "type": "Expense",
+      "amount": 100,
+      "date": "2025-04-05T08:03:00",
+      "memo": "11"
     }
   ],
   "quickAddOptions": [

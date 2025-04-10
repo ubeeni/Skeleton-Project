@@ -48,7 +48,9 @@
 
     <!-- 버튼 -->
     <div class="button-group">
-      <p v-if="hasUnsavedChanges" class="unsaved-warning">저장하지 않은 변경사항이 있습니다!</p>
+      <p class="unsaved-warning" :class="{ show: hasUnsavedChanges }">
+        저장하지 않은 변경사항이 있습니다.
+      </p>
       <BtnLg
         :color="'var(--color-primary)'"
         :text="`저장`"
@@ -290,7 +292,7 @@ onMounted(async () => {
 }
 
 .button-group {
-  margin-top: 10rem;
+  margin-top: 5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -298,10 +300,16 @@ onMounted(async () => {
 }
 
 .unsaved-warning {
-  color: red;
+  height: 20px;
   font-size: 14px;
-  margin-bottom: 0.5rem;
+  color: red;
   text-align: center;
+  visibility: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.unsaved-warning.show {
+  visibility: visible;
 }
 
 .btn-warning {

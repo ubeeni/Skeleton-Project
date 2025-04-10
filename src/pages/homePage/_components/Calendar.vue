@@ -69,7 +69,11 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 function moveToAdd() {
-  router.push({ name: 'add' })
+  router.push({
+    name: 'detail',
+    params: { action: 'add' },
+    state: { from: 'home' },
+  })
 }
 
 const transactions = ref([])

@@ -45,32 +45,57 @@ const isIncome = inject('isIncome')
 const isExpense = inject('isExpense')
 const top5Labels = inject('top5Labels')
 const PERIOD_OPTIONS = inject('PERIOD_OPTIONS')
-const currentDate = inject('currentDate')
-const setCurrentDate = inject('setCurrentDate')
+const currentDate = inject('currentDoughnutDate')
+const setCurrentDate = inject('setCurrentDoughnutDate')
+const transactions = inject('transactions')
+const subtractPeriod = inject('subtractPeriod')
+
+function formatDateYMD(date) {
+  return date.toISOString().split('T')[0]
+}
+
+function hasTransactionsInRange(start, end) {
+  const startStr = formatDateYMD(start)
+  const endStr = formatDateYMD(end)
+
+  return transactions.value.some((tx) => {
+    const txStr = formatDateYMD(new Date(tx.date))
+    return txStr >= startStr && txStr <= endStr
+  })
+}
 
 // 날짜 이동 함수
-function handlePrev() {
+function tryMoveDate(direction) {
   const date = new Date(currentDate.value)
-  if (periodDoughnut.value === '1주') {
-    date.setDate(date.getDate() - 7)
-  } else if (periodDoughnut.value === '1개월') {
-    date.setMonth(date.getMonth() - 1)
-  } else if (periodDoughnut.value === '3개월') {
-    date.setMonth(date.getMonth() - 3)
+  const unit = periodDoughnut.value
+  let nextDate = new Date(date)
+
+  if (unit === '1주') {
+    nextDate.setDate(date.getDate() + 7 * direction)
+  } else if (unit === '1개월') {
+    nextDate.setMonth(date.getMonth() + 1 * direction)
+  } else if (unit === '3개월') {
+    nextDate.setMonth(date.getMonth() + 3 * direction)
   }
-  setCurrentDate(date)
+
+  const today = new Date()
+  if (nextDate > today) return // 오늘 이후는 이동 금지
+
+  // 계산된 범위 내에 데이터 있는지 확인
+  const start = subtractPeriod(nextDate, unit, 1)
+  const end = nextDate
+
+  if (hasTransactionsInRange(start, end)) {
+    setCurrentDate(nextDate)
+  }
+}
+
+function handlePrev() {
+  tryMoveDate(-1)
 }
 
 function handleNext() {
-  const date = new Date(currentDate.value)
-  if (periodDoughnut.value === '1주') {
-    date.setDate(date.getDate() + 7)
-  } else if (periodDoughnut.value === '1개월') {
-    date.setMonth(date.getMonth() + 1)
-  } else if (periodDoughnut.value === '3개월') {
-    date.setMonth(date.getMonth() + 3)
-  }
-  setCurrentDate(date)
+  tryMoveDate(1)
 }
 
 // 범위 텍스트

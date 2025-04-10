@@ -33,7 +33,9 @@ defineEmits(['click'])
   padding: 1.25rem 0;
 }
 
-.btn-lg-wrapper:hover {
-  background: var(--color-hover);
+@media (hover: hover) and (pointer: fine) {
+  .btn-lg-wrapper:hover {
+    background: var(--color-hover);
+  }
 }
 </style>

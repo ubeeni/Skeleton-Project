@@ -1,5 +1,5 @@
 <template>
-  <header><Header /></header>
+  <header><HeaderMobile v-if="isMobile" /><Header v-else /></header>
 
   <main class="bodyRegular16px">
     <RouterView />
@@ -11,11 +11,15 @@
 <script setup>
 import axios from 'axios'
 import { ref, computed, onMounted, provide } from 'vue'
+import { useIsMobile } from './composables/UseIsMobile'
 
 import Floating from './components/layout/Floating.vue'
 import Header from './components/layout/Header.vue'
+import HeaderMobile from './components/layout/HeaderMobile.vue'
 // import Footer from './components/layout/Footer.vue'
 import { toast } from 'vue3-toastify'
+
+const { isMobile } = useIsMobile()
 
 const quickAddOptions = ref([])
 
@@ -229,4 +233,11 @@ main {
   width: 100vw;
   margin: 0 auto;
 } */
+
+@media screen and (max-width: 767px) {
+  main {
+    width: 90vw;
+    margin: 5rem auto;
+  }
+}
 </style>

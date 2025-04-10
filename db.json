@@ -2,9 +2,9 @@
   "members": [
     {
       "id": "12CD",
-      "name": "테스트",
-      "incomeDefault": "용돈",
-      "expenseDefault": "카페"
+      "name": "홍길동",
+      "incomeDefault": "미분류",
+      "expenseDefault": "미분류"
     }
   ],
   "categories": [
@@ -363,34 +363,6 @@
       "amount": 200000,
       "date": "2025-04-09",
       "memo": "엄마 용돈"
-    },
-    {
-      "id": "7bbc",
-      "title": "123",
-      "member_id": "12CD",
-      "category_id": "0000",
-      "type": "Expense",
-      "amount": 200000,
-      "date": "2025-04-09"
-    },
-    {
-      "id": "dcee",
-      "title": "123",
-      "member_id": "12CD",
-      "category_id": "0000",
-      "type": "Expense",
-      "amount": 200000,
-      "date": "2025-04-09"
-    },
-    {
-      "id": "6f63",
-      "title": "주간 저금",
-      "member_id": "12CD",
-      "category_id": "0000",
-      "type": "Expense",
-      "amount": 70000,
-      "date": "2025-04-09",
-      "memo": "매주 모아서..."
     }
   ],
   "quickAddOptions": [
@@ -443,21 +415,19 @@
       "day": "매일",
       "week": null,
       "month": null,
-      "amount": "200000",
-      "memo": ""
+      "amount": 200000
     },
     {
-      "id": "1744185703078",
+      "id": "1744164354623",
       "member_id": "12CD",
-      "title": "1",
+      "title": "4",
       "type": "Expense",
       "category_id": "0000",
       "cycle": "daily",
       "day": "매일",
       "week": null,
       "month": null,
-      "amount": "2000",
-      "memo": ""
+      "amount": 10000
     }
   ]
 }

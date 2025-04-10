@@ -4,12 +4,16 @@
     <div class="content">
       <!-- 왼쪽 패널 -->
       <div class="left-panel">
+        <div class="left-header">
+          <span class="bodySemibold18px">카테고리 기본값</span>
+        </div>
         <div class="select-group">
           <span class="bodySemibold18px">수입</span>
           <SelectMed
             v-model="selectedIncome"
             :options="incomeCategories.map((cat) => ({ label: cat.name, value: cat.id }))"
             placeholder="수입 카테고리 선택"
+            @change="onCategoryChange"
           />
         </div>
         <div class="select-group">
@@ -18,6 +22,7 @@
             v-model="selectedExpense"
             :options="expenseCategories.map((cat) => ({ label: cat.name, value: cat.id }))"
             placeholder="지출 카테고리 선택"
+            @change="onCategoryChange"
           />
         </div>
       </div>
@@ -43,7 +48,15 @@
 
     <!-- 버튼 -->
     <div class="button-group">
-      <BtnLg :color="'var(--color-primary)'" :text="`저장`" @click="saveDefaults" />
+      <p class="unsaved-warning" :class="{ show: hasUnsavedChanges }">
+        저장하지 않은 변경사항이 있습니다.
+      </p>
+      <BtnLg
+        :color="'var(--color-primary)'"
+        :text="`저장`"
+        :class="{ 'btn-warning': hasUnsavedChanges }"
+        @click="saveDefaults"
+      />
       <BtnLg :color="'var(--color-light)'" :text="`취소`" @click="cancelAndRedirect" />
     </div>
   </div>
@@ -91,6 +104,7 @@ const userId = route.params.id
 const showAddModal = ref(false)
 const showEditModal = ref(false)
 const selectedOption = ref(null)
+const hasUnsavedChanges = ref(false)
 
 // 사용자 정보 및 선택된 카테고리
 const user = ref(null)
@@ -147,15 +161,22 @@ const handleAddOption = (newOption) => {
   newOption.id = Date.now().toString()
   newOption.member_id = userId
   quickOptions.value.push(newOption)
+  hasUnsavedChanges.value = true
 }
 
 const handleUpdateOption = (updatedItem) => {
   const idx = quickOptions.value.findIndex((opt) => opt.id === updatedItem.id)
   if (idx !== -1) quickOptions.value[idx] = { ...updatedItem }
+  hasUnsavedChanges.value = true
 }
 
 const handleDeleteOption = (id) => {
   quickOptions.value = quickOptions.value.filter((item) => item.id !== id)
+  hasUnsavedChanges.value = true
+}
+
+const onCategoryChange = () => {
+  hasUnsavedChanges.value = true
 }
 
 // 저장
@@ -190,6 +211,7 @@ const saveDefaults = async () => {
   ])
 
   alert('저장되었습니다!')
+  hasUnsavedChanges.value = false
   router.push(`/user/${userId}`)
 }
 
@@ -197,6 +219,7 @@ const saveDefaults = async () => {
 const cancelAndRedirect = () => {
   const confirmCancel = confirm('수정 내용이 반영되지 않습니다. 정말 취소하시겠어요?')
   if (confirmCancel) {
+    hasUnsavedChanges.value = false
     router.push(`/user/${userId}`)
   }
 }
@@ -255,16 +278,41 @@ onMounted(async () => {
   margin-bottom: 1rem;
 }
 
+.left-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  height: 35.5px;
+}
+
 .item {
   margin-bottom: 1rem;
   cursor: pointer;
 }
 
 .button-group {
-  margin-top: 10rem;
+  margin-top: 5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+}
+
+.unsaved-warning {
+  height: 20px;
+  font-size: 14px;
+  color: red;
+  text-align: center;
+  visibility: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.unsaved-warning.show {
+  visibility: visible;
+}
+
+.btn-warning {
+  border: 2px solid red;
 }
 </style>

@@ -48,7 +48,13 @@ const router = createRouter({
   ],
 
   // 페이지 이동시 항상 최상단으로 이동
-  scrollBehavior() {
+  scrollBehavior(to) {
+    if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: 'smooth',
+      }
+    }
     return { top: 0, behavior: 'smooth' }
   },
 })

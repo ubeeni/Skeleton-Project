@@ -1,6 +1,6 @@
 <template>
   <div class="report-page bodyRegular18px">
-    <div class="report-wrapper">
+    <div class="report-wrapper" id="line">
       <div class="report-left">
         <div class="report-title titleBold24px">소비 분석 그래프</div>
         <LineExplain />
@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="report-divider"></div>
-    <div class="report-wrapper">
+    <div class="report-wrapper" id="doughnut">
       <div class="report-left">
         <div class="report-title titleBold24px">카테고리 별 비율</div>
         <DoughnutExplain />

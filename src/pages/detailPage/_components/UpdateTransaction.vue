@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <h3>거래내역 추가</h3>
+    <h3>거래 수정</h3>
     <div class="form-group">
       <label>거래명</label>
       <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionTitle" />
@@ -18,30 +18,25 @@
     </div>
 
     <BtnDual
-      @clickIncome="clickIncome"
-      @clickExpense="clickExpense"
+      @clickIncome="selectType('Income')"
+      @clickExpense="selectType('Expense')"
       :is-income-active="isIncome"
       :is-expense-active="isExpense"
     />
 
-    <SelectLg
-      v-model="categoryId"
-      :options="filteredCategory"
-      placeholder="카테고리"
-      @onChange="handleCategorySelect"
-    />
+    <SelectLg v-model="categoryId" :options="filteredCategory" placeholder="카테고리" />
 
     <div class="form-group">
       <label>날짜</label>
       <InputLg
         type="text"
         placeholder="날짜를 선택하세요"
-        @click="openModal"
+        @click="openCalenderModal"
         v-model="dateDisplay"
       />
     </div>
 
-    <div v-if="showModal" class="modal-backdrop">
+    <div v-if="showCalenderModal" class="modal-backdrop">
       <div class="modal-content">
         <h3>날짜와 시간 선택</h3>
         <Datepicker
@@ -53,7 +48,7 @@
           :max-date="new Date()"
         />
         <br />
-        <button @click="closeModal">닫기</button>
+        <button @click="closeCalenderModal">닫기</button>
       </div>
     </div>
 
@@ -63,14 +58,22 @@
     </div>
 
     <div class="actions">
-      <BtnLg text="추가" @click="addTransaction" color="var(--color-primary)" />
+      <BtnLg text="수정" @click="updateTransaction" color="var(--color-primary)" />
+      <BtnLg text="삭제" @click="deleteTransaction" color="var(--color-semidark)" />
       <BtnLg text="취소" @click="cancle" color="var(--color-semidark)" />
     </div>
 
-    <div>
-      <p>categoryId : {{ categoryId }}</p>
-      <p>categoryType : {{ categoryType }}</p>
-      <p>categoryName : {{ categoryName }}</p>
+    <div v-if="showConfirmModal" class="modal-backdrop">
+      <div class="modal-content">
+        <div>
+          <p>거래 내역 수정이 완료되었습니다!</p>
+          <br />
+        </div>
+        <div class="modal-button-container">
+          <button @click="moveToPrev">이전 페이지로</button>
+          <!-- <button @click="moveToView">상세보기 페이지로</button> -->
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -92,7 +95,7 @@ import SelectSm from '@/components/input/SelectSm.vue'
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 
@@ -103,11 +106,11 @@ const router = useRouter()
 
 const BASEURI = '/api'
 
-const transactionTitle = ref('') // 거래 타이틀
+const transactionId = ref(null) // 상세 보기할 트랜잭션 ID - 추후 ViewTransaction 에서 받아올 것
+
+const transactionTitle = ref('') // 거래명
 
 const amount = ref(0) // 금액
-
-const memo = ref('') // 메모
 
 const dateStr = ref('') // 날짜 (문자열)
 const dateObj = computed(() => {
@@ -118,13 +121,15 @@ const dateObj = computed(() => {
       : dateStr.value
 }) // 날짜 (Date 객체)
 const dateDisplay = computed(() => (dateObj.value ? dateObj.value.toLocaleString('ko-KR') : '')) // 화면에 표시될 날짜 형식
-const isoDate = computed(() => toKSTISOString(dateStr.value).slice(0, 19)) // 날짜 (iso 표준 - 실제 DB 저장 형식)
+const isoDate = computed(() => toKSTISOString(dateObj.value).slice(0, 19)) // 날짜 (iso 표준 - 실제 DB 저장 형식)
+
+const memo = ref('') // 메모
 
 // 모든 카테고리 목록 (id, name, type)
 const allCategories = reactive([])
 
 // 선택된 카테고리 ID
-const categoryId = ref('0000')
+const categoryId = ref('')
 
 // 선택된 카테고리 (type, name)
 const category = computed(() => allCategories.find((category) => category.id === categoryId.value))
@@ -149,45 +154,59 @@ const filteredCategory = computed(() => {
     }))
 })
 
-const showModal = ref(false) // 모달창 띄울 지 여부
+const showCalenderModal = ref(false) // 모달창 띄울 지 여부
 
-const openModal = () => (showModal.value = true) // 모달 열기
-const closeModal = () => (showModal.value = false) // 모달 닫기
+const openCalenderModal = () => {
+  showCalenderModal.value = true
+} // 캘린더 모달 열기
+const closeCalenderModal = () => {
+  showCalenderModal.value = false
+} // 캘린더 모달 닫기
 
 const isIncome = computed(() => categoryType.value === 'Income')
 const isExpense = computed(() => categoryType.value === 'Expense')
 
-function clickIncome() {
-  // console.log('수입 클릭!')
-  selectType('Income')
-}
-function clickExpense() {
-  // console.log('지출 클릭!')
-  selectType('Expense')
-}
+const showConfirmModal = ref(false)
 
-const handleCategorySelect = () => {
-  categoryId.value = allCategories.find(
-    (category) =>
-      category.type === categoryType.value && category.name === selectedCategoryName.value,
-  )
+const moveToView = () => {
+  showConfirmModal.value = false
+  router.push({
+    name: 'detail',
+    params: { action: 'view' },
+    state: { from: prevPage.value, transaction_id: transactionId.value },
+  })
+}
+const moveToPrev = () => {
+  showConfirmModal.value = false
+  router.push({
+    name: prevPage.value,
+  })
 }
 
 onMounted(async () => {
   const historyState = window.history.state
   prevPage.value = historyState.from
+  transactionId.value = historyState.transaction_id
+
+  console.log('prevPage : ', prevPage.value)
+  console.log('transactionId : ', transactionId.value)
 
   try {
-    const response = await axios.get(BASEURI + '/categories')
-    dateStr.value = new Date()
+    const transResponse = await axios.get(BASEURI + '/transactions')
+    const catResponse = await axios.get(BASEURI + '/categories')
 
-    if (response.status === 200) {
-      console.log('성공')
-      allCategories.splice(0, allCategories.length, ...response.data)
-      console.log(allCategories)
-    } else {
-      console.log('실패')
-    }
+    const allTransactions = transResponse.data
+    allCategories.splice(0, allCategories.length, ...catResponse.data)
+
+    const transaction = allTransactions.find(
+      (transaction) => transaction.id === transactionId.value,
+    )
+
+    transactionTitle.value = transaction.title
+    amount.value = transaction.amount
+    dateStr.value = transaction.date
+    memo.value = transaction.memo
+    categoryId.value = transaction.category_id
   } catch (error) {
     console.log('에러 발생 : ' + error)
     console.log(error.stack)
@@ -203,14 +222,13 @@ const onlyAllowDigits = (e) => {
 
 const removeNonDigits = (e) => {
   e.target.value = e.target.value.replace(/[^0-9]/g, '')
-  amount.value = Number(e.target.value)
+  // onlyNumber.value = e.target.value
 }
 
 const selectType = (type) => {
   const category = allCategories.find(
     (category) => category.type === type && category.name === '미분류',
   )
-  // console.log(category.id)
   categoryId.value = category.id
 }
 
@@ -220,14 +238,6 @@ const toKSTISOString = (date) => {
   return kstDate.toISOString().slice(0, 19)
 }
 
-const initInputData = () => {
-  transactionTitle.value = ''
-  amount.value = 0
-  categoryId.value = '0000'
-  dateStr.value = ''
-  memo.value = ''
-}
-
 const checkTransaction = () => {
   if (transactionTitle.value === '' || Number(amount.value) < 0) {
     return false
@@ -235,29 +245,14 @@ const checkTransaction = () => {
   return true
 }
 
-const addTransaction = async () => {
+const updateTransaction = async () => {
   if (!checkTransaction()) {
     alert('데이터 입력이 잘못되었습니다.')
     return
   }
 
-  console.log(
-    '거래명: ' +
-      transactionTitle.value +
-      '\n금액: ' +
-      amount.value +
-      '\n카테고리 타입: ' +
-      categoryType.value +
-      '\n카테고리명: ' +
-      categoryName.value +
-      '\n날짜: ' +
-      isoDate.value +
-      '\n메모: ' +
-      memo.value,
-  )
-
   try {
-    const response = await axios.post(`${BASEURI}/transactions/`, {
+    const response = await axios.put(`${BASEURI}/transactions/${transactionId.value}`, {
       title: transactionTitle.value,
       category_id: categoryId.value,
       type: categoryType.value,
@@ -266,15 +261,37 @@ const addTransaction = async () => {
       memo: memo.value,
     })
 
-    if (response.status === 201) {
-      console.log('추가 성공')
-      initInputData()
+    if (response.status === 200) {
+      console.log('수정 성공')
+      showConfirmModal.value = true
     } else {
-      console.log('추가 실패')
+      console.log('수정 실패')
     }
   } catch (error) {
-    console.log('에러 발생 : ' + error)
-    console.log(error.stack)
+    console.log('에러 발생 : ' + error.stack)
+  }
+}
+
+const deleteTransaction = async () => {
+  const isAllowed = confirm('정말로 삭제하시겠습니까?')
+
+  if (!isAllowed) {
+    return
+  }
+
+  try {
+    const response = await axios.delete(`${BASEURI}/transactions/${transactionId.value}`)
+
+    if (response.status === 200) {
+      console.log('삭제 성공')
+      router.push({
+        name: prevPage.value,
+      })
+    } else {
+      console.log('삭제 실패')
+    }
+  } catch (error) {
+    console.log('에러 발생 : ' + error.stack)
   }
 }
 
@@ -323,5 +340,12 @@ const cancle = () => {
   width: 300px;
   margin: 100px auto;
   border-radius: 10px;
+}
+div.modal-button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* 버튼 간 간격 */
+  align-items: center; /* 가운데 정렬 */
+  margin-top: 1rem;
 }
 </style>

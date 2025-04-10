@@ -315,14 +315,13 @@
       "memo": "비행기가 싸다!"
     },
     {
-      "id": "4KLW",
       "title": "용돈",
-      "member_id": "12CD",
       "category_id": "3333",
       "type": "Income",
       "amount": 100000,
-      "date": "2025-04-08",
-      "memo": "길에서 주운 돈"
+      "date": "2025-04-08T09:00:00",
+      "memo": "길에서 주운 돈",
+      "id": "4KLW"
     },
     {
       "id": "1d97",
@@ -402,11 +401,11 @@
       "memo": ""
     },
     {
-      "title": "임시 추가",
+      "title": "모달테스트 a2",
       "category_id": "1111",
       "type": "Income",
-      "amount": 456,
-      "date": "2025-04-10T01:25:00",
+      "amount": 789789,
+      "date": "2025-04-10T13:07:00",
       "memo": "",
       "id": "3d81"
     },
@@ -418,6 +417,69 @@
       "date": "2025-04-05T11:18:00",
       "memo": "",
       "id": "9b8f"
+    },
+    {
+      "id": "1536",
+      "title": "ㄴㅇㄹㄴㅇㄹ",
+      "category_id": "0000",
+      "type": "Expense",
+      "amount": 1222,
+      "date": "2025-04-10T13:50:04",
+      "memo": ""
+    },
+    {
+      "id": "f343",
+      "title": "asdf",
+      "category_id": "0000",
+      "type": "Expense",
+      "amount": 0,
+      "date": "2025-04-10T13:50:36",
+      "memo": ""
+    },
+    {
+      "id": "00d8",
+      "title": "qweqwe",
+      "category_id": "0000",
+      "type": "Expense",
+      "amount": 0,
+      "date": "2025-04-10T13:50:48",
+      "memo": ""
+    },
+    {
+      "id": "3dc7",
+      "title": "qwe",
+      "category_id": "0000",
+      "type": "Expense",
+      "amount": 0,
+      "date": "2025-04-10T13:52:15",
+      "memo": ""
+    },
+    {
+      "id": "23fa",
+      "title": "모달 테스트 b",
+      "category_id": "0000",
+      "type": "Expense",
+      "amount": 0,
+      "date": "2025-04-10T13:55:21",
+      "memo": ""
+    },
+    {
+      "id": "7eae",
+      "title": "ㅁㄴㅇㄹㄴㅇㄹ",
+      "category_id": "0000",
+      "type": "Expense",
+      "amount": 0,
+      "date": "2025-04-10T14:00:51",
+      "memo": "ㄷㄷ"
+    },
+    {
+      "id": "6dce",
+      "title": "ㅇㄹㄴㅇㄹ",
+      "category_id": "0000",
+      "type": "Expense",
+      "amount": 0,
+      "date": "2025-04-10T14:00:59",
+      "memo": ""
     }
   ],
   "quickAddOptions": [

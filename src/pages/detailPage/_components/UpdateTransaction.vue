@@ -2,30 +2,39 @@
   <div class="form-container">
     <div class="form-body">
       <div class="form-body-left">
-        <div class="form-input">
-          <div class="form-input-amount">
-            <InputSm
-              type="number"
-              placeholder="금액을 입력하세요"
-              v-model.number="amount"
-              @keypress="onlyAllowDigits"
-              @input="removeNonDigits"
-              style="text-align: right"
-            /><span> 원</span>
-            <p class="form-alert" v-if="!isValidAmount">&nbsp;*</p>
+        <div class="form-row">
+          <div class="form-side">
+            <span class="form-alert" :class="{ visible: !isValidAmount }">* &nbsp;</span>
           </div>
-          <BtnDual
-            @clickIncome="selectType('Income')"
-            @clickExpense="selectType('Expense')"
-            :is-income-active="isIncome"
-            :is-expense-active="isExpense"
-          />
+          <div class="form-input">
+            <div class="form-input-amount">
+              <InputSm
+                type="number"
+                placeholder="금액을 입력하세요"
+                v-model.number="amount"
+                @keypress="onlyAllowDigits"
+                @input="removeNonDigits"
+                style="text-align: right"
+              /><span> 원</span>
+            </div>
+            <BtnDual
+              @clickIncome="selectType('Income')"
+              @clickExpense="selectType('Expense')"
+              :is-income-active="isIncome"
+              :is-expense-active="isExpense"
+            />
+          </div>
         </div>
-        <div class="form-input">
-          <label>거래명</label>
-          <div class="input-with-alert">
-            <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionTitle" />
-            <p class="form-alert" v-show="!isValidTitle">*</p>
+        <div class="form-row">
+          <div class="form-side">
+            <span class="form-alert" :class="{ visible: !isValidTitle }">* &nbsp;</span>
+          </div>
+          <div class="form-input">
+            <label>거래명</label>
+            <div class="input-with-alert">
+              <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionTitle" />
+              <p class="form-alert" v-show="!isValidTitle">*</p>
+            </div>
           </div>
         </div>
       </div>
@@ -122,6 +131,8 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import { ref, reactive, computed, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
+
+const isMobile = ref(window.innerWidth <= 768)
 
 const prevPage = ref(null)
 
@@ -325,6 +336,8 @@ const cancle = () => {
 <!-- ----------------------------------- style  ----------------------------------- -->
 
 <style scoped>
+/* ---------------------- Modal ---------------------- */
+
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -347,7 +360,8 @@ div.modal-button-container {
   align-items: center; /* 가운데 정렬 */
   margin-top: 1rem;
 }
-/* ------------------------ */
+
+/* ---------------------- Desktop ---------------------- */
 
 .form-container {
   max-width: 100%;
@@ -379,6 +393,20 @@ div.modal-button-container {
   flex-direction: column;
 }
 
+.form-row {
+  display: flex;
+  flex-direction: row;
+
+  width: 100%;
+}
+
+.form-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
 .form-input {
   display: flex;
   justify-content: space-between;
@@ -387,9 +415,16 @@ div.modal-button-container {
   gap: 16px;
 }
 
-.input-with-alert {
+.form-alert {
+  visibility: hidden;
   display: flex;
   align-items: center;
+  color: red;
+  font-size: 16px;
+}
+
+.form-alert.visible {
+  visibility: visible;
 }
 
 .form-alert {
@@ -439,5 +474,16 @@ div.modal-button-container {
   align-items: center;
   justify-content: center;
   gap: 16px;
+}
+
+/* ---------------------- Mobile ---------------------- */
+
+@media (max-width: 768px) {
+  .form-body {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 32px;
+  }
 }
 </style>

@@ -69,6 +69,8 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 
+const isMobile = ref(window.innerWidth <= 768)
+
 const prevPage = ref(null)
 
 const currentRoute = useRoute()
@@ -159,6 +161,8 @@ const cancle = () => {
 <!-- ----------------------------------- style  ----------------------------------- -->
 
 <style scoped>
+/* ---------------------- Desktop ---------------------- */
+
 .form-container {
   max-width: 100%;
   margin: 0 auto;
@@ -230,5 +234,16 @@ const cancle = () => {
   align-items: center;
   justify-content: center;
   gap: 16px;
+}
+
+/* ---------------------- Mobile ---------------------- */
+
+@media (max-width: 768px) {
+  .form-body {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 32px;
+  }
 }
 </style>

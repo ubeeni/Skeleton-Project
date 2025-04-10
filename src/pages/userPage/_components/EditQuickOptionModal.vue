@@ -118,7 +118,15 @@ const triedSubmit = ref(false)
 watch(
   () => props.option,
   (newVal) => {
-    editItem.value = { ...newVal }
+    const copied = { ...newVal }
+
+    // amount가 문자열이면 숫자로 변환
+    if (typeof copied.amount === 'string') {
+      const parsed = Number(copied.amount)
+      copied.amount = isNaN(parsed) ? 0 : parsed
+    }
+
+    editItem.value = copied
   },
   { immediate: true },
 )

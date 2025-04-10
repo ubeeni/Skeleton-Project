@@ -40,7 +40,9 @@ defineEmits(['click'])
   padding: 0.5rem 0;
 }
 
-.btn-xs-wrapper:hover {
-  background: var(--color-hover);
+@media (hover: hover) and (pointer: fine) {
+  .btn-xs-wrapper:hover {
+    background: var(--color-hover);
+  }
 }
 </style>

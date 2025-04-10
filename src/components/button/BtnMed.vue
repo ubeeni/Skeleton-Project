@@ -33,7 +33,13 @@ defineEmits(['click'])
   padding: 1.25rem 0;
 }
 
-.btn-med-wrapper:hover {
-  background: var(--color-hover);
+@media (hover: hover) and (pointer: fine) {
+  .btn-med-wrapper:hover {
+    background: var(--color-hover);
+  }
+}
+
+@media screen and (max-width: 767px) {
+  /** Mobile */
 }
 </style>

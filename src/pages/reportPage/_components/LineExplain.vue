@@ -1,30 +1,32 @@
 <template>
-  <!-- 월 이동 -->
-  <div class="month-nav">
-    <img :src="backButton" alt="back" @click="handlePrev" />
-    <span class="titleBold24px range-text" @click="resetToToday"> {{ rangeText }} </span>
-    <img :src="forwardButton" alt="forward" @click="handleNext" />
-  </div>
+  <div class="filter-wrapper">
+    <!-- 월 이동 -->
+    <div class="month-nav">
+      <img :src="backButton" alt="back" @click="handlePrev" />
+      <span class="titleBold24px range-text" @click="resetToToday"> {{ rangeText }} </span>
+      <img :src="forwardButton" alt="forward" @click="handleNext" />
+    </div>
 
-  <!-- 기간 선택 버튼 -->
-  <div class="report-selector">
-    <BtnXs
-      v-for="p in PERIOD_OPTIONS"
-      :key="p"
-      :text="p"
-      :is-active="p === periodLine"
-      @click="periodLine = p"
-      color="var(--color-accent)"
-    />
-  </div>
-  <div class="report-subtitle">
-    {{
-      monthlyTotal.diff === 0
-        ? `${periodLine} 기준으로 동일한 소비입니다.`
-        : monthlyTotal.diff > 0
-          ? `${periodLine} 기준으로 ${monthlyTotal.diff.toLocaleString()}원 더 소비하였습니다.`
-          : `${periodLine} 기준으로 ${Math.abs(monthlyTotal.diff).toLocaleString()}원 덜 소비하였습니다.`
-    }}
+    <!-- 기간 선택 버튼 -->
+    <div class="report-selector">
+      <BtnXs
+        v-for="p in PERIOD_OPTIONS"
+        :key="p"
+        :text="p"
+        :is-active="p === periodLine"
+        @click="periodLine = p"
+        color="var(--color-accent)"
+      />
+    </div>
+    <div class="report-subtitle">
+      {{
+        monthlyTotal.diff === 0
+          ? `${periodLine} 기준으로 동일한 소비입니다.`
+          : monthlyTotal.diff > 0
+            ? `${periodLine} 기준으로 ${monthlyTotal.diff.toLocaleString()}원 더 소비하였습니다.`
+            : `${periodLine} 기준으로 ${Math.abs(monthlyTotal.diff).toLocaleString()}원 덜 소비하였습니다.`
+      }}
+    </div>
   </div>
 </template>
 
@@ -109,5 +111,18 @@ function resetToToday() {
 
 .range-text {
   cursor: pointer;
+}
+@media screen and (max-width: 767px) {
+  /** Mobile */
+  .filter-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .report-subtitle {
+    margin-bottom: 1rem;
+  }
 }
 </style>

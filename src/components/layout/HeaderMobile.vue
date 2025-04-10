@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <img :src="backButton" alt="back" @click="handlePrev" />
-    <div class="titleBold14px">
+    <div class="bodySemibold18px">
       <RouterLink :to="{ name: 'home' }">🗓️ 스켈레톤프로젝트</RouterLink>
     </div>
     <img :src="isMenuOpen ? menuOpenButton : menuButton" alt="menu" @click="toggleMenu" />

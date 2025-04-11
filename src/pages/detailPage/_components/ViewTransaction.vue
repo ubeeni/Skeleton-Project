@@ -63,7 +63,11 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
-const prevPage = ref(null)
+// const prevPage = ref(null)
+const props = defineProps({
+  prevPage: String,
+  transactionId: String, // Add에서는 안 들어오므로 옵셔널로 사용 가능
+})
 
 const router = useRouter()
 
@@ -100,9 +104,9 @@ const isIncome = computed(() => categoryType.value === 'Income')
 const isExpense = computed(() => categoryType.value === 'Expense')
 
 onMounted(async () => {
-  const historyState = window.history.state
-  prevPage.value = historyState.from
-  transactionId.value = historyState.transaction_id || 'e5f7'
+  // const historyState = window.history.state
+  // prevPage.value = historyState.from
+  // props.transactionId = historyState.transaction_id || 'e5f7'
 
   try {
     console.log(transactionId)
@@ -114,7 +118,7 @@ onMounted(async () => {
     const allCategories = catResponse.data
 
     const transaction = allTransactions.find(
-      (transaction) => transaction.id === transactionId.value,
+      (transaction) => transaction.id === props.transactionId,
     )
 
     transactionTitle.value = transaction.title
@@ -137,14 +141,14 @@ const gotoUpdate = () => {
   router.push({
     name: 'detail',
     params: { action: 'update' },
-    state: { from: prevPage.value, transaction_id: transactionId.value },
+    state: { from: props.prevPage, transaction_id: props.transactionId },
   })
 }
 
 const cancle = () => {
   console.log('취소 버튼')
   router.push({
-    name: prevPage.value,
+    name: props.prevPage,
   })
 }
 </script>

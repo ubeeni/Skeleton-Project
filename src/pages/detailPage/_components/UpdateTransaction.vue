@@ -1,14 +1,12 @@
 <template>
-  <div class="form-container">
+  <div class="form-container bodySemibold18px">
     <div class="form-body">
       <div class="form-body-left">
         <div class="form-row">
-          <div class="form-side">
-            <span class="form-alert" :class="{ visible: !isValidAmount }">* &nbsp;</span>
-          </div>
-          <div class="form-input">
+          <div class="form-input form-input-amount-container">
             <div class="form-input-amount">
-              <InputSm
+              <span class="form-alert" :class="{ visible: !isValidAmount }">* &nbsp;</span>
+              <InputMed
                 type="number"
                 placeholder="금액을 입력하세요"
                 v-model.number="amount"
@@ -26,14 +24,14 @@
           </div>
         </div>
         <div class="form-row">
-          <div class="form-side">
-            <span class="form-alert" :class="{ visible: !isValidTitle }">* &nbsp;</span>
-          </div>
-          <div class="form-input">
-            <label>거래명</label>
+          <div class="form-input form-lg">
+            <label>
+              <span class="form-alert" :class="{ visible: !isValidTitle }">* &nbsp;</span
+              >거래명</label
+            >
             <div class="input-with-alert">
-              <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionTitle" />
-              <p class="form-alert" v-show="!isValidTitle">*</p>
+              <InputLg type="search" placeholder="거래명을 입력하세요" v-model="transactionTitle" />
+              <!-- <p class="form-alert" v-show="!isValidTitle">*</p> -->
             </div>
           </div>
         </div>
@@ -68,19 +66,17 @@
         </div>
       </div>
     </div>
-    <div class="form-footer">
-      <div class="form-btn-container">
-        <BtnLg text="수정" @click="updateTransaction" color="var(--color-primary)" />
-        <BtnLg text="삭제" @click="deleteTransaction" color="var(--color-light)" />
-        <BtnLg text="취소" @click="cancle" color="var(--color-light)" />
-      </div>
+    <div class="form-btn-container">
+      <BtnLg text="수정" @click="updateTransaction" color="var(--color-primary)" />
+      <BtnLg text="삭제" @click="deleteTransaction" color="var(--color-light)" />
+      <BtnLg text="취소" @click="cancle" color="var(--color-light)" />
     </div>
 
     <!-- 캘린더 모달 -->
 
     <div v-if="showCalenderModal" class="modal-backdrop">
       <div class="modal-content">
-        <h3>날짜와 시간 선택</h3>
+        <h3 class="bodySemibold16px">날짜와 시간 선택</h3>
         <Datepicker
           v-model="dateStr"
           :enable-time-picker="true"
@@ -89,8 +85,9 @@
           :format="(d) => d.toLocaleString('ko-KR')"
           :max-date="new Date()"
         />
-        <br />
-        <button @click="closeCalenderModal">닫기</button>
+        <div class="modal-btn">
+          <BtnXs @click="closeCalenderModal" text="닫기" />
+        </div>
       </div>
     </div>
 
@@ -102,10 +99,7 @@
           <p>거래 내역 수정이 완료되었습니다!</p>
           <br />
         </div>
-        <div class="modal-button-container">
-          <button @click="moveToPrev">이전 페이지로</button>
-          <!-- <button @click="moveToView">상세보기 페이지로</button> -->
-        </div>
+        <BtnXs @click="moveToPrev" text="확인" />
       </div>
     </div>
   </div>
@@ -115,28 +109,20 @@
 
 <script setup>
 import BtnLg from '@/components/button/BtnLg.vue'
-import BtnMed from '@/components/button/BtnMed.vue'
-import BtnSm from '@/components/button/BtnSm.vue'
 import BtnDual from '@/components/button/BtnDual.vue'
 import InputLg from '@/components/input/InputLg.vue'
 import InputMed from '@/components/input/InputMed.vue'
-import InputSm from '@/components/input/InputSm.vue'
-import SelectLg from '@/components/input/SelectLg.vue'
 import SelectMed from '@/components/input/SelectMed.vue'
-import SelectSm from '@/components/input/SelectSm.vue'
+import BtnXs from '@/components/button/BtnXs.vue'
 
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
-import { ref, reactive, computed, watch, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { ref, reactive, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from 'axios'
 
-const isMobile = ref(window.innerWidth <= 768)
-
 const prevPage = ref(null)
-
-const currentRoute = useRoute()
 const router = useRouter()
 
 const BASEURI = '/api'
@@ -344,58 +330,51 @@ const cancle = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--color-light2);
 }
 .modal-content {
-  background: white;
-  padding: 24px;
-  width: 300px;
-  margin: 100px auto;
-  border-radius: 10px;
-}
-div.modal-button-container {
+  background: var(--color-white);
+  padding: 1.5rem;
+  width: 20rem;
+  margin: 10rem auto;
+  border-radius: 1rem;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
-  gap: 12px; /* 버튼 간 간격 */
-  align-items: center; /* 가운데 정렬 */
-  margin-top: 1rem;
+  gap: 1rem;
+}
+.modal-btn {
+  display: flex;
+  justify-content: right;
 }
 
 /* ---------------------- Desktop ---------------------- */
 
 .form-container {
-  max-width: 100%;
+  /* max-width: 100%;
   margin: 0 auto;
-  padding: 24px;
+  padding: 24px; */
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 2rem;
 }
-
 .form-body {
   display: flex;
   justify-content: center;
-  gap: 32px;
+  gap: 2rem;
 }
 
-.form-body-left {
-  display: flex;
-  flex-direction: column;
-}
-
+.form-body-left,
 .form-body-right {
   display: flex;
   flex-direction: column;
-}
-
-.form-right {
-  display: flex;
-  flex-direction: column;
+  gap: 2rem;
 }
 
 .form-row {
   display: flex;
-  flex-direction: row;
+
+  align-items: center;
 
   width: 100%;
 }
@@ -411,69 +390,48 @@ div.modal-button-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 20px 0;
-  gap: 16px;
+  gap: 1rem;
+}
+
+.form-input-amount-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
 .form-alert {
   visibility: hidden;
-  display: flex;
-  align-items: center;
-  color: red;
-  /* font-size: 16px; */
+  color: var(--color-expense);
 }
 
 .form-alert.visible {
   visibility: visible;
 }
 
-.form-alert {
-  color: red;
-}
-
 .form-input-amount {
   justify-content: left;
-  display: inline-flex;
+  display: flex;
   align-items: center;
 }
 
-.form-input span {
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 100%;
-  letter-spacing: 0%;
+.form-input-amount span:last-child {
+  margin-left: 1rem;
 }
 
 .form-input label {
   white-space: nowrap; /* 줄바꿈 방지 */
-  font-size: 16px;
+
   flex-shrink: 0; /* 작아지지 않게 */
 }
 
-.text-like-input {
-  width: auto;
-  min-width: 1ch;
-  max-width: 15ch;
-  font-size: 18px;
-  background: transparent;
-  border: none;
-}
-
-.form-alert p {
-  color: red;
-}
-
-.form-footer {
-  display: flex;
-  justify-content: center;
-}
-
 .form-btn-container {
+  margin-top: 5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 1rem;
 }
 
 /* ---------------------- Mobile ---------------------- */
@@ -483,7 +441,20 @@ div.modal-button-container {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    gap: 32px;
+    gap: 1rem;
+  }
+
+  .form-input-amount-container {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: start;
+  }
+
+  .form-lg {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.5rem;
   }
 }
 </style>

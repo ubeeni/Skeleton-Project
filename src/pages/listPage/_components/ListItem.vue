@@ -40,11 +40,11 @@ const amountOnly = computed(() => {
 
 const goToDetail = () => {
   router.push({
-    name:'detail',
-    params: {action : 'view'},
+    name: 'detail',
+    params: { action: 'view' },
     state: {
-      from : 'list',
-      transaction_id : props.item.id,
+      from: 'list',
+      transaction_id: props.item.id,
     },
   })
 }
@@ -107,29 +107,17 @@ const goToDetail = () => {
 }
 @media screen and (max-width: 767px) {
   .list-item {
-    flex-direction: column;
-    align-items: flex-start;
     height: auto;
     padding: 1rem;
-    gap: 1rem;
-  }
-
-  .item-left {
-    gap: 1rem;
   }
 
   .category-img {
-    width: 60px;
-    height: 60px;
+    width: 3.75rem;
+    height: 3.75rem;
   }
 
   .text {
-    gap: 6px;
-  }
-
-  .item-right {
-    align-self: flex-end;
+    gap: 0.5rem;
   }
 }
-
 </style>

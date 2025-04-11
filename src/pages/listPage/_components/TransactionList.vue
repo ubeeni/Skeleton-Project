@@ -30,9 +30,7 @@ const groupedTransactions = computed(() => {
   }
 
   // 최신 날짜가 위로 오도록 정렬
-  return Object.fromEntries(
-    Object.entries(groups).sort((a, b) => new Date(b[0]) - new Date(a[0]))
-  )
+  return Object.fromEntries(Object.entries(groups).sort((a, b) => new Date(b[0]) - new Date(a[0])))
   //   const date = item.date
   //   if (!groups[date]) groups[date] = []
   //   groups[date].push(item)
@@ -49,9 +47,5 @@ const groupedTransactions = computed(() => {
 }
 
 @media screen and (max-width: 767px) {
-  .transaction-list {
-    gap: 1.5rem; /* 모바일에 맞게 여백 줄이기 */
-  }
 }
-
 </style>

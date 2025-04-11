@@ -59,8 +59,13 @@ const options = computed(() => ({
   xaxis: {
     categories: props.labels,
     labels: {
-      // 라벨 형식 mm/dd 형식으로 변환
       formatter: function (value) {
+        const idx = props.labels.indexOf(value)
+        const income = props.incomeData[idx] || 0
+        const expense = props.expenseData[idx] || 0
+
+        if (income === 0 && expense === 0) return '' // 라벨 숨김
+
         const date = new Date(value)
         const mm = String(date.getMonth() + 1).padStart(2, '0')
         const dd = String(date.getDate()).padStart(2, '0')

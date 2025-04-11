@@ -126,32 +126,48 @@ const monthlyTotal = computed(() => {
 // 소비,수입,트랜잭션 그룹화
 const grouped = computed(() => {
   const map = new Map()
-  // 날짜별로 그룹핑
-  lineFilteredTransactions.value.forEach((tx) => {
-    const date = tx.date
-    const isIncome = tx.type === 'Income'
 
-    // 해당 날짜 없으면 초기화
-    if (!map.has(date)) {
-      map.set(date, {
-        income: 0,
-        incomeCount: 0,
-        expense: 0,
-        expenseCount: 0,
-      })
-    }
-    // 해당 날짜 있으면 업데이트
-    const entry = map.get(date)
-    if (isIncome) {
+  // 범위 설정
+  const now = new Date(currentLineDate.value)
+  const start = subtractPeriod(now, periodLine.value, 1)
+
+  const days = []
+  const cursor = new Date(start)
+  while (cursor <= now) {
+    const ymd = cursor.toISOString().split('T')[0]
+    days.push(ymd)
+    cursor.setDate(cursor.getDate() + 1)
+  }
+
+  // 날짜 초기화 설정
+  days.forEach((ymd) => {
+    map.set(ymd, {
+      income: 0,
+      incomeCount: 0,
+      expense: 0,
+      expenseCount: 0,
+    })
+  })
+
+  // 트랜잭션 데이터 그룹화
+  lineFilteredTransactions.value.forEach((tx) => {
+    const ymd = new Date(tx.date).toISOString().split('T')[0]
+
+    if (!map.has(ymd)) return
+    const entry = map.get(ymd)
+
+    if (tx.type === 'Income') {
       entry.income += tx.amount
       entry.incomeCount++
-    } else {
+    } else if (tx.type === 'Expense') {
       entry.expense += tx.amount
       entry.expenseCount++
     }
   })
 
+  // 날짜별로 정렬
   const sorted = [...map.entries()].sort(([a], [b]) => a.localeCompare(b))
+
   return {
     labels: sorted.map(([date]) => date),
     incomeData: sorted.map(([, val]) => val.income),

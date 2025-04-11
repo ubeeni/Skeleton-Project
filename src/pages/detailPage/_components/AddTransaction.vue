@@ -408,7 +408,7 @@ const cancle = () => {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
   }
 
   .form-input-amount-container {

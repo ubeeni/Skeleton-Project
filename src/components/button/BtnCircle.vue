@@ -41,6 +41,7 @@ defineEmits(['click'])
   .btn-circle {
     width: 2.5rem;
     height: 2.5rem;
+    box-shadow: var(--boxshadow-light);
   }
 }
 </style>

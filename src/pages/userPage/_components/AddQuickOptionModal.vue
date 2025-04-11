@@ -10,13 +10,15 @@
             @clickIncome="newItem.type = 'Income'"
             @clickExpense="newItem.type = 'Expense'"
           />
-          <InputMed
-            v-model.number="newItem.amount"
-            type="number"
-            :class="{ error: (!newItem.amount || newItem.amount <= 0) && triedSubmit }"
-            placeholder="금액을 입력하세요(단위: 원)"
-          />
-          <span class="bodySemibold18px"> 원</span>
+          <div class="amount-row">
+            <InputMed
+              v-model.number="newItem.amount"
+              type="number"
+              :class="{ error: (!newItem.amount || newItem.amount <= 0) && triedSubmit }"
+              placeholder="금액을 입력하세요(단위: 원)"
+            />
+            <span class="bodySemibold18px"> 원</span>
+          </div>
         </div>
         <!-- 거래명 -->
         <div class="form-row">
@@ -259,18 +261,9 @@ h3 {
   gap: 2rem;
 }
 
-/* input,
-select {
-  flex: 1;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  font-size: 14px;
-}*/
-
 input.error,
 select.error {
-  border: 1px solid red;
+  border: 1px solid var(--color-expense);
 }
 
 .select-group {
@@ -280,33 +273,6 @@ select.error {
   gap: 2.5rem;
 }
 
-/* .toggle-group {
-  display: flex;
-  gap: 12px;
-  flex: 1;
-}
-
-.toggle-btn {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  border-radius: 10px;
-  font-weight: bold;
-  background-color: var(--color-light);
-  color: var(--color-white);
-  cursor: pointer;
-}
-
-.toggle-btn.active.income {
-  background-color: var(--color-income);
-  color: var(--color-white);
-}
-
-.toggle-btn.active.expense {
-  background-color: var(--color-expense);
-  color: var(--color-white);
-} */
-
 .button-group {
   margin-top: 4rem;
   display: flex;
@@ -314,12 +280,90 @@ select.error {
   gap: 1rem;
 }
 
-/* .button-group button {
-  padding: 14px;
-  border: none;
-  border-radius: 14px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-} */
+@media screen and (max-width: 767px) {
+  .modal {
+    position: fixed;
+    inset: 0;
+    background-color: var(--color-light2);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* 아래에서부터 정렬 */
+    padding: 0;
+    z-index: 1000;
+  }
+
+  .modal-box {
+    width: 100vw;
+    height: 792px;
+    max-height: 100vh;
+    background: var(--color-white);
+    padding: 2rem 1.5rem;
+    border-radius: 1rem 1rem 0 0;
+    box-shadow: var(--boxshadow-light);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    overflow-y: auto;
+  }
+
+  .modal-box h3 {
+    display: none;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+
+  .form-row,
+  .button-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .form-row-dual {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .form-row-dual .amount-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .form-row-dual .amount-row input {
+    flex: 1;
+  }
+
+  .form-row-dual .amount-row span {
+    white-space: nowrap;
+  }
+
+  .button-group {
+    margin-top: 1rem;
+    align-items: center;
+  }
+
+  input,
+  select {
+    width: 100%;
+  }
+
+  .select-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-end;
+  }
+}
 </style>

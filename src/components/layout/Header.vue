@@ -2,8 +2,10 @@
   <div class="header titleBold24px">
     <div class="nav-left">
       <!-- 아이콘영역 -->
-      <div class="titleBold30px">
-        <RouterLink :to="{ name: 'home' }">🗓️ 스켈레톤프로젝트</RouterLink>
+      <div class="titleBold30px logo">
+        <RouterLink :to="{ name: 'home' }"
+          ><img :src="logo" alt="logo" /> <img :src="logoText" alt="logo text"
+        /></RouterLink>
       </div>
       <!-- 내비게이션영역 -->
       <div class="nav-tabs">
@@ -33,6 +35,8 @@
 <script setup>
 import { useRoute } from 'vue-router'
 import { ref, watchEffect } from 'vue'
+import logo from '@/assets/icons/Logo.svg'
+import logoText from '@/assets/icons/LogoTitleDesk.svg'
 
 const route = useRoute()
 const userName = ref('')
@@ -92,5 +96,11 @@ watchEffect(async () => {
 
 .username {
   text-decoration: underline;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 </style>

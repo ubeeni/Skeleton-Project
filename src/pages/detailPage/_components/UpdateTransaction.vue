@@ -7,7 +7,7 @@
             <div class="form-input-amount">
               <span class="form-alert" :class="{ visible: !isValidAmount }">* &nbsp;</span>
               <InputMed
-                type="number"
+                type="text"
                 placeholder="금액을 입력하세요"
                 v-model.number="amount"
                 @keypress="onlyAllowDigits"
@@ -122,12 +122,17 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 
-const prevPage = ref(null)
+// const prevPage = ref(null)
+const props = defineProps({
+  prevPage: String,
+  transactionId: String, // Add에서는 안 들어오므로 옵셔널로 사용 가능
+})
+
 const router = useRouter()
 
 const BASEURI = '/api'
 
-const transactionId = ref(null) // 상세 보기할 트랜잭션 ID - 추후 ViewTransaction 에서 받아올 것
+// const transactionId = ref(null) // 상세 보기할 트랜잭션 ID - 추후 ViewTransaction 에서 받아올 것
 
 const transactionTitle = ref('') // 거래명
 const isValidTitle = computed(() => transactionTitle.value !== '')
@@ -196,23 +201,23 @@ const moveToView = () => {
   router.push({
     name: 'detail',
     params: { action: 'view' },
-    state: { from: prevPage.value, transaction_id: transactionId.value },
+    state: { from: props.prevPage, transaction_id: props.transactionId },
   })
 }
 const moveToPrev = () => {
   showConfirmModal.value = false
   router.push({
-    name: prevPage.value,
+    name: props.prevPage,
   })
 }
 
 onMounted(async () => {
-  const historyState = window.history.state
-  prevPage.value = historyState.from
-  transactionId.value = historyState.transaction_id
+  // const historyState = window.history.state
+  // prevPage.value = historyState.from
+  // props.transactionId = historyState.transaction_id
 
-  console.log('prevPage : ', prevPage.value)
-  console.log('transactionId : ', transactionId.value)
+  console.log('prevPage : ', props.prevPage)
+  console.log('transactionId : ', props.transactionId)
 
   try {
     const transResponse = await axios.get(BASEURI + '/transactions')
@@ -222,7 +227,7 @@ onMounted(async () => {
     allCategories.splice(0, allCategories.length, ...catResponse.data)
 
     const transaction = allTransactions.find(
-      (transaction) => transaction.id === transactionId.value,
+      (transaction) => transaction.id === props.transactionId,
     )
 
     transactionTitle.value = transaction.title
@@ -268,7 +273,7 @@ const updateTransaction = async () => {
   }
 
   try {
-    const response = await axios.put(`${BASEURI}/transactions/${transactionId.value}`, {
+    const response = await axios.put(`${BASEURI}/transactions/${props.transactionId}`, {
       title: transactionTitle.value,
       category_id: categoryId.value,
       type: categoryType.value,
@@ -296,12 +301,12 @@ const deleteTransaction = async () => {
   }
 
   try {
-    const response = await axios.delete(`${BASEURI}/transactions/${transactionId.value}`)
+    const response = await axios.delete(`${BASEURI}/transactions/${props.transactionId}`)
 
     if (response.status === 200) {
       console.log('삭제 성공')
       router.push({
-        name: prevPage.value,
+        name: props.prevPage,
       })
     } else {
       console.log('삭제 실패')
@@ -314,7 +319,7 @@ const deleteTransaction = async () => {
 const cancle = () => {
   console.log('취소 버튼')
   router.push({
-    name: prevPage.value,
+    name: props.prevPage,
   })
 }
 </script>

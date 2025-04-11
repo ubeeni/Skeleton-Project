@@ -7,7 +7,7 @@
             <div class="form-input-amount">
               <span class="form-alert" :class="{ visible: !isValidAmount }">* &nbsp;</span
               ><InputMed
-                type="number"
+                type="text"
                 placeholder="금액을 입력하세요"
                 v-model.number="amount"
                 @keypress="onlyAllowDigits"
@@ -117,11 +117,15 @@ import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
 import { ref, reactive, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
 import BtnXs from '@/components/button/BtnXs.vue'
 
-const prevPage = ref(null)
+// const prevPage = ref(null)
+const props = defineProps({
+  prevPage: String,
+  transactionId: String, // Add에서는 안 들어오므로 옵셔널로 사용 가능
+})
 
 const router = useRouter()
 
@@ -192,7 +196,7 @@ const showConfirmModal = ref(false)
 const moveToPrev = () => {
   showConfirmModal.value = false
   router.push({
-    name: prevPage.value,
+    name: props.prevPage,
   })
 }
 
@@ -204,8 +208,8 @@ const handleCategorySelect = () => {
 }
 
 onMounted(async () => {
-  const historyState = window.history.state
-  prevPage.value = historyState.from
+  // const historyState = window.history.state
+  // prevPage.value = historyState.from
 
   try {
     const response = await axios.get(BASEURI + '/categories')
@@ -281,7 +285,7 @@ const addTransaction = async () => {
 const cancle = () => {
   console.log('취소 버튼')
   router.push({
-    name: prevPage.value,
+    name: props.prevPage,
   })
 }
 </script>

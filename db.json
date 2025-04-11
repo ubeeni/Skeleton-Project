@@ -231,13 +231,13 @@
       "memo": ""
     },
     {
-      "id": "9d5d",
       "title": "지하철",
       "category_id": "FFFF",
       "type": "Expense",
       "amount": 1400,
       "date": "2025-04-11T10:07:18",
-      "memo": ""
+      "memo": "",
+      "id": "9d5d"
     },
     {
       "id": "2fe9",
@@ -427,6 +427,15 @@
       "amount": 25000,
       "date": "2025-04-11T10:05:00",
       "memo": ""
+    },
+    {
+      "id": "52ea",
+      "title": "삼겹살김치볶음밥",
+      "category_id": "7777",
+      "type": "Expense",
+      "amount": 6000,
+      "date": "2025-04-11T12:30:00",
+      "memo": "신메뉴 존맛"
     }
   ],
   "quickAddOptions": [

@@ -319,9 +319,9 @@ onMounted(async () => {
   }
 
   .select-group {
-    margin-bottom: 24px;
+    margin-bottom: 1rem;
     display: flex;
-    gap: 1.25rem;
+    justify-content: space-between;
     align-items: center;
   }
 
@@ -330,17 +330,16 @@ onMounted(async () => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
-  }
-
-  .left-header {
-    height: 35.5px;
   }
 
   .divider {
     width: auto;
     background-color: var(--color-light);
-    height: 1px;
+    height: 0.0625rem;
+  }
+
+  .button-group {
+    margin-top: 2rem;
   }
 }
 </style>

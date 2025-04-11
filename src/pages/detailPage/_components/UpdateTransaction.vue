@@ -420,7 +420,7 @@ div.modal-button-container {
   display: flex;
   align-items: center;
   color: red;
-  font-size: 16px;
+  /* font-size: 16px; */
 }
 
 .form-alert.visible {

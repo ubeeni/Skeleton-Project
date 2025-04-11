@@ -3,30 +3,6 @@
     <div class="modal-box">
       <h3 class="titleBold24px">고정 수입/지출 추가</h3>
       <div class="input-group">
-        <!-- 구분 (수입 / 지출 버튼) -->
-        <!-- 금액 -->
-        <!-- <div class="form-row">
-          <div class="toggle-group">
-            <button
-              :class="[
-                'toggle-btn',
-                { active: newItem.type === 'Income', income: newItem.type === 'Income' },
-              ]"
-              @click="newItem.type = 'Income'"
-            >
-              수입
-            </button>
-            <button
-              :class="[
-                'toggle-btn',
-                { active: newItem.type === 'Expense', expense: newItem.type === 'Expense' },
-              ]"
-              @click="newItem.type = 'Expense'"
-            >
-              지출
-            </button>
-          </div>
-        </div> -->
         <div class="form-row-dual">
           <BtnDual
             :is-income-active="newItem.type === 'Income'"
@@ -35,7 +11,7 @@
             @clickExpense="newItem.type = 'Expense'"
           />
           <InputMed
-            v-model="newItem.amount"
+            v-model.number="newItem.amount"
             type="number"
             :class="{ error: (!newItem.amount || newItem.amount <= 0) && triedSubmit }"
             placeholder="금액을 입력하세요(단위: 원)"
@@ -75,16 +51,21 @@
               v-if="newItem.cycle === 'weekly'"
               :options="weeklyOptions"
               v-model="newItem.week"
+              :class="{ error: (!newItem.week || newItem.week === '') && triedSubmit }"
               placeholder="요일 선택"
             />
 
             <InputMed
               v-if="newItem.cycle === 'monthly'"
               v-model="newItem.month"
-              placeholder="예: 15"
+              :class="{
+                error: (!newItem.month || newItem.month < 1 || newItem.month > 31) && triedSubmit,
+              }"
+              placeholder="1 ~ 31일까지 입력 가능합니다."
               type="number"
             />
             <InputMed v-if="newItem.cycle === 'daily'" value="매일" disabled />
+            <InputMed v-if="newItem.cycle === 'onetime'" value="반복 없음" disabled />
           </div>
         </div>
 
@@ -104,7 +85,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watchEffect, watch } from 'vue'
+import { ref, computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import InputLg from '@/components/input/InputLg.vue'
 import InputMed from '@/components/input/InputMed.vue'
@@ -128,8 +109,8 @@ const newItem = ref({
   title: '',
   type: 'Expense',
   category_id: '',
-  cycle: 'daily',
-  day: '매일',
+  cycle: 'onetime',
+  day: null,
   week: null,
   month: null,
   amount: 0,
@@ -141,6 +122,7 @@ const filteredCategories = computed(() =>
 )
 
 const cycleOptions = [
+  { value: 'onetime', label: '반복 없음' },
   { value: 'daily', label: '매일' },
   { value: 'weekly', label: '매주' },
   { value: 'monthly', label: '매월' },
@@ -158,21 +140,34 @@ const weeklyOptions = [
 
 const triedSubmit = ref(false)
 
-watch(
-  () => newItem.value.amount,
-  (val) => {
-    if (typeof val === 'string') {
-      const parsed = Number(val)
-      newItem.value.amount = isNaN(parsed) ? 0 : parsed
-    }
-  },
-)
-
 const submit = () => {
   triedSubmit.value = true
 
-  if (!newItem.value.title || !newItem.value.amount || newItem.value.amount <= 0) {
-    alert('거래명과 금액은 필수 항목입니다.')
+  const errors = []
+
+  if (!newItem.value.amount || newItem.value.amount <= 0) {
+    errors.push('금액은 0보다 커야 합니다.')
+  }
+
+  if (!newItem.value.title) {
+    errors.push('거래명을 입력해주세요.')
+  }
+
+  if (newItem.value.cycle === 'monthly') {
+    const day = newItem.value.month
+    if (!day || day < 1 || day > 31) {
+      errors.push('1 ~ 31일 중 반복할 날짜를 선택해주세요.')
+    }
+  }
+
+  if (newItem.value.cycle === 'weekly') {
+    if (!newItem.value.week) {
+      errors.push('반복할 요일을 선택해주세요.')
+    }
+  }
+
+  if (errors.length > 0) {
+    alert('입력값을 확인해주세요:\n\n' + errors.join('\n'))
     return
   }
 
@@ -191,6 +186,10 @@ const submit = () => {
   } else if (newItem.value.cycle === 'monthly') {
     newItem.value.day = null
     newItem.value.week = null
+  } else if (newItem.value.cycle === 'onetime') {
+    newItem.value.day = null
+    newItem.value.week = null
+    newItem.value.month = null
   }
 
   emit('add', { ...newItem.value })
@@ -269,7 +268,8 @@ select {
   font-size: 14px;
 }*/
 
-input.error {
+input.error,
+select.error {
   border: 1px solid red;
 }
 

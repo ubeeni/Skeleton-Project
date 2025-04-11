@@ -2,7 +2,7 @@
   <div class="header titleBold24px">
     <div class="nav-left">
       <!-- 아이콘영역 -->
-      <div class="titleBold30px logo">
+      <div class="logo">
         <RouterLink :to="{ name: 'home' }"
           ><img :src="logo" alt="logo" /> <img :src="logoText" alt="logo text"
         /></RouterLink>

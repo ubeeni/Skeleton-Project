@@ -225,25 +225,26 @@ const remove = () => {
   background-color: var(--color-light2);
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding: 2rem;
+  align-items: center;
+  padding-top: auto;
   z-index: 1000;
 }
 
 .modal-box {
-  width: 22.125rem;
-  max-height: 90vh;
   background: var(--color-white);
-  border-radius: 1rem 1rem 0 0;
+  padding: 3rem 3rem;
+  border-radius: 1.25rem;
   box-shadow: var(--boxshadow-light);
+
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  padding: 2rem;
+  align-items: center;
+  justify-content: center;
 }
 
 h3 {
   margin-bottom: 2rem;
+  text-align: center;
 }
 .input-group {
   display: flex;
@@ -284,6 +285,7 @@ select.error {
   margin-top: 4rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1rem;
 }
 
@@ -308,6 +310,7 @@ select.error {
     box-shadow: var(--boxshadow-light);
     display: flex;
     flex-direction: column;
+    justify-content: start;
     align-items: center;
     overflow-y: auto;
     padding: 2rem 0;

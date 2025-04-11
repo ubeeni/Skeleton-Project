@@ -2,10 +2,17 @@
   <div class="transaction-day">
     <div class="header">
       <div class="date bodySemibold18px">{{ formattedDate }}</div>
-      <div class="summary bodyRegular16px">{{ formattedTotal }} {{ items.length }}건</div>
+      <div class="summary bodyRegular16px">
+        {{ formattedTotal }}&nbsp; &nbsp;{{ items.length }}건
+      </div>
     </div>
     <div class="items">
-      <ListItem v-for="item in sortedItems" :key="item.id" :item="item" :categoryMap="categoryMap" />
+      <ListItem
+        v-for="item in sortedItems"
+        :key="item.id"
+        :item="item"
+        :categoryMap="categoryMap"
+      />
     </div>
   </div>
 </template>
@@ -41,7 +48,7 @@ const formattedTotal = computed(() => {
 const sortedItems = computed(() =>
   [...props.items].sort((a, b) => {
     return dayjs(b.date).valueOf() - dayjs(a.date).valueOf()
-  })
+  }),
 )
 </script>
 
@@ -67,5 +74,13 @@ const sortedItems = computed(() =>
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+@media screen and (max-width: 767px) {
+  .header {
+    /* flex-direction: column; */
+    /* align-items: flex-start; */
+    /* gap: 0.25rem; */
+  }
 }
 </style>

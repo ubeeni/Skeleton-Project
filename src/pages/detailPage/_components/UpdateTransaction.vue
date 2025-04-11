@@ -1,31 +1,38 @@
 <template>
-  <div class="form-container">
+  <div class="form-container bodySemibold18px">
     <div class="form-body">
       <div class="form-body-left">
-        <div class="form-input">
-          <div class="form-input-amount">
-            <InputSm
-              type="number"
-              placeholder="금액을 입력하세요"
-              v-model.number="amount"
-              @keypress="onlyAllowDigits"
-              @input="removeNonDigits"
-              style="text-align: right"
-            /><span> 원</span>
-            <p class="form-alert" v-if="!isValidAmount">&nbsp;*</p>
+        <div class="form-row">
+          <div class="form-input form-input-amount-container">
+            <div class="form-input-amount">
+              <span class="form-alert" :class="{ visible: !isValidAmount }">* &nbsp;</span>
+              <InputMed
+                type="text"
+                placeholder="금액을 입력하세요"
+                v-model.number="amount"
+                @keypress="onlyAllowDigits"
+                @input="removeNonDigits"
+                style="text-align: right"
+              /><span> 원</span>
+            </div>
+            <BtnDual
+              @clickIncome="selectType('Income')"
+              @clickExpense="selectType('Expense')"
+              :is-income-active="isIncome"
+              :is-expense-active="isExpense"
+            />
           </div>
-          <BtnDual
-            @clickIncome="selectType('Income')"
-            @clickExpense="selectType('Expense')"
-            :is-income-active="isIncome"
-            :is-expense-active="isExpense"
-          />
         </div>
-        <div class="form-input">
-          <label>거래명</label>
-          <div class="input-with-alert">
-            <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionTitle" />
-            <p class="form-alert" v-show="!isValidTitle">*</p>
+        <div class="form-row">
+          <div class="form-input form-lg">
+            <label>
+              <span class="form-alert" :class="{ visible: !isValidTitle }">* &nbsp;</span
+              >거래명</label
+            >
+            <div class="input-with-alert">
+              <InputLg type="search" placeholder="거래명을 입력하세요" v-model="transactionTitle" />
+              <!-- <p class="form-alert" v-show="!isValidTitle">*</p> -->
+            </div>
           </div>
         </div>
       </div>
@@ -59,19 +66,17 @@
         </div>
       </div>
     </div>
-    <div class="form-footer">
-      <div class="form-btn-container">
-        <BtnLg text="수정" @click="updateTransaction" color="var(--color-primary)" />
-        <BtnLg text="삭제" @click="deleteTransaction" color="var(--color-light)" />
-        <BtnLg text="취소" @click="cancle" color="var(--color-light)" />
-      </div>
+    <div class="form-btn-container">
+      <BtnLg text="수정" @click="updateTransaction" color="var(--color-primary)" />
+      <BtnLg text="삭제" @click="deleteTransaction" color="var(--color-light)" />
+      <BtnLg text="취소" @click="cancle" color="var(--color-light)" />
     </div>
 
     <!-- 캘린더 모달 -->
 
     <div v-if="showCalenderModal" class="modal-backdrop">
       <div class="modal-content">
-        <h3>날짜와 시간 선택</h3>
+        <h3 class="bodySemibold16px">날짜와 시간 선택</h3>
         <Datepicker
           v-model="dateStr"
           :enable-time-picker="true"
@@ -80,8 +85,9 @@
           :format="(d) => d.toLocaleString('ko-KR')"
           :max-date="new Date()"
         />
-        <br />
-        <button @click="closeCalenderModal">닫기</button>
+        <div class="modal-btn">
+          <BtnXs @click="closeCalenderModal" text="닫기" />
+        </div>
       </div>
     </div>
 
@@ -93,10 +99,7 @@
           <p>거래 내역 수정이 완료되었습니다!</p>
           <br />
         </div>
-        <div class="modal-button-container">
-          <button @click="moveToPrev">이전 페이지로</button>
-          <!-- <button @click="moveToView">상세보기 페이지로</button> -->
-        </div>
+        <BtnXs @click="moveToPrev" text="확인" />
       </div>
     </div>
   </div>
@@ -106,31 +109,30 @@
 
 <script setup>
 import BtnLg from '@/components/button/BtnLg.vue'
-import BtnMed from '@/components/button/BtnMed.vue'
-import BtnSm from '@/components/button/BtnSm.vue'
 import BtnDual from '@/components/button/BtnDual.vue'
 import InputLg from '@/components/input/InputLg.vue'
 import InputMed from '@/components/input/InputMed.vue'
-import InputSm from '@/components/input/InputSm.vue'
-import SelectLg from '@/components/input/SelectLg.vue'
 import SelectMed from '@/components/input/SelectMed.vue'
-import SelectSm from '@/components/input/SelectSm.vue'
+import BtnXs from '@/components/button/BtnXs.vue'
 
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 
-import { ref, reactive, computed, watch, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { ref, reactive, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from 'axios'
 
-const prevPage = ref(null)
+// const prevPage = ref(null)
+const props = defineProps({
+  prevPage: String,
+  transactionId: String, // Add에서는 안 들어오므로 옵셔널로 사용 가능
+})
 
-const currentRoute = useRoute()
 const router = useRouter()
 
 const BASEURI = '/api'
 
-const transactionId = ref(null) // 상세 보기할 트랜잭션 ID - 추후 ViewTransaction 에서 받아올 것
+// const transactionId = ref(null) // 상세 보기할 트랜잭션 ID - 추후 ViewTransaction 에서 받아올 것
 
 const transactionTitle = ref('') // 거래명
 const isValidTitle = computed(() => transactionTitle.value !== '')
@@ -199,23 +201,23 @@ const moveToView = () => {
   router.push({
     name: 'detail',
     params: { action: 'view' },
-    state: { from: prevPage.value, transaction_id: transactionId.value },
+    state: { from: props.prevPage, transaction_id: props.transactionId },
   })
 }
 const moveToPrev = () => {
   showConfirmModal.value = false
   router.push({
-    name: prevPage.value,
+    name: props.prevPage,
   })
 }
 
 onMounted(async () => {
-  const historyState = window.history.state
-  prevPage.value = historyState.from
-  transactionId.value = historyState.transaction_id
+  // const historyState = window.history.state
+  // prevPage.value = historyState.from
+  // props.transactionId = historyState.transaction_id
 
-  console.log('prevPage : ', prevPage.value)
-  console.log('transactionId : ', transactionId.value)
+  console.log('prevPage : ', props.prevPage)
+  console.log('transactionId : ', props.transactionId)
 
   try {
     const transResponse = await axios.get(BASEURI + '/transactions')
@@ -225,7 +227,7 @@ onMounted(async () => {
     allCategories.splice(0, allCategories.length, ...catResponse.data)
 
     const transaction = allTransactions.find(
-      (transaction) => transaction.id === transactionId.value,
+      (transaction) => transaction.id === props.transactionId,
     )
 
     transactionTitle.value = transaction.title
@@ -271,7 +273,7 @@ const updateTransaction = async () => {
   }
 
   try {
-    const response = await axios.put(`${BASEURI}/transactions/${transactionId.value}`, {
+    const response = await axios.put(`${BASEURI}/transactions/${props.transactionId}`, {
       title: transactionTitle.value,
       category_id: categoryId.value,
       type: categoryType.value,
@@ -299,12 +301,12 @@ const deleteTransaction = async () => {
   }
 
   try {
-    const response = await axios.delete(`${BASEURI}/transactions/${transactionId.value}`)
+    const response = await axios.delete(`${BASEURI}/transactions/${props.transactionId}`)
 
     if (response.status === 200) {
       console.log('삭제 성공')
       router.push({
-        name: prevPage.value,
+        name: props.prevPage,
       })
     } else {
       console.log('삭제 실패')
@@ -317,7 +319,7 @@ const deleteTransaction = async () => {
 const cancle = () => {
   console.log('취소 버튼')
   router.push({
-    name: prevPage.value,
+    name: props.prevPage,
   })
 }
 </script>
@@ -325,119 +327,139 @@ const cancle = () => {
 <!-- ----------------------------------- style  ----------------------------------- -->
 
 <style scoped>
+/* ---------------------- Modal ---------------------- */
+
 .modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--color-light2);
 }
 .modal-content {
-  background: white;
-  padding: 24px;
-  width: 300px;
-  margin: 100px auto;
-  border-radius: 10px;
-}
-div.modal-button-container {
+  background: var(--color-white);
+  padding: 1.5rem;
+  width: 20rem;
+  margin: 10rem auto;
+  border-radius: 1rem;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
-  gap: 12px; /* 버튼 간 간격 */
-  align-items: center; /* 가운데 정렬 */
-  margin-top: 1rem;
+  gap: 1rem;
 }
-/* ------------------------ */
+.modal-btn {
+  display: flex;
+  justify-content: right;
+}
+
+/* ---------------------- Desktop ---------------------- */
 
 .form-container {
-  max-width: 100%;
+  /* max-width: 100%;
   margin: 0 auto;
-  padding: 24px;
+  padding: 24px; */
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 2rem;
 }
-
 .form-body {
   display: flex;
   justify-content: center;
-  gap: 32px;
+  gap: 2rem;
 }
 
-.form-body-left {
-  display: flex;
-  flex-direction: column;
-}
-
+.form-body-left,
 .form-body-right {
   display: flex;
   flex-direction: column;
+  gap: 2rem;
 }
 
-.form-right {
+.form-row {
   display: flex;
-  flex-direction: column;
+
+  align-items: center;
+
+  width: 100%;
+}
+
+.form-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .form-input {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 20px 0;
-  gap: 16px;
+  gap: 1rem;
 }
 
-.input-with-alert {
+.form-input-amount-container {
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  width: 100%;
 }
 
 .form-alert {
-  color: red;
+  visibility: hidden;
+  color: var(--color-expense);
+}
+
+.form-alert.visible {
+  visibility: visible;
 }
 
 .form-input-amount {
   justify-content: left;
-  display: inline-flex;
+  display: flex;
   align-items: center;
 }
 
-.form-input span {
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 100%;
-  letter-spacing: 0%;
+.form-input-amount span:last-child {
+  margin-left: 1rem;
 }
 
 .form-input label {
   white-space: nowrap; /* 줄바꿈 방지 */
-  font-size: 16px;
+
   flex-shrink: 0; /* 작아지지 않게 */
 }
 
-.text-like-input {
-  width: auto;
-  min-width: 1ch;
-  max-width: 15ch;
-  font-size: 18px;
-  background: transparent;
-  border: none;
-}
-
-.form-alert p {
-  color: red;
-}
-
-.form-footer {
-  display: flex;
-  justify-content: center;
-}
-
 .form-btn-container {
+  margin-top: 5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 1rem;
+}
+
+/* ---------------------- Mobile ---------------------- */
+
+@media (max-width: 768px) {
+  .form-body {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .form-input-amount-container {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: start;
+  }
+
+  .form-lg {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.5rem;
+  }
 }
 </style>

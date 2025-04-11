@@ -1,8 +1,10 @@
 <template>
   <div class="header">
     <img :src="backButton" alt="back" @click="handlePrev" />
-    <div class="bodySemibold18px">
-      <RouterLink :to="{ name: 'home' }">🗓️ 스켈레톤프로젝트</RouterLink>
+    <div class="logo">
+      <RouterLink :to="{ name: 'home' }"
+        ><img :src="logo" alt="logo" /> <img :src="logoText" alt="logo text"
+      /></RouterLink>
     </div>
     <img :src="isMenuOpen ? menuOpenButton : menuButton" alt="menu" @click="toggleMenu" />
   </div>
@@ -48,6 +50,8 @@ import { ref, watchEffect } from 'vue'
 import backButton from '@/assets/icons/IconArrowBack.svg'
 import menuButton from '@/assets/icons/IconMenu.svg'
 import menuOpenButton from '@/assets/icons/IconMenuOpen.svg'
+import logo from '@/assets/icons/LogoMobile.svg'
+import logoText from '@/assets/icons/LogoTitleMobile.svg'
 
 const route = useRoute()
 const userName = ref('')
@@ -90,7 +94,7 @@ const handlePrev = () => {
   padding: 0 1rem;
 }
 
-.header img {
+.header > img {
   width: 2.25rem;
   height: 2.25rem;
 }
@@ -134,5 +138,11 @@ const handlePrev = () => {
 .fade-slide-leave-to {
   opacity: 0;
   transform: translateY(-10px);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 </style>

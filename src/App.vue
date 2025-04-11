@@ -11,14 +11,13 @@
 <script setup>
 import axios from 'axios'
 import { ref, computed, onMounted, provide } from 'vue'
-import { useIsMobile } from './composables/UseIsMobile'
 
 import Floating from './components/layout/Floating.vue'
 import Header from './components/layout/Header.vue'
 import HeaderMobile from './components/layout/HeaderMobile.vue'
 // import Footer from './components/layout/Footer.vue'
 import { toast } from 'vue3-toastify'
-
+import { useIsMobile } from './composables/UseIsMobile'
 const { isMobile } = useIsMobile()
 
 const quickAddOptions = ref([])

@@ -320,7 +320,7 @@ select.error {
   .input-group {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .form-row,
@@ -369,7 +369,7 @@ select.error {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.5rem;
     align-items: flex-end;
   }
 }

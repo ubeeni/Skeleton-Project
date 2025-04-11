@@ -1,6 +1,7 @@
 <template>
   <div class="modal">
     <div class="modal-box">
+      <div class="modal-content"></div>
       <h3 class="titleBold24px">고정 수입/지출 추가</h3>
       <div class="input-group">
         <div class="form-row-dual">
@@ -41,7 +42,7 @@
         </div>
 
         <!-- 반복주기 + 상세 입력 -->
-        <div class="form-row">
+        <div class="form-row repeat-row">
           <span class="bodySemibold18px">반복주기</span>
           <div class="select-group">
             <SelectMed
@@ -287,23 +288,29 @@ select.error {
     background-color: var(--color-light2);
     display: flex;
     justify-content: center;
-    align-items: flex-end; /* 아래에서부터 정렬 */
+    align-items: flex-end;
     padding: 0;
     z-index: 1000;
   }
 
   .modal-box {
-    width: 100vw;
-    height: 792px;
-    max-height: 100vh;
+    width: 100%;
+    max-height: 38rem;
+    height: 100%;
     background: var(--color-white);
-    padding: 2rem 1.5rem;
     border-radius: 1rem 1rem 0 0;
     box-shadow: var(--boxshadow-light);
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    justify-content: start;
+    align-items: center;
     overflow-y: auto;
+    padding: 2rem 0;
+  }
+
+  .modal-content {
+    width: 100%;
+    max-width: 22.125rem;
   }
 
   .modal-box h3 {
@@ -313,25 +320,21 @@ select.error {
   .input-group {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin-top: 3rem;
+    gap: 0.5rem;
   }
 
   .form-row,
   .button-group {
-    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    align-items: flex-start;
+    gap: 0.5rem;
+    align-items: start;
   }
 
   .form-row-dual {
-    display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 1rem;
-    width: 100%;
+    gap: 0.5rem;
   }
 
   .form-row-dual .amount-row {
@@ -340,16 +343,20 @@ select.error {
     gap: 0.5rem;
   }
 
-  .form-row-dual .amount-row input {
-    flex: 1;
-  }
-
   .form-row-dual .amount-row span {
     white-space: nowrap;
   }
 
+  .repeat-row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    gap: 0;
+  }
+
   .button-group {
-    margin-top: 1rem;
+    margin-top: 2rem;
     align-items: center;
   }
 
@@ -362,7 +369,7 @@ select.error {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.5rem;
     align-items: flex-end;
   }
 }

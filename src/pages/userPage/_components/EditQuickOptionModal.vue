@@ -1,86 +1,88 @@
 <template>
   <div class="modal">
     <div class="modal-box">
-      <h3 class="titleBold24px">고정 수입/지출 수정</h3>
-      <div class="input-group">
-        <div class="form-row-dual">
-          <BtnDual
-            :is-income-active="editItem.type === 'Income'"
-            :is-expense-active="editItem.type === 'Expense'"
-            @clickIncome="editItem.type = 'Income'"
-            @clickExpense="editItem.type = 'Expense'"
-          />
-          <div class="amount-row">
-            <InputMed
-              v-model.number="editItem.amount"
-              type="number"
-              :class="{ error: (!editItem.amount || editItem.amount <= 0) && triedSubmit }"
-              placeholder="금액을 입력하세요"
+      <div class="modal-content">
+        <h3 class="titleBold24px">고정 수입/지출 수정</h3>
+        <div class="input-group">
+          <div class="form-row-dual">
+            <BtnDual
+              :is-income-active="editItem.type === 'Income'"
+              :is-expense-active="editItem.type === 'Expense'"
+              @clickIncome="editItem.type = 'Income'"
+              @clickExpense="editItem.type = 'Expense'"
             />
-            <span class="bodySemibold18px"> 원</span>
+            <div class="amount-row">
+              <InputMed
+                v-model.number="editItem.amount"
+                type="number"
+                :class="{ error: (!editItem.amount || editItem.amount <= 0) && triedSubmit }"
+                placeholder="금액을 입력하세요"
+              />
+              <span class="bodySemibold18px"> 원</span>
+            </div>
+          </div>
+          <!-- 거래명 -->
+          <div class="form-row">
+            <span class="bodySemibold18px">거래명</span>
+            <InputLg
+              v-model="editItem.title"
+              :class="{ error: !editItem.title && triedSubmit }"
+              placeholder="거래명을 입력하세요"
+            />
+          </div>
+
+          <!-- 카테고리 -->
+          <div class="form-row">
+            <span class="bodySemibold18px">카테고리</span>
+            <SelectLg
+              v-model="editItem.category_id"
+              :options="filteredCategories.map((cat) => ({ label: cat.name, value: cat.id }))"
+              placeholder="카테고리 선택"
+            />
+          </div>
+
+          <!-- 반복주기 -->
+          <div class="form-row repeat-row">
+            <span class="bodySemibold18px">반복주기</span>
+            <div class="select-group">
+              <SelectMed
+                v-model="editItem.cycle"
+                :options="cycleOptions"
+                placeholder="반복주기 선택"
+              />
+              <SelectMed
+                v-if="editItem.cycle === 'weekly'"
+                :options="weeklyOptions"
+                v-model="editItem.week"
+                :class="{ error: (!editItem.week || editItem.week === '') && triedSubmit }"
+                placeholder="요일 선택"
+              />
+              <InputMed
+                v-if="editItem.cycle === 'monthly'"
+                v-model="editItem.month"
+                :class="{
+                  error:
+                    (!editItem.month || editItem.month < 1 || editItem.month > 31) && triedSubmit,
+                }"
+                placeholder="1 ~ 31일까지 입력 가능합니다."
+                type="number"
+              />
+              <InputMed v-if="editItem.cycle === 'daily'" value="매일" disabled />
+              <InputMed v-if="editItem.cycle === 'onetime'" value="반복 없음" disabled />
+            </div>
+          </div>
+          <!-- 메모 -->
+          <div class="form-row">
+            <span class="bodySemibold18px">메모</span>
+            <InputLg v-model="editItem.memo" placeholder="추가 정보를 입력하세요" />
           </div>
         </div>
-        <!-- 거래명 -->
-        <div class="form-row">
-          <span class="bodySemibold18px">거래명</span>
-          <InputLg
-            v-model="editItem.title"
-            :class="{ error: !editItem.title && triedSubmit }"
-            placeholder="거래명을 입력하세요"
-          />
-        </div>
 
-        <!-- 카테고리 -->
-        <div class="form-row">
-          <span class="bodySemibold18px">카테고리</span>
-          <SelectLg
-            v-model="editItem.category_id"
-            :options="filteredCategories.map((cat) => ({ label: cat.name, value: cat.id }))"
-            placeholder="카테고리 선택"
-          />
+        <div class="button-group">
+          <BtnLg :color="'var(--color-primary)'" :text="`수정 완료`" @click="update" />
+          <BtnLg :color="'var(--color-light)'" :text="`삭제`" @click="remove" />
+          <BtnLg :color="'var(--color-light)'" :text="`취소`" @click="$emit('close')" />
         </div>
-
-        <!-- 반복주기 -->
-        <div class="form-row">
-          <span class="bodySemibold18px">반복주기</span>
-          <div class="select-group">
-            <SelectMed
-              v-model="editItem.cycle"
-              :options="cycleOptions"
-              placeholder="반복주기 선택"
-            />
-            <SelectMed
-              v-if="editItem.cycle === 'weekly'"
-              :options="weeklyOptions"
-              v-model="editItem.week"
-              :class="{ error: (!editItem.week || editItem.week === '') && triedSubmit }"
-              placeholder="요일 선택"
-            />
-            <InputMed
-              v-if="editItem.cycle === 'monthly'"
-              v-model="editItem.month"
-              :class="{
-                error:
-                  (!editItem.month || editItem.month < 1 || editItem.month > 31) && triedSubmit,
-              }"
-              placeholder="1 ~ 31일까지 입력 가능합니다."
-              type="number"
-            />
-            <InputMed v-if="editItem.cycle === 'daily'" value="매일" disabled />
-            <InputMed v-if="editItem.cycle === 'onetime'" value="반복 없음" disabled />
-          </div>
-        </div>
-        <!-- 메모 -->
-        <div class="form-row">
-          <span class="bodySemibold18px">메모</span>
-          <InputLg v-model="editItem.memo" placeholder="추가 정보를 입력하세요" />
-        </div>
-      </div>
-
-      <div class="button-group">
-        <BtnLg :color="'var(--color-primary)'" :text="`수정 완료`" @click="update" />
-        <BtnLg :color="'var(--color-light)'" :text="`삭제`" @click="remove" />
-        <BtnLg :color="'var(--color-light)'" :text="`취소`" @click="$emit('close')" />
       </div>
     </div>
   </div>
@@ -242,6 +244,7 @@ const remove = () => {
 
 h3 {
   margin-bottom: 2rem;
+  text-align: center;
 }
 .input-group {
   display: flex;
@@ -282,6 +285,7 @@ select.error {
   margin-top: 4rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1rem;
 }
 
@@ -292,23 +296,29 @@ select.error {
     background-color: var(--color-light2);
     display: flex;
     justify-content: center;
-    align-items: flex-end; /* 아래에서부터 정렬 */
+    align-items: flex-end;
     padding: 0;
     z-index: 1000;
   }
 
   .modal-box {
-    width: 100vw;
-    height: 792px;
-    max-height: 100vh;
+    width: 100%;
+    max-height: 38rem;
+    height: 100%;
     background: var(--color-white);
-    padding: 2rem 1.5rem;
     border-radius: 1rem 1rem 0 0;
     box-shadow: var(--boxshadow-light);
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    justify-content: start;
+    align-items: center;
     overflow-y: auto;
+    padding: 2rem 0;
+  }
+
+  .modal-content {
+    width: 100%;
+    max-width: 22.125rem;
   }
 
   .modal-box h3 {
@@ -318,25 +328,21 @@ select.error {
   .input-group {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin-top: 7rem;
+    gap: 0.5rem;
   }
 
   .form-row,
   .button-group {
-    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    align-items: flex-start;
+    gap: 0.5rem;
+    align-items: start;
   }
 
   .form-row-dual {
-    display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 1rem;
-    width: 100%;
+    gap: 0.5rem;
   }
 
   .form-row-dual .amount-row {
@@ -345,16 +351,20 @@ select.error {
     gap: 0.5rem;
   }
 
-  .form-row-dual .amount-row input {
-    flex: 1;
-  }
-
   .form-row-dual .amount-row span {
     white-space: nowrap;
   }
 
+  .repeat-row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    gap: 0;
+  }
+
   .button-group {
-    margin-top: 1rem;
+    margin-top: 2rem;
     align-items: center;
   }
 
@@ -367,7 +377,7 @@ select.error {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.5rem;
     align-items: flex-end;
   }
 }

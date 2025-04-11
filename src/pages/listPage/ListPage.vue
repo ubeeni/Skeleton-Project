@@ -75,29 +75,37 @@ const filterOptions = ref({
 function handleFilterChange(newOptions) {
   filterOptions.value = newOptions
 }
-
 const filteredTransactions = computed(() => {
-  const { date, range, showIncome, showExpense, incomeCategoryIds, expenseCategoryIds } =
-    filterOptions.value
+  const {
+    date,
+    range,
+    showIncome,
+    showExpense,
+    incomeCategoryIds,
+    expenseCategoryIds,
+  } = filterOptions.value
 
-  const to = dayjs(date)
-  let from
+  const now = dayjs()
+  const base = dayjs(date)
+  let from, to
 
   if (range === '1주') {
-    const day = to.day() // 일요일(0) ~ 토요일(6)
-    from = to.subtract(day === 0 ? 6 : day - 1, 'day') // 월요일까지 이동
+    const day = base.day()
+    from = base.subtract(day === 0 ? 6 : day - 1, 'day')
+    to = base
   } else if (range === '1개월') {
-    from = to.startOf('month')
+    from = base.startOf('month')
+    to = base.isSame(now, 'month') ? now : base.endOf('month') // 핵심 수정
   } else if (range === '3개월') {
-    from = to.subtract(2, 'month').startOf('month')
+    from = base.subtract(2, 'month').startOf('month')
+    to = base.isSame(now, 'month') ? now : base.endOf('month')
   }
 
   return transactions.value.filter((tx) => {
     const txDate = dayjs(tx.date).startOf('day')
     const inRange =
-      txDate.isSame(from, 'day') || txDate.isSame(to, 'day') || txDate.isBetween(from, to)
+      txDate.isSame(from, 'day') || txDate.isSame(to, 'day') || txDate.isBetween(from, to, null, '[]')
 
-    // 수입/지출 모두 꺼져 있을 때 → 전체 출력
     if (!showIncome && !showExpense) return inRange
 
     if (tx.type === 'Income' && !showIncome) return false
@@ -115,29 +123,6 @@ const filteredTransactions = computed(() => {
   })
 })
 
-//mobile
-const isMobile = ref(false)
-
-onMounted(() => {
-  isMobile.value = window.innerWidth <= 767
-  window.addEventListener('resize', () => {
-    isMobile.value = window.innerWidth <= 767
-  })
-  console.log('📱 isMobile:', isMobile.value)
-})
-
-// 모달 상태
-const isFilterModalOpen = ref(false)
-
-// 필터 버튼 클릭 시
-const openFilterModal = () => {
-  isFilterModalOpen.value = true
-}
-
-// 저장 후 모달 닫기
-const closeFilterModal = () => {
-  isFilterModalOpen.value = false
-}
 </script>
 
 <style scoped>

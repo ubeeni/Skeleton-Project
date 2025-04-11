@@ -47,7 +47,7 @@
 
     <div class="form-btn-container">
       <BtnLg text="수정" @click="gotoUpdate" color="var(--color-primary)" />
-      <BtnLg text="취소" @click="cancle" color="var(--color-light)" />
+      <BtnLg text="뒤로가기" @click="cancle" color="var(--color-light)" />
     </div>
   </div>
 </template>

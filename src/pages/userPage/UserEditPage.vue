@@ -141,26 +141,22 @@ input.error {
   .wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    min-height: 100vh;
   }
 
   .form-row {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    margin-top: 1.25rem;
   }
 
   .input-wrapper {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
     margin-top: 1rem;
   }
 
   .button-group {
-    margin-top: auto;
+    position: fixed;
+    bottom: 0;
     display: flex;
     flex-direction: column;
     align-items: center;

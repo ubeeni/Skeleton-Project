@@ -68,4 +68,17 @@ const sortedItems = computed(() =>
   flex-direction: column;
   gap: 1rem;
 }
+
+@media screen and (max-width: 767px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .summary {
+    font-size: 14px;
+  }
+}
+
 </style>

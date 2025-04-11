@@ -105,4 +105,31 @@ const goToDetail = () => {
   color: var(--color-dark); /* '원'은 항상 검정색 */
   text-align: right;
 }
+@media screen and (max-width: 767px) {
+  .list-item {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .item-left {
+    gap: 1rem;
+  }
+
+  .category-img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .text {
+    gap: 6px;
+  }
+
+  .item-right {
+    align-self: flex-end;
+  }
+}
+
 </style>

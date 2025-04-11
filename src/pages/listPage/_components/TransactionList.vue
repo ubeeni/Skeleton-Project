@@ -47,4 +47,11 @@ const groupedTransactions = computed(() => {
   flex-direction: column;
   gap: 2rem;
 }
+
+@media screen and (max-width: 767px) {
+  .transaction-list {
+    gap: 1.5rem; /* 모바일에 맞게 여백 줄이기 */
+  }
+}
+
 </style>

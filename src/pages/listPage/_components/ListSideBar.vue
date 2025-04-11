@@ -1,12 +1,12 @@
 <template>
   <div class="sidebar-wrapper">
     <!-- 월 이동 -->
+     <div class="sideBar-top" v-if="isMobile&&!props.isFilterOnly">
     <div class="month-nav">
       <img :src="backButton" alt="back" @click="handlePrev" />
-      <span class="titleBold24px range-text" @click="resetToToday" > {{ rangeText }} </span>
+      <span class="titleBold24px range-text" @click="resetToToday"> {{ rangeText }} </span>
       <img :src="forwardButton" alt="forward" @click="handleNext" />
     </div>
-
     <!-- 수입/지출/총합 요약 -->
     <div class="summary">
       <div class="bodyRegular16px">
@@ -26,12 +26,13 @@
       </div>
       <div class="total-line"></div>
     </div>
+  </div>
 
-    <div class="sideBar-bottom">
+    <div class="sideBar-bottom" v-if="!isMobile || !isFilterOnly" >
       <!--초기화 버튼-->
       <div class="reset-container" @click="resetFilters">
         <img :src="resetButton" alt="리셋아이콘" />
-        <span class="bodyRegular18px" > 초기화</span>
+        <span class="bodyRegular18px"> 초기화</span>
       </div>
 
       <!-- 날짜 범위 -->
@@ -99,11 +100,17 @@ import BtnDual from '@/components/button/BtnDual.vue'
 import backButton from '@/assets/icons/IconArrowBack.svg'
 import forwardButton from '@/assets/icons/IconArrowForward.svg'
 import resetButton from '@/assets/icons/IconReset.svg'
+import { useIsMobile } from '@/composables/UseIsMobile'
+const isMobile = useIsMobile()
 
 const props = defineProps({
   categories: Array,
   transactions: Array,
   filteredTransactions: Array,
+  isFilterOnly: {
+    type: Boolean,
+    default: false
+  }
 })
 
 const resetFilters = () => {
@@ -130,7 +137,6 @@ const selectedExpense = ref([])
 const options = ['1주', '1개월', '3개월']
 
 function resetToToday() {
-  
   currentDate.value = dayjs()
   selectedRange.value = '1개월'
   resetFilters()
@@ -249,7 +255,6 @@ const emitFilters = () => {
     expenseCategoryIds: selectedExpense.value,
   })
 }
-
 </script>
 
 <style scoped>
@@ -349,4 +354,51 @@ const emitFilters = () => {
 .range-text {
   cursor: pointer;
 }
+
+@media screen and (max-width: 767px) {
+  .sidebar-wrapper {
+    padding: 1rem;
+    width: 120%;
+    overflow-x: hidden;
+    z-index: 0;
+    background-color: white;
+    border-radius: 1rem 1rem 0 0;
+    box-shadow: 0 -2px 10px rgba(137, 134, 134, 0.1);
+    margin: 0 auto; 
+    
+  }
+  .sideBar-bottom {
+    gap: 1rem; /* ✅ 간격 축소 */
+  }
+
+  .summary .total-line {
+    margin: 0.5rem 0; /* ✅ 수치 줄이기 */
+  }
+  
+  .category-list {
+    display: flex;
+    flex-wrap: nowrap; /* 줄바꿈 없이 한 줄로 */
+    overflow-x: auto; /* 수평 스크롤 가능 */
+    overflow-y: hidden;
+    white-space: nowrap;
+    -ms-overflow-style: none; /* IE */
+    scrollbar-width: none;     /* Firefox */
+  }
+
+  .category-list::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+
+  .category-item {
+    flex: 0 0 auto; /* 자동 줄어들지 않게 */
+    /* margin-right: 0.5rem; */
+    white-space: nowrap;
+  }
+  .category-group {
+  width: 100%;
+}
+
+}
+
+
 </style>

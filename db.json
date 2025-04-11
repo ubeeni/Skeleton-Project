@@ -45,12 +45,6 @@
       "imgUrl": "/images/categories/otherIncome.png"
     },
     {
-      "id": "6666",
-      "name": "수도&가스비",
-      "type": "Expense",
-      "imgUrl": "/images/categories/watergas.png"
-    },
-    {
       "id": "7777",
       "name": "식비",
       "type": "Expense",
@@ -69,10 +63,16 @@
       "imgUrl": "/images/categories/pleasure.png"
     },
     {
-      "id": "AAAA",
-      "name": "경조/선물",
+      "id": "EEEE",
+      "name": "생활",
       "type": "Expense",
-      "imgUrl": "/images/categories/congratulations.png"
+      "imgUrl": "/images/categories/life.png"
+    },
+    {
+      "id": "DDDD",
+      "name": "쇼핑",
+      "type": "Expense",
+      "imgUrl": "/images/categories/shopping.png"
     },
     {
       "id": "BBBB",
@@ -87,18 +87,6 @@
       "imgUrl": "/images/categories/travel.png"
     },
     {
-      "id": "DDDD",
-      "name": "쇼핑",
-      "type": "Expense",
-      "imgUrl": "/images/categories/shopping.png"
-    },
-    {
-      "id": "EEEE",
-      "name": "생활",
-      "type": "Expense",
-      "imgUrl": "/images/categories/life.png"
-    },
-    {
       "id": "FFFF",
       "name": "교통",
       "type": "Expense",
@@ -111,19 +99,336 @@
       "imgUrl": "/images/categories/medical.png"
     },
     {
+      "id": "IIII",
+      "name": "교육",
+      "type": "Expense",
+      "imgUrl": "/images/categories/education.png"
+    },
+    {
       "id": "HHHH",
       "name": "주거/통신",
       "type": "Expense",
       "imgUrl": "/images/categories/residentialCommunication.png"
     },
     {
-      "id": "IIII",
-      "name": "교육",
+      "id": "JJJJ",
+      "name": "정기구독",
       "type": "Expense",
-      "imgUrl": "/images/categories/education.png"
+      "imgUrl": "/images/categories/monthlySubscribe.png"
+    },
+    {
+      "id": "6666",
+      "name": "공과금",
+      "type": "Expense",
+      "imgUrl": "/images/categories/watergas.png"
+    },
+    {
+      "id": "AAAA",
+      "name": "경조/선물",
+      "type": "Expense",
+      "imgUrl": "/images/categories/congratulations.png"
     }
   ],
-  "transactions": [],
+  "transactions": [
+    {
+      "id": "4a29",
+      "title": "아아",
+      "category_id": "8888",
+      "type": "Expense",
+      "amount": 5000,
+      "date": "2025-04-11T10:02:30",
+      "memo": "메머드최고"
+    },
+    {
+      "id": "6d96",
+      "title": "양분식 알밥",
+      "category_id": "7777",
+      "type": "Expense",
+      "amount": 8000,
+      "date": "2025-04-10T12:02:00",
+      "memo": ""
+    },
+    {
+      "id": "0382",
+      "title": "고등어백반",
+      "category_id": "7777",
+      "type": "Expense",
+      "amount": 13000,
+      "date": "2025-04-09T12:03:00",
+      "memo": ""
+    },
+    {
+      "id": "1dc5",
+      "title": "마라탕 배달",
+      "category_id": "7777",
+      "type": "Expense",
+      "amount": 20000,
+      "date": "2025-04-10T19:03:00",
+      "memo": "마라탕은 못참지"
+    },
+    {
+      "id": "8911",
+      "title": "챗지피티 유료결제",
+      "category_id": "JJJJ",
+      "type": "Expense",
+      "amount": 29000,
+      "date": "2025-04-11T10:04:00",
+      "memo": ""
+    },
+    {
+      "id": "97b5",
+      "title": "월급🤍",
+      "member_id": "12CD",
+      "category_id": "2222",
+      "type": "Income",
+      "amount": 3000000,
+      "date": "2025-04-11",
+      "memo": ""
+    },
+    {
+      "id": "92da",
+      "title": "13회차 회식",
+      "category_id": "9999",
+      "type": "Expense",
+      "amount": 20000,
+      "date": "2025-04-07T17:05:00",
+      "memo": ""
+    },
+    {
+      "id": "de97",
+      "title": "다이소 쇼핑",
+      "category_id": "EEEE",
+      "type": "Expense",
+      "amount": 5000,
+      "date": "2025-04-08T23:05:00",
+      "memo": ""
+    },
+    {
+      "id": "45fe",
+      "title": "뮤지컬 지킬앤하이드",
+      "category_id": "BBBB",
+      "type": "Expense",
+      "amount": 150000,
+      "date": "2025-04-06T14:05:00",
+      "memo": ""
+    },
+    {
+      "id": "dd39",
+      "title": "제주도 여행",
+      "category_id": "CCCC",
+      "type": "Expense",
+      "amount": 200000,
+      "date": "2025-03-02T10:06:00",
+      "memo": ""
+    },
+    {
+      "id": "7ca0",
+      "title": "광주 야구 여행",
+      "category_id": "CCCC",
+      "type": "Expense",
+      "amount": 15000,
+      "date": "2025-04-07T21:06:00",
+      "memo": ""
+    },
+    {
+      "id": "9d5d",
+      "title": "지하철",
+      "category_id": "FFFF",
+      "type": "Expense",
+      "amount": 1400,
+      "date": "2025-04-11T10:07:18",
+      "memo": ""
+    },
+    {
+      "id": "2fe9",
+      "title": "피부과",
+      "category_id": "GGGG",
+      "type": "Expense",
+      "amount": 8000,
+      "date": "2025-04-05T10:07:00",
+      "memo": ""
+    },
+    {
+      "id": "9afe",
+      "title": "인프런 스프링 강의",
+      "category_id": "IIII",
+      "type": "Expense",
+      "amount": 60000,
+      "date": "2025-04-04T10:08:00",
+      "memo": ""
+    },
+    {
+      "id": "0acf",
+      "title": "인터넷 요금",
+      "category_id": "HHHH",
+      "type": "Expense",
+      "amount": 14000,
+      "date": "2025-04-03T10:08:00",
+      "memo": ""
+    },
+    {
+      "id": "3702",
+      "title": "유튜브 프리미엄",
+      "category_id": "JJJJ",
+      "type": "Expense",
+      "amount": 20000,
+      "date": "2025-04-03T10:08:00",
+      "memo": ""
+    },
+    {
+      "id": "51cf",
+      "title": "오피스텔 관리비",
+      "category_id": "6666",
+      "type": "Expense",
+      "amount": 40000,
+      "date": "2025-04-01T10:09:00",
+      "memo": ""
+    },
+    {
+      "id": "7e00",
+      "title": "엄마 생신 선물",
+      "category_id": "AAAA",
+      "type": "Expense",
+      "amount": 100000,
+      "date": "2025-04-02T10:09:00",
+      "memo": ""
+    },
+    {
+      "id": "fb07",
+      "title": "주식 배당금",
+      "category_id": "4444",
+      "type": "Income",
+      "amount": 30000,
+      "date": "2025-04-05T10:10:00",
+      "memo": ""
+    },
+    {
+      "id": "09db",
+      "title": "당근 거래",
+      "category_id": "5555",
+      "type": "Income",
+      "amount": 5000,
+      "date": "2025-04-08T10:10:00",
+      "memo": ""
+    },
+    {
+      "id": "d28f",
+      "title": "아빠가 용돈주셨당",
+      "category_id": "3333",
+      "type": "Income",
+      "amount": 50000,
+      "date": "2025-04-01T10:11:00",
+      "memo": ""
+    },
+    {
+      "id": "e96e",
+      "title": "샐러리아 점심",
+      "category_id": "7777",
+      "type": "Expense",
+      "amount": 7900,
+      "date": "2025-03-07T10:11:00",
+      "memo": ""
+    },
+    {
+      "id": "d5a7",
+      "title": "친구 모임",
+      "category_id": "9999",
+      "type": "Expense",
+      "amount": 35000,
+      "date": "2025-03-13T20:12:00",
+      "memo": ""
+    },
+    {
+      "id": "cad9",
+      "title": "봄 옷 쇼핑",
+      "category_id": "DDDD",
+      "type": "Expense",
+      "amount": 50000,
+      "date": "2025-03-17T10:12:00",
+      "memo": ""
+    },
+    {
+      "id": "5df6",
+      "title": "뮤지컬 레베카",
+      "category_id": "BBBB",
+      "type": "Expense",
+      "amount": 140000,
+      "date": "2025-03-03T10:13:00",
+      "memo": ""
+    },
+    {
+      "id": "1044",
+      "title": "3월 월급",
+      "category_id": "2222",
+      "type": "Income",
+      "amount": 3000000,
+      "date": "2025-03-11T10:13:00",
+      "memo": ""
+    },
+    {
+      "id": "1f2b",
+      "title": "이비인후과 진료",
+      "category_id": "GGGG",
+      "type": "Expense",
+      "amount": 45000,
+      "date": "2025-03-16T10:13:00",
+      "memo": ""
+    },
+    {
+      "id": "0e90",
+      "title": "자격증 책 구입",
+      "category_id": "IIII",
+      "type": "Expense",
+      "amount": 23000,
+      "date": "2025-03-16T10:14:00",
+      "memo": ""
+    },
+    {
+      "id": "111a",
+      "title": "3월 교통비",
+      "category_id": "FFFF",
+      "type": "Expense",
+      "amount": 23000,
+      "date": "2025-03-23T10:14:00",
+      "memo": ""
+    },
+    {
+      "id": "c391",
+      "title": "친구들이랑 카페 수다",
+      "category_id": "8888",
+      "type": "Expense",
+      "amount": 14000,
+      "date": "2025-04-10T15:16:00",
+      "memo": ""
+    },
+    {
+      "id": "cf52",
+      "title": "고등어조림 점심",
+      "category_id": "7777",
+      "type": "Expense",
+      "amount": 13000,
+      "date": "2025-02-12T10:17:00",
+      "memo": ""
+    },
+    {
+      "id": "cf73",
+      "title": "2월 월급",
+      "category_id": "2222",
+      "type": "Income",
+      "amount": 3000000,
+      "date": "2025-02-11T10:25:00",
+      "memo": ""
+    },
+    {
+      "id": "9060",
+      "title": "핸드폰 요금",
+      "category_id": "HHHH",
+      "type": "Expense",
+      "amount": 25000,
+      "date": "2025-04-11T10:05:00",
+      "memo": ""
+    }
+  ],
   "quickAddOptions": [
     {
       "id": "1744331258791",

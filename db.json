@@ -3,8 +3,8 @@
     {
       "id": "12CD",
       "name": "홍길동",
-      "incomeDefault": "미분류",
-      "expenseDefault": "미분류"
+      "incomeDefault": "용돈",
+      "expenseDefault": "식비"
     }
   ],
   "categories": [
@@ -435,71 +435,90 @@
       "amount": 213,
       "date": "2025-04-10T09:10:00",
       "memo": ""
+    },
+    {
+      "id": "03d6",
+      "title": "월급🤍",
+      "member_id": "12CD",
+      "category_id": "2222",
+      "type": "Income",
+      "amount": 3000000,
+      "date": "2025-04-11",
+      "memo": ""
+    },
+    {
+      "id": "5e45",
+      "title": "용돈",
+      "member_id": "12CD",
+      "category_id": "3333",
+      "type": "Income",
+      "amount": 100000,
+      "date": "2025-04-11",
+      "memo": ""
+    },
+    {
+      "id": "3c96",
+      "title": "넷플릭스",
+      "member_id": "12CD",
+      "category_id": "EEEE",
+      "type": "Expense",
+      "amount": 14900,
+      "date": "2025-04-11",
+      "memo": ""
     }
   ],
   "quickAddOptions": [
     {
-      "id": "PQRS",
-      "title": "커피 수혈",
+      "id": "1744331258791",
       "member_id": "12CD",
-      "category_id": "0000",
+      "title": "넷플릭스",
       "type": "Expense",
-      "cycle": "daily",
-      "day": "매일",
-      "week": null,
-      "month": null,
-      "amount": 2000,
-      "memo": "나는야 커피 자판기"
-    },
-    {
-      "id": "PIG7",
-      "title": "주간 저금",
-      "member_id": "12CD",
-      "category_id": "0000",
-      "type": "Expense",
-      "cycle": "weekly",
-      "day": null,
-      "week": "monday",
-      "month": null,
-      "amount": 70000,
-      "memo": "매주 모아서..."
-    },
-    {
-      "id": "SMFM",
-      "title": "월세",
-      "member_id": "12CD",
-      "category_id": "0000",
-      "type": "Expense",
+      "category_id": "EEEE",
       "cycle": "monthly",
       "day": null,
       "week": null,
-      "month": null,
-      "amount": 1000000,
-      "memo": "돈 나가는 날..."
+      "month": "15",
+      "amount": 14900,
+      "memo": ""
     },
     {
-      "id": "1744163505567",
+      "id": "1744331273040",
       "member_id": "12CD",
-      "title": "123",
+      "title": "아이스아메리카노",
       "type": "Expense",
-      "category_id": "0000",
+      "category_id": "8888",
       "cycle": "daily",
       "day": "매일",
       "week": null,
       "month": null,
-      "amount": 200000
+      "amount": 4000,
+      "memo": ""
     },
     {
-      "id": "1744164354623",
+      "id": "1744331287671",
       "member_id": "12CD",
-      "title": "4",
-      "type": "Expense",
-      "category_id": "0000",
-      "cycle": "daily",
-      "day": "매일",
+      "title": "용돈",
+      "type": "Income",
+      "category_id": "3333",
+      "cycle": "onetime",
+      "day": null,
       "week": null,
       "month": null,
-      "amount": 10000
+      "amount": 100000,
+      "memo": ""
+    },
+    {
+      "id": "1744331322025",
+      "member_id": "12CD",
+      "title": "월급🤍",
+      "type": "Income",
+      "category_id": "2222",
+      "cycle": "monthly",
+      "day": null,
+      "week": null,
+      "month": "11",
+      "amount": 3000000,
+      "memo": ""
     }
   ]
 }

@@ -1,12 +1,14 @@
 <template>
-  <div class="form-container">
+  <div class="form-container bodySemibold18px">
     <div class="form-body">
       <div class="form-body-left">
         <div class="form-input">
-          <span>{{ amount }} 원</span>
+          <span
+            ><span class="titleBold24px">{{ amount }} </span>&nbsp;&nbsp;원</span
+          >
           <BtnDual :is-income-active="isIncome" :is-expense-active="isExpense" />
         </div>
-        <div class="form-input">
+        <div class="form-input form-lg">
           <label>거래명</label>
           <InputLg
             type="text"
@@ -42,11 +44,9 @@
         </div>
       </div>
     </div>
-    <div class="form-footer">
-      <div class="form-btn-container">
-        <BtnLg text="수정" @click="gotoUpdate" color="var(--color-primary)" />
-        <BtnLg text="취소" @click="cancle" color="var(--color-light)" />
-      </div>
+
+    <div class="form-btn-container">
+      <BtnLg text="수정" @click="gotoUpdate" color="var(--color-primary)" />
     </div>
   </div>
 </template>
@@ -55,23 +55,16 @@
 
 <script setup>
 import BtnLg from '@/components/button/BtnLg.vue'
-import BtnMed from '@/components/button/BtnMed.vue'
-import BtnSm from '@/components/button/BtnSm.vue'
 import BtnDual from '@/components/button/BtnDual.vue'
 import InputLg from '@/components/input/InputLg.vue'
 import InputMed from '@/components/input/InputMed.vue'
-import InputSm from '@/components/input/InputSm.vue'
-import SelectLg from '@/components/input/SelectLg.vue'
-import SelectMed from '@/components/input/SelectMed.vue'
-import SelectSm from '@/components/input/SelectSm.vue'
 
-import { ref, reactive, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from 'axios'
 
 const prevPage = ref(null)
 
-const currentRoute = useRoute()
 const router = useRouter()
 
 const BASEURI = '/api'
@@ -159,42 +152,50 @@ const cancle = () => {
 <!-- ----------------------------------- style  ----------------------------------- -->
 
 <style scoped>
+/* ---------------------- Desktop ---------------------- */
+
 .form-container {
-  max-width: 100%;
+  /* max-width: 100%;
   margin: 0 auto;
-  padding: 24px;
+  padding: 24px; */
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 2rem;
 }
 
 .form-body {
   display: flex;
   justify-content: center;
-  gap: 32px;
+  gap: 2rem;
 }
 
-.form-body-left {
-  display: flex;
-  flex-direction: column;
-}
-
+.form-body-left,
 .form-body-right {
   display: flex;
   flex-direction: column;
+  gap: 2rem;
 }
 
-.form-right {
+.form-row {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+.form-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .form-input {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 20px 0;
-  gap: 16px;
+
+  gap: 1rem;
 }
 
 .form-input span {
@@ -206,29 +207,38 @@ const cancle = () => {
 
 .form-input label {
   white-space: nowrap; /* 줄바꿈 방지 */
-  font-size: 16px;
+
   flex-shrink: 0; /* 작아지지 않게 */
 }
 
-.text-like-input {
-  width: auto;
-  min-width: 1ch;
-  max-width: 15ch;
-  font-size: 18px;
-  background: transparent;
-  border: none;
-}
-
-.form-footer {
-  display: flex;
-  justify-content: center;
-}
-
 .form-btn-container {
+  margin-top: 5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 1rem;
+}
+
+/* ---------------------- Mobile ---------------------- */
+
+@media (max-width: 768px) {
+  .form-body {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .form-lg {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.5rem;
+  }
+
+  .form-btn-container {
+    margin-top: 2rem;
+  }
 }
 </style>

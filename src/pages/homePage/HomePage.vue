@@ -5,7 +5,7 @@
     </div>
     <div class="report-divider"></div>
     <div class="report-title titleBold24px">
-      <RouterLink :to="{ name: 'report' }">1개월 소비리포트</RouterLink>
+      <RouterLink :to="{ name: 'report' }">이번달 소비리포트</RouterLink>
     </div>
     <div class="report-wrapper bodySemibold18px">
       <div class="report-left">

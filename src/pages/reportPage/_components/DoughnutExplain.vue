@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { inject, computed } from 'vue'
+import { inject, computed, onMounted, onUnmounted } from 'vue'
 import BtnDual from '@/components/button/BtnDual.vue'
 import BtnXs from '@/components/button/BtnXs.vue'
 import backButton from '@/assets/icons/IconArrowBack.svg'
@@ -49,6 +49,13 @@ const currentDate = inject('currentDoughnutDate')
 const setCurrentDate = inject('setCurrentDoughnutDate')
 const transactions = inject('transactions')
 const subtractPeriod = inject('subtractPeriod')
+
+onMounted(() => {
+  setCurrentDate(new Date())
+  periodDoughnut.value = '1개월'
+  isIncome.value = false
+  isExpense.value = true
+})
 
 function formatDateYMD(date) {
   return date.toISOString().split('T')[0]
@@ -132,6 +139,13 @@ function resetToToday() {
   setCurrentDate(new Date())
   periodDoughnut.value = '1개월'
 }
+
+onUnmounted(() => {
+  setCurrentDate(new Date())
+  periodDoughnut.value = '1개월'
+  isIncome.value = false
+  isExpense.value = true
+})
 </script>
 
 <style scoped>

@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { inject, computed } from 'vue'
+import { inject, computed, onMounted, onUnmounted } from 'vue'
 import BtnXs from '@/components/button/BtnXs.vue'
 import backButton from '@/assets/icons/IconArrowBack.svg'
 import forwardButton from '@/assets/icons/IconArrowForward.svg'
@@ -43,6 +43,11 @@ const currentDate = inject('currentLineDate')
 const setCurrentDate = inject('setCurrentLineDate')
 const transactions = inject('transactions')
 const subtractPeriod = inject('subtractPeriod')
+
+onMounted(() => {
+  setCurrentDate(new Date())
+  periodLine.value = '1개월'
+})
 
 function formatDateYMD(date) {
   return date.toISOString().split('T')[0]
@@ -126,6 +131,11 @@ function resetToToday() {
   setCurrentDate(new Date())
   periodLine.value = '1개월'
 }
+
+onUnmounted(() => {
+  setCurrentDate(new Date())
+  periodLine.value = '1개월'
+})
 </script>
 
 <style scoped>

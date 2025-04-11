@@ -2,7 +2,6 @@
   <div class="wrapper">
     <span class="titleBold24px">사용자 설정</span>
     <div class="content">
-      <!-- 왼쪽 패널 -->
       <div class="left-panel">
         <div class="left-header">
           <span class="bodySemibold18px">카테고리 기본값</span>
@@ -27,7 +26,6 @@
 
       <div class="divider"></div>
 
-      <!-- 오른쪽 패널 -->
       <div class="right-panel">
         <div class="right-header">
           <span class="bodySemibold18px">고정 수입/지출 (최대 5개)</span>
@@ -46,7 +44,6 @@
       </div>
     </div>
 
-    <!-- 하단 버튼 -->
     <div class="button-group">
       <p class="unsaved-warning" :class="{ show: hasUnsavedChanges }">
         저장하지 않은 변경사항이 있습니다.
@@ -60,7 +57,6 @@
       <BtnLg :color="'var(--color-light)'" :text="'취소'" @click="cancelAndRedirect" />
     </div>
 
-    <!-- 모달 -->
     <AddQuickOptionModal
       v-if="showAddModal"
       :categories="categories"
@@ -89,6 +85,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
+
 import AddQuickOptionModal from '@/pages/userPage/_components/AddQuickOptionModal.vue'
 import EditQuickOptionModal from '@/pages/userPage/_components/EditQuickOptionModal.vue'
 import SelectMed from '@/components/input/SelectMed.vue'
@@ -99,20 +96,37 @@ const route = useRoute()
 const router = useRouter()
 const userId = route.params.id
 
-const showAddModal = ref(false)
-const showEditModal = ref(false)
-const selectedOption = ref(null)
-const originalQuickOptions = ref([])
-
 const user = ref(null)
 const selectedIncome = ref('')
 const selectedExpense = ref('')
 
+const showAddModal = ref(false)
+const showEditModal = ref(false)
+const selectedOption = ref(null)
+const originalQuickOptions = ref([])
 const categories = ref([])
 const quickOptions = ref([])
 
 const incomeCategories = computed(() => categories.value.filter((c) => c.type === 'Income'))
+
 const expenseCategories = computed(() => categories.value.filter((c) => c.type === 'Expense'))
+
+const defaultChanged = computed(() => {
+  if (!user.value) return false
+
+  const incomeName = findCategoryNameById(selectedIncome.value)
+  const expenseName = findCategoryNameById(selectedExpense.value)
+
+  return incomeName !== user.value.incomeDefault || expenseName !== user.value.expenseDefault
+})
+
+const quickOptionsChanged = computed(() => {
+  return JSON.stringify(quickOptions.value) !== JSON.stringify(originalQuickOptions.value)
+})
+
+const hasUnsavedChanges = computed(() => {
+  return defaultChanged.value || quickOptionsChanged.value
+})
 
 const fetchUser = async () => {
   const res = await axios.get(`http://localhost:3000/members/${userId}`)
@@ -134,6 +148,7 @@ const fetchCategories = async () => {
 const fetchQuickOptions = async () => {
   const res = await axios.get('http://localhost:3000/quickAddOptions')
   const userData = res.data.filter((item) => item.member_id === userId)
+
   quickOptions.value = JSON.parse(JSON.stringify(userData))
   originalQuickOptions.value = JSON.parse(JSON.stringify(userData))
 }
@@ -142,27 +157,13 @@ const findCategoryNameById = (id) => {
   return categories.value.find((c) => c.id === id)?.name || ''
 }
 
-const defaultChanged = computed(() => {
-  if (!user.value) return false
-  const incomeName = findCategoryNameById(selectedIncome.value)
-  const expenseName = findCategoryNameById(selectedExpense.value)
-  return incomeName !== user.value.incomeDefault || expenseName !== user.value.expenseDefault
-})
-
-const quickOptionsChanged = computed(() => {
-  return JSON.stringify(quickOptions.value) !== JSON.stringify(originalQuickOptions.value)
-})
-
-const hasUnsavedChanges = computed(() => {
-  return defaultChanged.value || quickOptionsChanged.value
-})
-
 const formatOption = (item) => {
   const dayText =
     item.day ||
     (item.week ? `매주 ${item.week}` : '') ||
     (item.month ? `매월 ${item.month}일` : '') ||
     `반복 없음`
+
   return `${item.title} | ${dayText} | ${item.amount.toLocaleString()}원`
 }
 
@@ -188,6 +189,7 @@ const saveDefaults = async () => {
     incomeDefault: findCategoryNameById(selectedIncome.value),
     expenseDefault: findCategoryNameById(selectedExpense.value),
   }
+
   await axios.patch(`http://localhost:3000/members/${userId}`, payload)
 
   const existing = await axios.get(`http://localhost:3000/quickAddOptions?member_id=${userId}`)
@@ -232,7 +234,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* 동일한 스타일 유지 */
 .wrapper {
   width: 100%;
   max-width: 48rem;
@@ -265,6 +266,7 @@ onMounted(async () => {
   align-items: center;
 }
 
+.left-header,
 .right-header {
   display: flex;
   justify-content: space-between;
@@ -273,10 +275,6 @@ onMounted(async () => {
 }
 
 .left-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
   height: 35.5px;
 }
 
@@ -296,7 +294,7 @@ onMounted(async () => {
 .unsaved-warning {
   height: 20px;
   font-size: 14px;
-  color: red;
+  color: var(--color-expense);
   text-align: center;
   visibility: hidden;
   margin-bottom: 0.5rem;
@@ -307,6 +305,42 @@ onMounted(async () => {
 }
 
 .btn-warning {
-  border: 2px solid red;
+  border: 2px solid var(--color-expense);
+}
+
+@media screen and (max-width: 767px) {
+  .content {
+    margin-top: 1.25rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  .select-group {
+    margin-bottom: 24px;
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+  }
+
+  .left-header,
+  .right-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .left-header {
+    height: 35.5px;
+  }
+
+  .divider {
+    width: auto;
+    background-color: var(--color-light);
+    height: 1px;
+  }
 }
 </style>

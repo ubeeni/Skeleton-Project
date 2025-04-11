@@ -10,13 +10,15 @@
             @clickIncome="editItem.type = 'Income'"
             @clickExpense="editItem.type = 'Expense'"
           />
-          <InputMed
-            v-model.number="editItem.amount"
-            type="number"
-            :class="{ error: (!editItem.amount || editItem.amount <= 0) && triedSubmit }"
-            placeholder="금액을 입력하세요"
-          />
-          <span class="bodySemibold18px"> 원</span>
+          <div class="amount-row">
+            <InputMed
+              v-model.number="editItem.amount"
+              type="number"
+              :class="{ error: (!editItem.amount || editItem.amount <= 0) && triedSubmit }"
+              placeholder="금액을 입력하세요"
+            />
+            <span class="bodySemibold18px"> 원</span>
+          </div>
         </div>
         <!-- 거래명 -->
         <div class="form-row">
@@ -266,7 +268,7 @@ h3 {
 
 input.error,
 select.error {
-  border: 1px solid red;
+  border: 1px solid var(--color-expense);
 }
 
 .select-group {
@@ -281,5 +283,92 @@ select.error {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+@media screen and (max-width: 767px) {
+  .modal {
+    position: fixed;
+    inset: 0;
+    background-color: var(--color-light2);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* 아래에서부터 정렬 */
+    padding: 0;
+    z-index: 1000;
+  }
+
+  .modal-box {
+    width: 100vw;
+    height: 792px;
+    max-height: 100vh;
+    background: var(--color-white);
+    padding: 2rem 1.5rem;
+    border-radius: 1rem 1rem 0 0;
+    box-shadow: var(--boxshadow-light);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    overflow-y: auto;
+  }
+
+  .modal-box h3 {
+    display: none;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 7rem;
+  }
+
+  .form-row,
+  .button-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .form-row-dual {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .form-row-dual .amount-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .form-row-dual .amount-row input {
+    flex: 1;
+  }
+
+  .form-row-dual .amount-row span {
+    white-space: nowrap;
+  }
+
+  .button-group {
+    margin-top: 1rem;
+    align-items: center;
+  }
+
+  input,
+  select {
+    width: 100%;
+  }
+
+  .select-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-end;
+  }
 }
 </style>

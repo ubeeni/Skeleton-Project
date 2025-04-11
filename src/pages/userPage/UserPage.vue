@@ -3,7 +3,9 @@
     <div class="block">
       <div class="header-row">
         <span class="titleBold24px">프로필</span>
-        <router-link :to="`/user/${userId}/edit`" class="bodyRegular16px">수정</router-link>
+        <span class="edit">
+          <router-link :to="`/user/${userId}/edit`" class="bodyRegular16px">수정</router-link></span
+        >
       </div>
       <div class="item">
         <span class="bodySemibold18px">이름</span>
@@ -15,17 +17,25 @@
 
     <div class="block">
       <div class="header-row">
-        <span class="titleBold24px">사용자 설정</span>
-        <router-link :to="`/user/${userId}/settings`" class="bodyRegular16px">수정</router-link>
+        <span class="titleBold24px">사용자 설정</span
+        ><span class="edit">
+          <router-link :to="`/user/${userId}/settings`" class="bodyRegular16px"
+            >수정</router-link
+          ></span
+        >
       </div>
 
-      <div class="item vertical">
+      <div class="item horizontal">
         <span class="bodySemibold18px">카테고리 기본값</span>
         &nbsp;
         <div class="bodyRegular18px right-align">
-          <span :style="{ color: 'var(--color-income)' }">{{ user?.incomeDefault }}</span>
-          <span> | </span>
-          <span :style="{ color: 'var(--color-expense)' }">{{ user?.expenseDefault }}</span>
+          <div>
+            수입: <span :style="{ color: 'var(--color-income)' }">{{ user?.incomeDefault }}</span>
+          </div>
+
+          <div>
+            지출: <span :style="{ color: 'var(--color-expense)' }">{{ user?.expenseDefault }}</span>
+          </div>
         </div>
       </div>
 
@@ -98,16 +108,15 @@ onMounted(async () => {
   max-width: 48rem;
   width: 100%;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 2rem;
 }
 
 .block {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 2rem;
 }
 
 .header-row {
@@ -116,11 +125,14 @@ onMounted(async () => {
   align-items: center;
 }
 
+.header-row > .edit {
+  color: var(--color-semidark);
+}
+
 .horizontal-divider {
-  height: 1px;
+  height: 0.0625rem;
   width: 100%;
   background-color: var(--color-light);
-  margin: 1rem 0;
 }
 
 /* 항목 영역 */
@@ -137,6 +149,10 @@ onMounted(async () => {
   align-items: flex-start;
   gap: 0.5rem;
 }
+.item.horizontal {
+  display: flex;
+  align-items: start;
+}
 
 .option-list {
   padding: 0;
@@ -152,13 +168,19 @@ onMounted(async () => {
   align-self: flex-end;
 }
 
+.item .horizontal {
+  display: flex;
+
+  align-items: start;
+}
+
 /* 반응형 */
 @media screen and (max-width: 767px) {
   .wrapper {
     max-width: 48rem;
     width: 100%;
     margin: 0 auto;
-    padding: 2rem 1.5rem;
+    padding: 0;
     display: flex;
     flex-direction: column;
     gap: 1rem;

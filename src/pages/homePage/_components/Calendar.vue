@@ -21,7 +21,7 @@
             <span style="color: var(--color-dark)"> {{ monthlyExpense.toLocaleString() }}원 </span>
           </div>
         </div>
-        <div class="bodySemibold18px" style="margin-top: 0.5rem">
+        <div class="bodySemibold18px" style="margin-top: 0.6rem">
           총합:
           <span :class="totalColorClass">
             {{ (monthlyIncome - monthlyExpense).toLocaleString() }}
@@ -476,7 +476,7 @@ function resetToToday() {
 .summary-inout {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
 }
 
 @media screen and (max-width: 767px) {
@@ -526,6 +526,4 @@ function resetToToday() {
     text-align: center;
   }
 }
-
-
 </style>

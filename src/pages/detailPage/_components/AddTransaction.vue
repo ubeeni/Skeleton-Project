@@ -1,47 +1,74 @@
 <template>
-  <div class="body">
-    <h3>거래내역 추가</h3>
-    <div class="form-group">
-      <label>거래명</label>
-      <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionTitle" />
+  <div class="form-container">
+    <div class="form-body">
+      <div class="form-body-left">
+        <div class="form-input">
+          <div class="form-input-amount">
+            <InputSm
+              type="number"
+              placeholder="금액을 입력하세요"
+              v-model.number="amount"
+              @keypress="onlyAllowDigits"
+              @input="removeNonDigits"
+              style="text-align: right"
+            /><span> 원 </span>
+            <p class="form-alert" v-if="!isValidAmount">&nbsp;*</p>
+          </div>
+          <BtnDual
+            @clickIncome="selectType('Income')"
+            @clickExpense="selectType('Expense')"
+            :is-income-active="isIncome"
+            :is-expense-active="isExpense"
+          />
+        </div>
+        <div class="form-input">
+          <label>거래명</label>
+          <div class="input-with-alert">
+            <InputLg type="text" placeholder="거래명을 입력하세요" v-model="transactionTitle" />
+            <p class="form-alert" v-show="!isValidTitle">*</p>
+          </div>
+        </div>
+      </div>
+      <div class="form-body-right">
+        <div class="form-input">
+          <label>카테고리</label>
+          <SelectMed
+            v-model="categoryId"
+            :options="filteredCategory"
+            placeholder="카테고리"
+            @onChange="handleCategorySelect"
+          />
+        </div>
+        <div class="form-input">
+          <label>날짜</label>
+          <InputMed
+            type="text"
+            placeholder="날짜를 선택하세요"
+            @click="openCalenderModal"
+            v-model="dateDisplay"
+          />
+        </div>
+        <div class="form-input">
+          <label>메모</label>
+          <InputMed
+            type="text"
+            placeholder="메모는 선택사항입니다"
+            v-model="memo"
+            color="var(--color-primary)"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="form-footer">
+      <div class="form-btn-container">
+        <BtnLg text="추가" @click="addTransaction" color="var(--color-primary)" />
+        <BtnLg text="취소" @click="cancle" color="var(--color-light)" />
+      </div>
     </div>
 
-    <div class="form-group">
-      <label>금액</label>
-      <InputLg
-        type="number"
-        placeholder="금액을 입력하세요"
-        v-model.number="amount"
-        @keypress="onlyAllowDigits"
-        @input="removeNonDigits"
-      />
-    </div>
+    <!-- 캘린더 모달 -->
 
-    <BtnDual
-      @clickIncome="clickIncome"
-      @clickExpense="clickExpense"
-      :is-income-active="isIncome"
-      :is-expense-active="isExpense"
-    />
-
-    <SelectLg
-      v-model="categoryId"
-      :options="filteredCategory"
-      placeholder="카테고리"
-      @onChange="handleCategorySelect"
-    />
-
-    <div class="form-group">
-      <label>날짜</label>
-      <InputLg
-        type="text"
-        placeholder="날짜를 선택하세요"
-        @click="openModal"
-        v-model="dateDisplay"
-      />
-    </div>
-
-    <div v-if="showModal" class="modal-backdrop">
+    <div v-if="showCalenderModal" class="modal-backdrop">
       <div class="modal-content">
         <h3>날짜와 시간 선택</h3>
         <Datepicker
@@ -53,24 +80,23 @@
           :max-date="new Date()"
         />
         <br />
-        <button @click="closeModal">닫기</button>
+        <button @click="closeCalenderModal">닫기</button>
       </div>
     </div>
 
-    <div class="form-group">
-      <label>메모</label>
-      <InputLg type="text" placeholder="메모는 선택사항입니다" v-model="memo" />
-    </div>
+    <!-- 컨펌 모달 -->
 
-    <div class="actions">
-      <BtnLg text="추가" @click="addTransaction" color="var(--color-primary)" />
-      <BtnLg text="취소" @click="cancle" color="var(--color-semidark)" />
-    </div>
-
-    <div>
-      <p>categoryId : {{ categoryId }}</p>
-      <p>categoryType : {{ categoryType }}</p>
-      <p>categoryName : {{ categoryName }}</p>
+    <div v-if="showConfirmModal" class="modal-backdrop">
+      <div class="modal-content">
+        <div>
+          <p>거래 내역이 추가되었습니다!</p>
+          <br />
+        </div>
+        <div class="modal-button-container">
+          <button @click="moveToPrev">이전 페이지로</button>
+          <!-- <button @click="moveToView">상세보기 페이지로</button> -->
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -104,8 +130,10 @@ const router = useRouter()
 const BASEURI = '/api'
 
 const transactionTitle = ref('') // 거래 타이틀
+const isValidTitle = computed(() => transactionTitle.value !== '')
 
 const amount = ref(0) // 금액
+const isValidAmount = computed(() => amount.value > 0)
 
 const memo = ref('') // 메모
 
@@ -149,21 +177,25 @@ const filteredCategory = computed(() => {
     }))
 })
 
-const showModal = ref(false) // 모달창 띄울 지 여부
+const showCalenderModal = ref(false) // 모달창 띄울 지 여부
 
-const openModal = () => (showModal.value = true) // 모달 열기
-const closeModal = () => (showModal.value = false) // 모달 닫기
+const openCalenderModal = () => {
+  showCalenderModal.value = true
+} // 모달 열기
+const closeCalenderModal = () => {
+  showCalenderModal.value = false
+} // 모달 닫기
 
 const isIncome = computed(() => categoryType.value === 'Income')
 const isExpense = computed(() => categoryType.value === 'Expense')
 
-function clickIncome() {
-  // console.log('수입 클릭!')
-  selectType('Income')
-}
-function clickExpense() {
-  // console.log('지출 클릭!')
-  selectType('Expense')
+const showConfirmModal = ref(false)
+
+const moveToPrev = () => {
+  showConfirmModal.value = false
+  router.push({
+    name: prevPage.value,
+  })
 }
 
 const handleCategorySelect = () => {
@@ -220,41 +252,11 @@ const toKSTISOString = (date) => {
   return kstDate.toISOString().slice(0, 19)
 }
 
-const initInputData = () => {
-  transactionTitle.value = ''
-  amount.value = 0
-  categoryId.value = '0000'
-  dateStr.value = ''
-  memo.value = ''
-}
-
-const checkTransaction = () => {
-  if (transactionTitle.value === '' || Number(amount.value) < 0) {
-    return false
-  }
-  return true
-}
-
 const addTransaction = async () => {
-  if (!checkTransaction()) {
+  if (!(isValidAmount.value && isValidTitle.value)) {
     alert('데이터 입력이 잘못되었습니다.')
     return
   }
-
-  console.log(
-    '거래명: ' +
-      transactionTitle.value +
-      '\n금액: ' +
-      amount.value +
-      '\n카테고리 타입: ' +
-      categoryType.value +
-      '\n카테고리명: ' +
-      categoryName.value +
-      '\n날짜: ' +
-      isoDate.value +
-      '\n메모: ' +
-      memo.value,
-  )
 
   try {
     const response = await axios.post(`${BASEURI}/transactions/`, {
@@ -268,7 +270,7 @@ const addTransaction = async () => {
 
     if (response.status === 201) {
       console.log('추가 성공')
-      initInputData()
+      showConfirmModal.value = true
     } else {
       console.log('추가 실패')
     }
@@ -289,26 +291,6 @@ const cancle = () => {
 <!-- ----------------------------------- style  ----------------------------------- -->
 
 <style scoped>
-* {
-  padding: 0;
-  margin: 0;
-}
-.body {
-  width: 500px;
-  margin: 0 auto;
-  font-family: sans-serif;
-  padding: 30px;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -323,5 +305,102 @@ const cancle = () => {
   width: 300px;
   margin: 100px auto;
   border-radius: 10px;
+}
+div.modal-button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* 버튼 간 간격 */
+  align-items: center; /* 가운데 정렬 */
+  margin-top: 1rem;
+}
+
+/* ------------ */
+
+.form-container {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.form-body {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+}
+
+.form-body-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-body-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+  gap: 16px;
+}
+
+.input-with-alert {
+  display: flex;
+  align-items: center;
+}
+
+.form-alert {
+  color: red;
+}
+
+.form-input-amount {
+  justify-content: left;
+  display: inline-flex;
+  align-items: center;
+}
+
+.form-input span {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.form-input label {
+  white-space: nowrap; /* 줄바꿈 방지 */
+  font-size: 16px;
+  flex-shrink: 0; /* 작아지지 않게 */
+}
+
+.text-like-input {
+  width: auto;
+  min-width: 1ch;
+  max-width: 15ch;
+  font-size: 18px;
+  background: transparent;
+  border: none;
+}
+
+.form-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.form-btn-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
 }
 </style>

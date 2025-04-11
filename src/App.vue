@@ -85,7 +85,7 @@ function subtractPeriod(date, type, amount) {
 
 // 현재 기간(기준) 데이터
 const lineFilteredTransactions = computed(() => {
-  const now = new Date(currentDate.value)
+  const now = new Date(currentLineDate.value)
   const start = subtractPeriod(now, periodLine.value, 1)
   return transactions.value.filter((tx) => {
     const d = new Date(tx.date)
@@ -164,7 +164,7 @@ const grouped = computed(() => {
 
 // 도넛 기간 계산
 const doughnutFilteredTransactions = computed(() => {
-  const now = new Date(currentDate.value)
+  const now = new Date(currentDoughnutDate.value)
   const start = subtractPeriod(now, periodDoughnut.value, 1)
   return transactions.value.filter((tx) => {
     const d = new Date(tx.date)
@@ -189,11 +189,15 @@ const doughnutData = computed(() => {
 
 const top5Labels = computed(() => doughnutData.value.labels.slice(0, 5))
 
-const currentDate = ref(new Date())
 const selectedRange = ref('1개월')
+const currentLineDate = ref(new Date())
+const currentDoughnutDate = ref(new Date())
 
-function setCurrentDate(date) {
-  currentDate.value = date
+function setCurrentLineDate(date) {
+  currentLineDate.value = date
+}
+function setCurrentDoughnutDate(date) {
+  currentDoughnutDate.value = date
 }
 
 // provide로 데이터 전달
@@ -214,9 +218,13 @@ provide('monthlyTotal', monthlyTotal)
 provide('grouped', grouped)
 provide('doughnutData', doughnutData)
 provide('top5Labels', top5Labels)
-provide('currentDate', currentDate)
 provide('selectedRange', selectedRange)
-provide('setCurrentDate', setCurrentDate)
+provide('transactions', transactions)
+provide('subtractPeriod', subtractPeriod)
+provide('currentLineDate', currentLineDate)
+provide('currentDoughnutDate', currentDoughnutDate)
+provide('setCurrentLineDate', setCurrentLineDate)
+provide('setCurrentDoughnutDate', setCurrentDoughnutDate)
 </script>
 
 <style scoped>

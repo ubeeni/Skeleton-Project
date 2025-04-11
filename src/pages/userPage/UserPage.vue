@@ -49,6 +49,7 @@ const route = useRoute()
 const userId = route.params.id
 const user = ref(null)
 const quickOptions = ref([])
+const categories = ref([])
 
 const fetchQuickOptions = async () => {
   const res = await axios.get('http://localhost:3000/quickAddOptions')
@@ -58,8 +59,14 @@ const fetchQuickOptions = async () => {
 
 const formatOption = (item) => {
   const dayText =
-    item.day || (item.week ? `매주 ${item.week}` : '') || (item.month ? `매월 ${item.month}일` : '')
-  return `${item.title} | ${dayText} | ${item.amount.toLocaleString()}원`
+    item.day ||
+    (item.week ? `매주 ${item.week}` : '') ||
+    (item.month ? `매월 ${item.month}일` : '') ||
+    `반복 없음`
+  const category = categories.value.find((c) => c.id === item.category_id)
+  const categoryName = category ? category.name : '(알 수 없음)'
+  const memoText = item.memo ? ` | ${item.memo}` : ''
+  return `${item.title} | ${categoryName} | ${dayText} | ${item.amount.toLocaleString()}원${memoText}`
 }
 
 const fetchUser = async () => {
@@ -67,9 +74,15 @@ const fetchUser = async () => {
   user.value = res.data
 }
 
+const fetchCategories = async () => {
+  const res = await axios.get('http://localhost:3000/categories')
+  categories.value = res.data
+}
+
 onMounted(async () => {
   fetchUser()
   fetchQuickOptions()
+  fetchCategories()
 })
 </script>
 

@@ -315,14 +315,13 @@
       "memo": "비행기가 싸다!"
     },
     {
-      "id": "4KLW",
       "title": "용돈",
-      "member_id": "12CD",
       "category_id": "3333",
       "type": "Income",
       "amount": 100000,
-      "date": "2025-04-08",
-      "memo": "길에서 주운 돈"
+      "date": "2025-04-08T09:00:00",
+      "memo": "길에서 주운 돈",
+      "id": "4KLW"
     },
     {
       "id": "1d97",
@@ -402,11 +401,11 @@
       "memo": ""
     },
     {
-      "title": "임시 추가",
+      "title": "sdf",
       "category_id": "1111",
       "type": "Income",
-      "amount": 456,
-      "date": "2025-04-10T01:25:00",
+      "amount": 2,
+      "date": "2025-04-10T13:07:00",
       "memo": "",
       "id": "3d81"
     },

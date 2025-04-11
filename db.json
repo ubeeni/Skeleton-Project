@@ -429,13 +429,22 @@
       "memo": ""
     },
     {
-      "id": "52ea",
-      "title": "삼겹살김치볶음밥",
+      "title": "소금구이 덮밥",
+      "category_id": "7777",
+      "type": "Expense",
+      "amount": 5000,
+      "date": "2025-04-11T12:30:00",
+      "memo": "간판 메뉴",
+      "id": "52ea"
+    },
+    {
+      "id": "b9d5",
+      "title": "세종대 학식",
       "category_id": "7777",
       "type": "Expense",
       "amount": 6000,
-      "date": "2025-04-11T12:30:00",
-      "memo": "신메뉴 존맛"
+      "date": "2025-04-11T13:23:57",
+      "memo": ""
     }
   ],
   "quickAddOptions": [

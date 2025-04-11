@@ -231,13 +231,13 @@
       "memo": ""
     },
     {
-      "id": "9d5d",
       "title": "지하철",
       "category_id": "FFFF",
       "type": "Expense",
       "amount": 1400,
       "date": "2025-04-11T10:07:18",
-      "memo": ""
+      "memo": "",
+      "id": "9d5d"
     },
     {
       "id": "2fe9",

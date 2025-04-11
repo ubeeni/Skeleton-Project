@@ -427,6 +427,15 @@
       "amount": 25000,
       "date": "2025-04-11T10:05:00",
       "memo": ""
+    },
+    {
+      "id": "52ea",
+      "title": "삼겹살김치볶음밥",
+      "category_id": "7777",
+      "type": "Expense",
+      "amount": 6000,
+      "date": "2025-04-11T12:30:00",
+      "memo": "신메뉴 존맛"
     }
   ],
   "quickAddOptions": [

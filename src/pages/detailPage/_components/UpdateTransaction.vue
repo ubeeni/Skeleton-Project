@@ -7,7 +7,7 @@
             <div class="form-input-amount">
               <span class="form-alert" :class="{ visible: !isValidAmount }">* &nbsp;</span>
               <InputMed
-                type="number"
+                type="text"
                 placeholder="금액을 입력하세요"
                 v-model.number="amount"
                 @keypress="onlyAllowDigits"

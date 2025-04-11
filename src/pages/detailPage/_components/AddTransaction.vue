@@ -3,12 +3,10 @@
     <div class="form-body">
       <div class="form-body-left">
         <div class="form-row">
-          <div class="form-side">
-            <span class="form-alert" :class="{ visible: !isValidAmount }">* &nbsp;</span>
-          </div>
           <div class="form-input form-input-amount-container">
             <div class="form-input-amount">
-              <InputMed
+              <span class="form-alert" :class="{ visible: !isValidAmount }">* &nbsp;</span
+              ><InputMed
                 type="number"
                 placeholder="금액을 입력하세요"
                 v-model.number="amount"
@@ -26,8 +24,7 @@
           </div>
         </div>
         <div class="form-row">
-          <div class="form-side"></div>
-          <div class="form-input">
+          <div class="form-input form-lg">
             <label>
               <span class="form-alert" :class="{ visible: !isValidTitle }">* &nbsp;</span
               >거래명</label
@@ -386,7 +383,7 @@ const cancle = () => {
   align-items: center;
 }
 
-.form-input-amount span {
+.form-input-amount span:last-child {
   margin-left: 1rem;
 }
 
@@ -411,7 +408,20 @@ const cancle = () => {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    gap: 32px;
+    gap: 2rem;
+  }
+
+  .form-input-amount-container {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: start;
+  }
+
+  .form-lg {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.5rem;
   }
 }
 </style>

@@ -133,8 +133,8 @@ function toggleQuickAddDropdown() {
 // 빠른 추가 클릭 시 POST 후 화면에 반영
 async function selectQuickAddOption(option) {
   const today = new Date()
-  const formattedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
-
+  const offsetDate = new Date(today.getTime() - today.getTimezoneOffset() * 60000)
+  const formattedDate = offsetDate.toISOString().slice(0, 19)
   const newTransaction = {
     title: option.title,
     member_id: option.member_id,
@@ -162,26 +162,33 @@ const groupedByDate = computed(() => {
 
   transactions.value.forEach((item) => {
     const { id, title, type, amount, date } = item
-    // date가 문자열인지 확인하고, 맞다면 앞 10자리(YYYY-MM-DD)를 잘라냄
-    // 문자열이 아니라면 빈 문자열 반환하여 오류 방지
+    const fullDate = new Date(date) // 원본 날짜 그대로 사용
     const normalizedDate = typeof date === 'string' ? date.slice(0, 10) : ''
 
     if (!result[normalizedDate]) {
       result[normalizedDate] = { income: [], expense: [] }
     }
 
+    const transactionData = {
+      id,
+      title,
+      amount,
+      fullDate, // 정렬을 위한 Date 객체 저장
+    }
+
     if (type === 'Income') {
-      result[normalizedDate].income.push({ id, title, amount })
+      result[normalizedDate].income.push(transactionData)
     } else if (type === 'Expense') {
-      result[normalizedDate].expense.push({ id, title, amount })
+      result[normalizedDate].expense.push(transactionData)
     }
   })
 
-  // 최신순 정렬
+  // 각 그룹 내에서 fullDate 기준으로 최신순 정렬
   Object.values(result).forEach((day) => {
-    day.income.sort((a, b) => new Date(b.fullDate) - new Date(a.fullDate))
-    day.expense.sort((a, b) => new Date(b.fullDate) - new Date(a.fullDate))
+    day.income.sort((a, b) => b.fullDate - a.fullDate)
+    day.expense.sort((a, b) => b.fullDate - a.fullDate)
   })
+
   return result
 })
 

@@ -40,11 +40,11 @@ const amountOnly = computed(() => {
 
 const goToDetail = () => {
   router.push({
-    name:'detail',
-    params: {action : 'view'},
+    name: 'detail',
+    params: { action: 'view' },
     state: {
-      from : 'list',
-      transaction_id : props.item.id,
+      from: 'list',
+      transaction_id: props.item.id,
     },
   })
 }
@@ -104,5 +104,20 @@ const goToDetail = () => {
 .won {
   color: var(--color-dark); /* '원'은 항상 검정색 */
   text-align: right;
+}
+@media screen and (max-width: 767px) {
+  .list-item {
+    height: auto;
+    padding: 1rem;
+  }
+
+  .category-img {
+    width: 3.75rem;
+    height: 3.75rem;
+  }
+
+  .text {
+    gap: 0.5rem;
+  }
 }
 </style>

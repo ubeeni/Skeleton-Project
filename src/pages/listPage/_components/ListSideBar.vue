@@ -1,37 +1,39 @@
 <template>
   <div class="sidebar-wrapper">
     <!-- 월 이동 -->
-    <div class="month-nav">
-      <img :src="backButton" alt="back" @click="handlePrev" />
-      <span class="titleBold24px range-text" @click="resetToToday" > {{ rangeText }} </span>
-      <img :src="forwardButton" alt="forward" @click="handleNext" />
+    <div class="sideBar-top" v-if="isMobile && !props.isFilterOnly">
+      <div class="month-nav">
+        <img :src="backButton" alt="back" @click="handlePrev" />
+        <span class="titleBold24px range-text" @click="resetToToday"> {{ rangeText }} </span>
+        <img :src="forwardButton" alt="forward" @click="handleNext" />
+      </div>
+      <!-- 수입/지출/총합 요약 -->
+      <div class="summary">
+        <div class="summary-inout">
+          <div class="bodyRegular16px">
+            💰 수입:
+            <span style="color: var(--color-dark)"> {{ totalIncome.toLocaleString() }}원 </span>
+          </div>
+          <div class="bodyRegular16px">
+            💸 지출:
+            <span style="color: var(--color-dark)"> {{ totalExpense.toLocaleString() }}원 </span>
+          </div>
+        </div>
+        <div class="bodySemibold18px">
+          총합:
+          <span :class="totalColorClass">
+            {{ netTotal.toLocaleString() }}
+          </span>
+          원
+        </div>
+      </div>
     </div>
-
-    <!-- 수입/지출/총합 요약 -->
-    <div class="summary">
-      <div class="bodyRegular16px">
-        💰 수입:
-        <span style="color: var(--color-dark)"> {{ totalIncome.toLocaleString() }}원 </span>
-      </div>
-      <div class="bodyRegular16px">
-        💸 지출:
-        <span style="color: var(--color-dark)"> {{ totalExpense.toLocaleString() }}원 </span>
-      </div>
-      <div class="bodySemibold18px" style="margin-top: 0.5rem">
-        총합:
-        <span :class="totalColorClass">
-          {{ netTotal.toLocaleString() }}
-        </span>
-        원
-      </div>
-      <div class="total-line"></div>
-    </div>
-
-    <div class="sideBar-bottom">
+    <div class="total-line"></div>
+    <div class="sideBar-bottom" v-if="!isMobile || !isFilterOnly">
       <!--초기화 버튼-->
       <div class="reset-container" @click="resetFilters">
         <img :src="resetButton" alt="리셋아이콘" />
-        <span class="bodyRegular18px" > 초기화</span>
+        <span> 초기화</span>
       </div>
 
       <!-- 날짜 범위 -->
@@ -89,6 +91,7 @@
         </div>
       </div>
     </div>
+    <div class="line"></div>
   </div>
 </template>
 
@@ -99,11 +102,17 @@ import BtnDual from '@/components/button/BtnDual.vue'
 import backButton from '@/assets/icons/IconArrowBack.svg'
 import forwardButton from '@/assets/icons/IconArrowForward.svg'
 import resetButton from '@/assets/icons/IconReset.svg'
+import { useIsMobile } from '@/composables/UseIsMobile'
+const isMobile = useIsMobile()
 
 const props = defineProps({
   categories: Array,
   transactions: Array,
   filteredTransactions: Array,
+  isFilterOnly: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const resetFilters = () => {
@@ -130,7 +139,6 @@ const selectedExpense = ref([])
 const options = ['1주', '1개월', '3개월']
 
 function resetToToday() {
-  
   currentDate.value = dayjs()
   selectedRange.value = '1개월'
   resetFilters()
@@ -249,7 +257,6 @@ const emitFilters = () => {
     expenseCategoryIds: selectedExpense.value,
   })
 }
-
 </script>
 
 <style scoped>
@@ -265,18 +272,18 @@ const emitFilters = () => {
 }
 .month-nav img {
   cursor: pointer;
-  width: 24px;
-  height: 24px;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .summary {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  position: relative;
+  /* position: relative; */
 }
 
-.summary .total-line {
+.total-line {
   margin: 2rem 0;
   border-top: 1px solid var(--color-light);
 }
@@ -298,18 +305,17 @@ const emitFilters = () => {
   display: flex;
   align-items: center; /* 세로 가운데 정렬 */
   justify-content: flex-end; /* 오른쪽 정렬 */
-  gap: 4px;
+  gap: 0.25rem;
   width: 100%;
   cursor: pointer;
 }
 .reset-btn {
   margin-left: auto;
-  font-size: 14px;
   color: var(--color-semidark);
   text-decoration: underline;
-  color: var(--SemiDark, #797979);
   text-align: center;
 }
+
 .range-list {
   display: flex;
   gap: 0.5rem;
@@ -348,5 +354,75 @@ const emitFilters = () => {
 }
 .range-text {
   cursor: pointer;
+}
+.summary-inout {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.reset-container > span {
+  color: var(--color-semidark);
+}
+
+@media screen and (max-width: 767px) {
+  .sidebar-wrapper {
+    width: 90vw;
+    overflow-x: hidden;
+    /* padding: 0.5rem 0; */
+    background-color: var(--color-white);
+    /* border-radius: 1rem; */
+    /* box-shadow: var(--boxshadow-light); */
+    margin: 0 auto;
+  }
+
+  .summary {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: end;
+  }
+
+  /* .sideBar-bottom {
+    gap: 1rem;
+  } */
+
+  /* .summary .total-line {
+    margin: 0.25rem 0;
+  } */
+
+  .category-list {
+    display: flex;
+    flex-wrap: nowrap; /* 줄바꿈 없이 한 줄로 */
+    overflow-x: auto; /* 수평 스크롤 가능 */
+    overflow-y: hidden;
+    white-space: nowrap;
+    -ms-overflow-style: none; /* IE */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .category-list::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+
+  .category-item {
+    flex: 0 0 auto; /* 자동 줄어들지 않게 */
+    /* margin-right: 0.5rem; */
+    white-space: nowrap;
+  }
+  .category-group {
+    width: 100%;
+  }
+
+  .total-line {
+    margin: 0.5rem 0;
+  }
+  .reset-container {
+    margin-bottom: -2rem;
+  }
+  .line {
+    margin: 1rem 0;
+    border-top: 1px solid var(--color-light);
+  }
 }
 </style>

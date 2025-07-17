@@ -9,6 +9,9 @@
 ## 🌱 Features
 **1️⃣ 예정 거래 알림 - 고정 지출/수입 데이터를 기반으로 오늘 예정 거래 알림**
 
+
+
+
 <img src="https://github.com/user-attachments/assets/d0138b1b-38ab-4f64-901e-3a1f37780f83" width="350" />
 
 <br/>
